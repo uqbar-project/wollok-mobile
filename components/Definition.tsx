@@ -8,6 +8,8 @@ export function DefinitionComponent(props: {definition: Module}) {
     const {colors} = useTheme()
     return (
         <View   style={{
+            marginHorizontal: 4,
+            borderRadius: 3,
             padding: 10,
             marginTop: 6,
             backgroundColor: colors.notification,
@@ -25,7 +27,6 @@ function getImageFromType(aType: Kind){
         case "Singleton":
             return require('../assets/wko.png')
         case "Mixin":
-            throw Error('agrega la imagen pa')
-        //     return require('../assets/mixin.png')
+            return require('../assets/mixin.png')
     }
 }

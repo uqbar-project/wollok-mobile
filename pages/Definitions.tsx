@@ -2,14 +2,15 @@ import { useTheme } from "@react-navigation/native";
 import React, { useState } from "react";
 import { DefinitionComponent } from "../components/Definition";
 import { Module, Kind, fromJSON } from 'wollok-ts/dist/model'
-import { Modal, Pressable, StyleSheet, View, Text, TextInput } from "react-native";
-import { FAB, ToggleButton } from 'react-native-paper'
+import { StyleSheet, View } from "react-native";
+import { Modal, FAB, ToggleButton, Button, TextInput, Text, Portal } from 'react-native-paper'
+
 
 
 
 
 export function Definitions() {
-    const theme = useTheme()
+    const { colors } = useTheme()
     const [definitions, setDefinitions] = useState<Module[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [name, setNewDefintionName] = useState<string>('')
@@ -19,50 +20,58 @@ export function Definitions() {
     }
 
     function addDefinition() {
-        
-        setDefinitions([...definitions, fromJSON({kind, name})])
+
+        setDefinitions([...definitions, fromJSON({ kind, name })])
+    }
+
+    function toggleButtonColorByKind(aKind: Kind){
+        return kind == aKind ? 'grey' : undefined
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TextInput onChangeText={setNewDefintionName} placeholder="Nombre definicion"></TextInput>
-                        <ToggleButton.Row
-                            onValueChange={(value) => setKind(value as Kind)}
-                            value={kind}>
-                            <ToggleButton icon={()=><View><Text style={{color:'blue'}}>Objeto</Text></View>} value="Singleton" > 
-                                <Text>Objeto</Text>
-                            </ToggleButton>
-                            <ToggleButton icon={()=><View><Text style={{color:'blue'}}>Clase</Text></View>} value="Class" > 
-                                <Text>Clase</Text>
-                            </ToggleButton>
-                        </ToggleButton.Row>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() => {
-                                addDefinition()
-                                setModalVisible(!modalVisible)
-                            }}
-                        >
-                            <Text style={styles.textStyle}>OK</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
+        <View style={{flex: 1}}>
+            <Portal>
+                <Modal
+                    contentContainerStyle={{ padding: 20, backgroundColor: colors.background}}
+                    visible={modalVisible}
+                    onDismiss={() => setModalVisible(false)}
+                >
+                    <TextInput placeholderTextColor="grey" onChangeText={setNewDefintionName} placeholder="Nombre definicion"></TextInput>
+                    <ToggleButton.Row style={{ marginVertical: 15, alignSelf: 'center'}}
+                        onValueChange={(value) => setKind(value as Kind)}
+                        value={kind}>
+                        <ToggleButton
+                            style={{ width: 100, backgroundColor: toggleButtonColorByKind('Singleton') }}
+                            icon={() => <View><Text>OBJETO</Text></View>}
+                            value='Singleton'
+                        />
+                        <ToggleButton
+                            style={{ width: 100, backgroundColor: toggleButtonColorByKind('Class') }}
+                            icon={() => <View><Text>CLASE</Text></View>}
+                            value='Class'
+                        />
+                        <ToggleButton
+                            style={{ width: 100, backgroundColor: toggleButtonColorByKind('Mixin') }}
+                            icon={() => <View><Text>MIXIN</Text></View>}
+                            value='Mixin'
+                        />
+
+                    </ToggleButton.Row>
+                    <Button
+                        onPress={() => {
+                            addDefinition()
+                            setModalVisible(!modalVisible)
+                        }}
+                    >
+                        <Text>OK</Text>
+                    </Button>
+                </Modal>
+            </Portal>
             <View>
                 {definitions.map(def => <DefinitionComponent key={def.name} definition={def}></DefinitionComponent>)}
             </View>
 
-            <FAB icon="plus" onPress={fabPressed} style={{ ...styles.fab, backgroundColor: theme.colors.primary }} />
+            <FAB icon="plus" onPress={fabPressed} style={{ ...styles.fab, backgroundColor: colors.primary }} />
         </View>
     )
 }
@@ -75,46 +84,6 @@ const styles = StyleSheet.create({
         margin: 16,
         right: 0,
         bottom: 0,
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    button: {
-        borderRadius: 3,
-        padding: 10,
-        elevation: 2
-    },
-    buttonOpen: {
-        backgroundColor: "#F194FF",
-    },
-    buttonClose: {
-        backgroundColor: "#2196F3",
-    },
-    textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center"
     }
 });
+
