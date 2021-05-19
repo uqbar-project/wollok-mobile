@@ -4,12 +4,18 @@ import { Kind, fromJSON, Module } from "wollok-ts/dist/model"
 import React, { useState } from "react"
 import { useTheme } from "@react-navigation/native"
 
+const definitionKinds: {kind: Kind, description: string}[] = 
+    [
+        {kind:'Singleton', description: 'OBJETO'},
+        {kind:'Class', description: 'CLASE'},  
+        {kind: 'Mixin', description: 'MIXIN'}
+    ]
+
 export function NewDefinitionModal(props: {
     visible: boolean, 
     setVisible: (value: boolean) => void, 
     addDefinition: (definition: Module) => void
 }){
-    console.log(props.visible)
     const {colors} = useTheme()
     const [name, setName] = useState<string>('')
     const [kind, setKind] = useState<Kind>('Singleton')
@@ -30,22 +36,15 @@ export function NewDefinitionModal(props: {
                     <ToggleButton.Row style={{ marginVertical: 15, alignSelf: 'center'}}
                         onValueChange={(value) => setKind(value as Kind)}
                         value={kind}>
-                        <ToggleButton
-                            style={{ width: 100, backgroundColor: toggleButtonColorByKind('Singleton') }}
-                            icon={() => <View><Text>OBJETO</Text></View>}
-                            value='Singleton'
-                        />
-                        <ToggleButton
-                            style={{ width: 100, backgroundColor: toggleButtonColorByKind('Class') }}
-                            icon={() => <View><Text>CLASE</Text></View>}
-                            value='Class'
-                        />
-                        <ToggleButton
-                            style={{ width: 100, backgroundColor: toggleButtonColorByKind('Mixin') }}
-                            icon={() => <View><Text>MIXIN</Text></View>}
-                            value='Mixin'
-                        />
-
+                        {definitionKinds.map(aKind => {
+                            return (
+                                <ToggleButton
+                                    style={{ width: 100, backgroundColor: toggleButtonColorByKind(aKind.kind) }}
+                                    icon={() => <View><Text>{aKind.description}</Text></View>}
+                                    value={aKind.kind}
+                                />
+                            )
+                        })}
                     </ToggleButton.Row>
                     <Button
                         onPress={() => {
