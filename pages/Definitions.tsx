@@ -17,9 +17,7 @@ export function Definitions (){
     }
 
     function addDefinition(){
-        console.log('hola')
-        setDefinitions([...definitions, new Singleton({name: newDefintionName})])
-        
+        setDefinitions([...definitions, new Singleton({name: newDefintionName})])        
     }
 
     return (
