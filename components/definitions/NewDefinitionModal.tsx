@@ -49,6 +49,8 @@ export function NewDefinitionModal(props: {
                     <Button
                         onPress={() => {
                             props.addDefinition(fromJSON({ kind, name }))
+                            setName('')
+                            setKind('Singleton')
                             props.setVisible(false)
                         }}
                     >
