@@ -1,20 +1,20 @@
 import React from 'react'
 import { useTheme } from "@react-navigation/native";
-import { ListItem, Text } from "native-base";
-import { Image } from 'react-native';
+import { Image, View, Text } from 'react-native';
 import { Module, Kind } from 'wollok-ts/dist/model';
+
 
 export function DefinitionComponent(props: {definition: Module}) {
     const {colors} = useTheme()
     return (
-        <ListItem   noIndent={true} style={{
+        <View   style={{
             padding: 10,
             marginTop: 6,
             backgroundColor: colors.notification,
         }}>
             <Image source={getImageFromType(props.definition.kind)} style={{marginRight: 10}}></Image>
             <Text>{props.definition.name}</Text>
-        </ListItem>
+        </View>
     )
 }
 
