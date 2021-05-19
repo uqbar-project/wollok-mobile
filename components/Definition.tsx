@@ -2,13 +2,9 @@ import React from 'react'
 import { useTheme } from "@react-navigation/native";
 import { ListItem, Text } from "native-base";
 import { Image } from 'react-native';
+import { Module, Kind } from 'wollok-ts/dist/model';
 
-export type Definition = {
-    name: string,
-    difinitionType: 'object' | 'class' 
-}
-
-export function DefinitionComponent(props: {definition: Definition}) {
+export function DefinitionComponent(props: {definition: Module}) {
     const {colors} = useTheme()
     return (
         <ListItem   noIndent={true} style={{
@@ -16,17 +12,20 @@ export function DefinitionComponent(props: {definition: Definition}) {
             marginTop: 6,
             backgroundColor: colors.notification,
         }}>
-            <Image source={getImageFromType(props.definition.difinitionType)} style={{marginRight: 10}}></Image>
+            <Image source={getImageFromType(props.definition.kind)} style={{marginRight: 10}}></Image>
             <Text>{props.definition.name}</Text>
         </ListItem>
     )
 }
 
-function getImageFromType(aType: string){
+function getImageFromType(aType: Kind){
     switch(aType){
-        case "class": 
+        case "Class": 
             return require('../assets/class.png')
-        case "object":
+        case "Singleton":
             return require('../assets/wko.png')
+        case "Mixin":
+            throw Error('agrega la imagen pa')
+        //     return require('../assets/mixin.png')
     }
 }
