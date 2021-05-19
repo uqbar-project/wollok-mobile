@@ -20,13 +20,13 @@ export function DefinitionComponent(props: {definition: Module}) {
     )
 }
 
-function getImageFromType(aType: Kind){
-    switch(aType){
+function getImageFromType(aKind: Kind){
+    switch(aKind){
         case "Class": 
-            return require('../assets/class.png')
+            return require('../../assets/class.png')
         case "Singleton":
-            return require('../assets/wko.png')
+            return require('../../assets/wko.png')
         case "Mixin":
-            return require('../assets/mixin.png')
+            return require('../../assets/mixin.png')
     }
 }
