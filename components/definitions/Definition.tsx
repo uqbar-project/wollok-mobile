@@ -5,32 +5,43 @@ import { List } from 'react-native-paper';
 import { Module, Kind } from 'wollok-ts/dist/model';
 
 
-export function DefinitionComponent(props: {definition: Module}) {
-    const {colors} = useTheme()
+export function DefinitionComponent(props: { definition: Module }) {
+    const { colors } = useTheme()
 
     const itemStyle: StyleProp<ViewStyle> = {
-        marginHorizontal: 4,
-        borderRadius: 3,
+        marginHorizontal: 10,
+        borderRadius: 5,
         padding: 10,
-        marginTop: 6,
-        backgroundColor: colors.notification
+        marginTop: 10,
+        borderColor: colors.primary,
+        borderWidth: 1,
+        backgroundColor: colors.notification,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+
+        elevation: 3,
     }
     return (
-        <List.Item   
+        <List.Item
             key={props.definition.name}
-            style= {itemStyle}
-            titleStyle= {{color: 'black', fontSize: 20}}
+            style={itemStyle}
+            titleStyle={{ fontSize: 20 }}
             title={props.definition.name}
-            left={() => <Image source={getImageFromType(props.definition.kind)} style={{marginRight: 10, alignSelf: 'center'}}/>}            
-        />        
+            left={() => <Image source={getImageFromType(props.definition.kind)} style={{ marginRight: 10, alignSelf: 'center' }} />}
+        />
     )
 }
 
 
 
-function getImageFromType(aKind: Kind){
-    switch(aKind){
-        case "Class": 
+function getImageFromType(aKind: Kind) {
+    switch (aKind) {
+        case "Class":
             return require('../../assets/class.png')
         case "Singleton":
             return require('../../assets/wko.png')

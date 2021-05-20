@@ -39,6 +39,7 @@ export function NewDefinitionModal(props: {
                         {definitionKinds.map(aKind => {
                             return (
                                 <ToggleButton
+                                    key={aKind.kind}
                                     style={{ width: 100, backgroundColor: toggleButtonColorByKind(aKind.kind) }}
                                     icon={() => <View><Text>{aKind.description}</Text></View>}
                                     value={aKind.kind}
