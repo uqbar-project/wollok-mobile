@@ -28,7 +28,7 @@ export function Entities() {
     return (
         <View style={{flex: 1}}>            
             <ScrollView>
-                {entities.map(def => <EntityComponent key={def.name} entity={def}></EntityComponent>)}
+                {entities.map(ent => <EntityComponent key={ent.name} entity={ent}/>)}
             </ScrollView>
             <NewEntityModal visible={modalVisible} addEntity={addEntity} setVisible={setModalVisible}/>
             <FAB icon="plus" onPress={fabPressed} style={{ ...styles.fab, backgroundColor: colors.primary }} />
