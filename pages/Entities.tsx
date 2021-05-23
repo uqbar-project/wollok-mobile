@@ -1,36 +1,36 @@
 import { useTheme } from "@react-navigation/native";
 import React, { useState } from "react";
-import { DefinitionComponent } from "../components/definitions/Definition";
+import { EntityComponent } from "../components/definitions/Entity";
 import { Module } from 'wollok-ts/dist/model'
 import { StyleSheet, View } from "react-native";
 import { FAB } from 'react-native-paper'
-import { NewDefinitionModal } from "../components/definitions/NewDefinitionModal";
+import { NewEntityModal } from "../components/definitions/NewEntityModal";
 import { ScrollView } from "react-native-gesture-handler";
 
 
 
 
 
-export function Definitions() {
+export function Entities() {
     const { colors } = useTheme()
-    const [definitions, setDefinitions] = useState<Module[]>([]);
+    const [entities, setEntities] = useState<Module[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
   
     function fabPressed() {
         setModalVisible(true);
     }
 
-    function addDefinition(definition: Module) {
-        setDefinitions([...definitions, definition])
+    function addEntity(entity: Module) {
+        setEntities([...entities, entity])
     }
 
     
     return (
         <View style={{flex: 1}}>            
             <ScrollView>
-                {definitions.map(def => <DefinitionComponent key={def.name} definition={def}></DefinitionComponent>)}
+                {entities.map(def => <EntityComponent key={def.name} entity={def}></EntityComponent>)}
             </ScrollView>
-            <NewDefinitionModal visible={modalVisible} addDefinition={addDefinition} setVisible={setModalVisible}/>
+            <NewEntityModal visible={modalVisible} addEntity={addEntity} setVisible={setModalVisible}/>
             <FAB icon="plus" onPress={fabPressed} style={{ ...styles.fab, backgroundColor: colors.primary }} />
         </View>
     )

@@ -5,7 +5,7 @@ import { List } from 'react-native-paper';
 import { Module, Kind } from 'wollok-ts/dist/model';
 
 
-export function DefinitionComponent(props: { definition: Module }) {
+export function EntityComponent(props: { entity: Module }) {
     const { colors } = useTheme()
 
     const itemStyle: StyleProp<ViewStyle> = {
@@ -28,11 +28,11 @@ export function DefinitionComponent(props: { definition: Module }) {
     }
     return (
         <List.Item
-            key={props.definition.name}
+            key={props.entity.name}
             style={itemStyle}
             titleStyle={{ fontSize: 20 }}
-            title={props.definition.name}
-            left={() => <Image source={getImageFromType(props.definition.kind)} style={{ marginRight: 10, alignSelf: 'center' }} />}
+            title={props.entity.name}
+            left={() => <Image source={getImageFromType(props.entity.kind)} style={{ marginRight: 10, alignSelf: 'center' }} />}
         />
     )
 }

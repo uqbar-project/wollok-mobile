@@ -4,17 +4,17 @@ import { Kind, fromJSON, Module } from "wollok-ts/dist/model"
 import React, { useState } from "react"
 import { useTheme } from "@react-navigation/native"
 
-const definitionKinds: {kind: Kind, description: string}[] = 
+const entityKinds: {kind: Kind, description: string}[] = 
     [
         {kind:'Singleton', description: 'OBJETO'},
         {kind:'Class', description: 'CLASE'},  
         {kind: 'Mixin', description: 'MIXIN'}
     ]
 
-export function NewDefinitionModal(props: {
+export function NewEntityModal(props: {
     visible: boolean, 
     setVisible: (value: boolean) => void, 
-    addDefinition: (definition: Module) => void
+    addEntity: (definition: Module) => void
 }){
     const {colors} = useTheme()
     const [name, setName] = useState<string>('')
@@ -36,7 +36,7 @@ export function NewDefinitionModal(props: {
                     <ToggleButton.Row style={{ marginVertical: 15, alignSelf: 'center'}}
                         onValueChange={(value) => setKind(value as Kind)}
                         value={kind}>
-                        {definitionKinds.map(aKind => {
+                        {entityKinds.map(aKind => {
                             return (
                                 <ToggleButton
                                     key={aKind.kind}
@@ -49,7 +49,7 @@ export function NewDefinitionModal(props: {
                     </ToggleButton.Row>
                     <Button
                         onPress={() => {
-                            props.addDefinition(fromJSON({ kind, name }))
+                            props.addEntity(fromJSON({ kind, name }))
                             setName('')
                             setKind('Singleton')
                             props.setVisible(false)
