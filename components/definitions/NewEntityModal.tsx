@@ -4,15 +4,26 @@ import React, { useState } from "react"
 import { useTheme } from "@react-navigation/native"
 import { SelectKind } from "./SelectKind"
 
+type Entity = {
+    name: string,
+    kind: Kind
+}
+
 export function NewEntityModal(props: {
     visible: boolean, 
     setVisible: (value: boolean) => void, 
     addEntity: (definition: Module) => void
 }){
     const {colors} = useTheme()
-    const [name, setName] = useState<string>('')
-    const [kind, setKind] = useState<Kind>('Singleton')
+    const [entity, setEntity] = useState<Entity>(getEmptyEntity())
 
+    function setName(name: string){
+        setEntity({...entity, name})
+    }
+
+    function setKind(kind: Kind){
+        setEntity({...entity, kind})
+    }
     
    
     return (
@@ -24,13 +35,12 @@ export function NewEntityModal(props: {
                 >
                     <TextInput placeholderTextColor="grey" onChangeText={setName} placeholder="Nombre definicion"></TextInput>
                     
-                    <SelectKind kind={kind} setKind={setKind}/>
+                    <SelectKind kind={entity.kind} setKind={setKind}/>
 
                     <Button
                         onPress={() => {
-                            props.addEntity(fromJSON({ kind, name }))
-                            setName('')
-                            setKind('Singleton')
+                            props.addEntity(fromJSON(entity))
+                            setEntity(getEmptyEntity())
                             props.setVisible(false)
                         }}
                     >
@@ -40,4 +50,11 @@ export function NewEntityModal(props: {
             </Portal>
     )
 
+}
+
+function getEmptyEntity(): Entity{
+    return {
+        kind: 'Singleton',
+        name: ''
+    }
 }
