@@ -3,6 +3,7 @@ import { useTheme } from "@react-navigation/native";
 import { Image, StyleProp, ViewStyle } from 'react-native';
 import { List } from 'react-native-paper';
 import { Module, Kind } from 'wollok-ts/dist/model';
+import { KindIcon } from '../EntityKindIcon';
 
 
 export function EntityComponent(props: { entity: Module }) {
@@ -32,20 +33,7 @@ export function EntityComponent(props: { entity: Module }) {
             style={itemStyle}
             titleStyle={{ fontSize: 20 }}
             title={props.entity.name}
-            left={() => <Image source={getImageFromType(props.entity.kind)} style={{ marginRight: 10, alignSelf: 'center' }} />}
+            left={() => <KindIcon kind={props.entity.kind} />}
         />
     )
-}
-
-
-
-function getImageFromType(aKind: Kind) {
-    switch (aKind) {
-        case "Class":
-            return require('../../assets/class.png')
-        case "Singleton":
-            return require('../../assets/wko.png')
-        case "Mixin":
-            return require('../../assets/mixin.png')
-    }
 }
