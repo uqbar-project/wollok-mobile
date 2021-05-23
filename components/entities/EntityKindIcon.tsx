@@ -2,7 +2,7 @@ import { Kind } from "wollok-ts/dist/model";
 import React from 'react'
 import { Image } from "react-native";
 
-export function KindIcon(props: {kind: Kind}){
+export function EntityKindIcon(props: {kind: Kind}){
     return(
         <Image source={getImageFromType(props.kind)} style={{alignSelf:'center'}}/>
     )
@@ -11,10 +11,10 @@ export function KindIcon(props: {kind: Kind}){
 function getImageFromType(aKind: Kind) {
     switch (aKind) {
         case "Class":
-            return require('../assets/class.png')
+            return require('../../assets/class.png')
         case "Singleton":
-            return require('../assets/wko.png')
+            return require('../../assets/wko.png')
         case "Mixin":
-            return require('../assets/mixin.png')
+            return require('../../assets/mixin.png')
     }
 }
