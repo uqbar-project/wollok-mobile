@@ -10,10 +10,16 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "native-base": "^2.15.2",
+    "@react-navigation/native": "^5.9.4",
+    "@react-navigation/stack": "^5.14.5",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-bootsplash": "^3.2.3",
+    "react-native-gesture-handler": "^1.10.3",
+    "react-native-paper": "^4.8.1",
+    "react-native-safe-area-context": "^3.2.0",
+    "react-native-screens": "^3.2.0",
+    "react-native-vector-icons": "^8.1.0",
     "wollok-ts": "^2.3.1"
   },
   "devDependencies": {
