@@ -1,7 +1,7 @@
 # Wollok Mobile
 A mobile IDE for [Wollok](https://www.wollok.org/)
 ## Local development
-After [setting up your environment](https://reactnative.dev/docs/environment-setup) in the project directory, you can run:
+After [setting up your development environment](https://reactnative.dev/docs/environment-setup), in the project directory you can run:
 ### `yarn`
 To install dependencies
 
@@ -9,10 +9,10 @@ To install dependencies
 To start metro
 
 ### `yarn android`
-To run the app on your devices (external devices should be connected by USB)
+To run the app on your android devices (external devices should be connected by USB)
 
 ## Assembling APKs
-All the generated filed will be located in the following directory: 
+All the generated files will be located in the following directory: 
 `android/app/build/outputs/apk/<release or debug>/`
 
 
@@ -23,7 +23,7 @@ yarn publish-debug:android
 ```
 
 ### Release APK
-For this you'll to generate need a keystore, it will prompt you to set a password, **save it**
+For this you'll need to generate a keystore, it will prompt you to set a password, **save it**
 ```
 keytool -genkeypair -v -storetype PKCS12 -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
 ```
