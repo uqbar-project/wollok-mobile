@@ -6,6 +6,10 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "bundle:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "prepublish": "yarn bundle:android && cd android  && ./gradlew clean",
+    "publish-release:android": "yarn prepublish && cd android && ./gradlew assembleRelease -x bundleReleaseJsAndAssets",
+    "publish-debug:android": "yarn prepublish && cd android && ./gradlew assembleDebug -x bundleReleaseJsAndAssets",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
