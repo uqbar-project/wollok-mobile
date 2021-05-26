@@ -48,7 +48,7 @@ export default class App extends React.Component {
                   <Stack.Screen
                      name="entities"
                      component={Entities}
-                     options={{ title: upperCaseFirst(translate("entities")), headerTitleAlign: 'center' }}
+                     options={{ title: upperCaseFirst(translate("entities.title")), headerTitleAlign: 'center' }}
                   ></Stack.Screen>
                </Stack.Navigator>
             </NavigationContainer>
@@ -58,8 +58,3 @@ export default class App extends React.Component {
 }
 
 const headerStyle = { elevation: 0, shadowOpacity: 0 }
-
-
-
-
-
