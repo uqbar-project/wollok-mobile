@@ -23,7 +23,8 @@ yarn publish-debug:android
 ```
 
 ### Release APK
-For this you'll need to generate a keystore, it will prompt you to set a password, **save it**
+For this you'll need to generate a keystore, it will prompt you to set a password, **save it**. 
+
 ```
 keytool -genkeypair -v -storetype PKCS12 -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
 ```
@@ -43,3 +44,4 @@ Then use the following command to assemble your release APK
 yarn publish-release:android
 ```
 
+note: The keystore generation is a one time only process, after that you can reuse the already generated one.
