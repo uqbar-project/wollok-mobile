@@ -3,7 +3,7 @@ import { useTheme, Theme } from "@react-navigation/native"
 import { FAB } from "react-native-paper"
 import React from 'react'
 
-export function FabScreen(props: {children: Element | Element[], onPress?: () => void}){
+export function FabAddScreen(props: {children: Element | Element[], onPress?: () => void}){
     const theme = useTheme()
     const styles = getStyles(theme)
     return (

@@ -5,10 +5,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
 import { EntityDetails } from "./pages/EntityDetails/EntityDetails";
+import { Module } from "wollok-ts/dist/model";
 
+export type RootStackParamList = {
+   Entities: undefined,
+   EntityDetails: { entity: Module }
+ }
 
 const App = () => {
-   const Stack = createStackNavigator();
+   const Stack = createStackNavigator<RootStackParamList>()
 
    const paperTheme: ReactNativePaper.Theme = {
       ...DefaultTheme,
@@ -21,16 +26,16 @@ const App = () => {
    return (
       <PaperProvider theme={paperTheme}>
          <NavigationContainer theme={theme}>
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName="Entities">
                <Stack.Screen
-                  name="entities"
+                  name="Entities"
                   component={Entities}
                   options={{ title: 'Entidades', headerTitleAlign: 'center' }}
                ></Stack.Screen>
                <Stack.Screen
-                  name="entityDetail"
+                  name="EntityDetails"
                   component={EntityDetails}
-                  options={{ title: 'Entidad', headerTitleAlign: 'center' }}
+                  options={({route}) => ({ title: route.params.entity.name, headerTitleAlign: 'center', animationEnabled: false })}
                ></Stack.Screen>
             </Stack.Navigator>
          </NavigationContainer>
