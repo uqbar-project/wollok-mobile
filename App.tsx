@@ -4,6 +4,7 @@ import { theme } from "./theme";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
+import { EntityDetails } from "./pages/EntityDetails/EntityDetails";
 
 
 const App = () => {
@@ -25,6 +26,11 @@ const App = () => {
                   name="entities"
                   component={Entities}
                   options={{ title: 'Entidades', headerTitleAlign: 'center' }}
+               ></Stack.Screen>
+               <Stack.Screen
+                  name="entityDetail"
+                  component={EntityDetails}
+                  options={{ title: 'Entidad', headerTitleAlign: 'center' }}
                ></Stack.Screen>
             </Stack.Navigator>
          </NavigationContainer>
