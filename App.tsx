@@ -26,7 +26,7 @@ const App = () => {
    return (
       <PaperProvider theme={paperTheme}>
          <NavigationContainer theme={theme}>
-            <Stack.Navigator initialRouteName="Entities">
+            <Stack.Navigator initialRouteName="Entities" mode="modal">
                <Stack.Screen
                   name="Entities"
                   component={Entities}
