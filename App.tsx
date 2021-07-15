@@ -1,39 +1,50 @@
-import React from "react";
-import { Entities } from "./pages/Entities/Entities";
-import { theme } from "./theme";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useEffect } from "react"
+import { Entities } from "./pages/Entities/Entities"
+import { theme } from "./theme"
+import { createStackNavigator } from "@react-navigation/stack"
+import { NavigationContainer } from "@react-navigation/native"
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
-
+import { setI18nConfig, translate } from "./utils/translation-helpers"
+import RNLocalize from 'react-native-localize'
+import { upperCaseFirst } from 'upper-case-first'
 
 const App = () => {
-   const Stack = createStackNavigator();
+   setI18nConfig()
+   useEffect(() => {
+      RNLocalize.addEventListener("change", setI18nConfig)
 
-   const paperTheme: ReactNativePaper.Theme = {
-      ...DefaultTheme,
-      colors: {
-         ...DefaultTheme.colors,
-         ...theme.colors,
-         accent: theme.colors.border
+      return function cleanup(){
+         RNLocalize.removeEventListener("change", setI18nConfig)
       }
-   }
-   return (
-      <PaperProvider theme={paperTheme}>
-         <NavigationContainer theme={theme}>
-            <Stack.Navigator>
-               <Stack.Screen
-                  name="entities"
-                  component={Entities}
-                  options={{ title: 'Entidades', headerTitleAlign: 'center' }}
-               ></Stack.Screen>
-            </Stack.Navigator>
-         </NavigationContainer>
-      </PaperProvider>
-   )
-};
+
+   })
+
+   const Stack = createStackNavigator()
+      const paperTheme: ReactNativePaper.Theme = {
+         ...DefaultTheme,
+         colors: {
+            ...DefaultTheme.colors,
+            ...theme.colors,
+            accent: theme.colors.border
+         },
+         dark: theme.dark
+      }
+      return (
+         <PaperProvider theme={paperTheme}>
+            <NavigationContainer theme={theme}>
+               <Stack.Navigator screenOptions={{ headerStyle }}>
+                  <Stack.Screen
+                     name="entities"
+                     component={Entities}
+                     options={{ title: upperCaseFirst(translate("entities.title")), headerTitleAlign: 'center' }}
+                  ></Stack.Screen>
+               </Stack.Navigator>
+            </NavigationContainer>
+         </PaperProvider>
+      )
+}
+
+const headerStyle = { elevation: 0, shadowOpacity: 0 }
 
 
-
-
-
-export default App;
+export default App

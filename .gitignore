@@ -30,6 +30,8 @@ local.properties
 *.iml
 drawable-*/
 release.keystore.properties
+android/app/src/main/res/raw
+index.android.bundle
 
 # node.js
 #
