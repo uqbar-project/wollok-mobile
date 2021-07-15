@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Entities } from "./pages/Entities/Entities"
 import { theme } from "./theme"
 import { createStackNavigator } from "@react-navigation/stack"
@@ -8,30 +8,18 @@ import { setI18nConfig, translate } from "./utils/translation-helpers"
 import RNLocalize from 'react-native-localize'
 import { upperCaseFirst } from 'upper-case-first'
 
-export default class App extends React.Component {
+const App = () => {
+   setI18nConfig()
+   useEffect(() => {
+      RNLocalize.addEventListener("change", setI18nConfig)
 
-   constructor(props: {} | Readonly<{}>) {
-      super(props)
-      setI18nConfig()
-   }
+      return function cleanup(){
+         RNLocalize.removeEventListener("change", setI18nConfig)
+      }
 
-   componentDidMount() {
-      RNLocalize.addEventListener("change", this.handleLocalizationChange)
-   }
+   })
 
-   componentWillUnmount() {
-      RNLocalize.removeEventListener("change", this.handleLocalizationChange)
-   }
-
-   handleLocalizationChange = () => {
-      setI18nConfig()
-      this.forceUpdate()
-   }
-
-
-
-   render() {
-      const Stack = createStackNavigator()
+   const Stack = createStackNavigator()
       const paperTheme: ReactNativePaper.Theme = {
          ...DefaultTheme,
          colors: {
@@ -54,7 +42,9 @@ export default class App extends React.Component {
             </NavigationContainer>
          </PaperProvider>
       )
-   }
 }
 
 const headerStyle = { elevation: 0, shadowOpacity: 0 }
+
+
+export default App
