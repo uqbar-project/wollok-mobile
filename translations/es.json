@@ -1,0 +1,12 @@
+{
+    "ok": "ok",
+    "entities": {
+        "title": "entidades",
+        "kinds":{
+            "mixin": "mixin",
+            "object": "objeto",
+            "class": "clase"
+        },
+        "entityName": "Nombre entidad"
+    }
+}

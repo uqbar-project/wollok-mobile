@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { useTheme } from "@react-navigation/native"
 import { SelectKind } from "../SelectKind/SelectKind"
 import { stylesheet } from "./styles"
+import { translate } from "../../../utils/translation-helpers"
 
 type Entity = {
     name: string,
@@ -34,7 +35,7 @@ export function NewEntityModal(props: {
                 visible={props.visible}
                 onDismiss={() => props.setVisible(false)}
             >
-                <TextInput placeholderTextColor="grey" onChangeText={setName} placeholder="Nombre definicion"></TextInput>
+                <TextInput placeholderTextColor="grey" onChangeText={setName} placeholder={translate('entities.entityName')}></TextInput>
 
                 <SelectKind kind={entity.kind} setKind={setKind} />
 
@@ -45,7 +46,7 @@ export function NewEntityModal(props: {
                         props.setVisible(false)
                     }}
                 >
-                    <Text>OK</Text>
+                    <Text>{translate('ok').toUpperCase()}</Text>
                 </Button>
             </Modal>
         </Portal>

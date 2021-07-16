@@ -1,0 +1,13 @@
+{
+    "ok": "ok",
+    "entities": {
+        "title": "entities",
+        "kinds":{
+            "mixin": "mixin",
+            "object": "object",
+            "class": "class"
+        },
+        "entityName": "Entity name"
+
+    }
+}
