@@ -1,13 +1,13 @@
 import React from 'react'
 import { useTheme, useNavigation } from "@react-navigation/native";
 import { List } from 'react-native-paper';
-import { Module } from 'wollok-ts/dist/model';
 import { EntityKindIcon } from '../EntityKindIcon';
 import { stylesheet } from './styles'
 import { EntitiesScreenNavigationProp } from '../../../pages/Entities/Entities';
+import { Entity } from '../../../models/entity';
 
 type Props =  { 
-    entity: Module,
+    entity: Entity,
 }
 
 export function EntityComponent(props: Props) {

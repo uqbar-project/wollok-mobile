@@ -5,16 +5,16 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { NavigationContainer } from "@react-navigation/native"
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
 import { EntityDetails } from "./pages/EntityDetails/EntityDetails";
-import { Module } from "wollok-ts/dist/model";
-
-export type RootStackParamList = {
-   Entities: undefined,
-   EntityDetails: { entity: Module }
- }
-
 import { setI18nConfig, translate } from "./utils/translation-helpers"
 import RNLocalize from 'react-native-localize'
 import { upperCaseFirst } from 'upper-case-first'
+import { Entity } from "./models/entity"
+
+export type RootStackParamList = {
+   Entities: undefined,
+   EntityDetails: { entity: Entity }
+ }
+
 
 const App = () => {
    setI18nConfig()

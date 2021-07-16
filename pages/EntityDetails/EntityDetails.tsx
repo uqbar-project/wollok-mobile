@@ -7,7 +7,6 @@ import { RootStackParamList } from '../../App';
 
 
 export function EntityDetails(props: { route: RouteProp<RootStackParamList, 'EntityDetails'> }) {
-    console.log(props.route.params.entity.methods())
     return (
         <FabAddScreen onPress={() => console.log('hola')}>
             <List.Section>

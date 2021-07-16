@@ -1,4 +1,4 @@
-import { Kind } from "wollok-ts/dist/model"
+import { Kind } from "../../../models/entity"
 import React from "react"
 import { ToggleButton, Text } from "react-native-paper"
 import { View } from "react-native"

@@ -1,20 +1,17 @@
 import { Portal, Modal, TextInput, Text, Button } from "react-native-paper"
-import { Kind, fromJSON, Module } from "wollok-ts/dist/model"
+import { fromJSON } from "wollok-ts/dist/model"
 import React, { useState } from "react"
 import { useTheme } from "@react-navigation/native"
 import { SelectKind } from "../SelectKind/SelectKind"
 import { stylesheet } from "./styles"
 import { translate } from "../../../utils/translation-helpers"
+import { Kind, Entity } from "../../../models/entity"
 
-type Entity = {
-    name: string,
-    kind: Kind
-}
 
 export function NewEntityModal(props: {
     visible: boolean,
     setVisible: (value: boolean) => void,
-    addEntity: (definition: Module) => void
+    addEntity: (definition: Entity) => void
 }) {
     const styles = stylesheet(useTheme())
     const [entity, setEntity] = useState<Entity>(getEmptyEntity())
@@ -55,8 +52,5 @@ export function NewEntityModal(props: {
 }
 
 function getEmptyEntity(): Entity {
-    return {
-        kind: 'Singleton',
-        name: ''
-    }
+    return new Entity('', 'Singleton')
 }
