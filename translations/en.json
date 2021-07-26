@@ -1,12 +1,12 @@
 {
-  "ok": "ok",
-  "entities": {
-    "title": "entities",
-    "kinds": {
-      "mixin": "mixin",
-      "object": "object",
-      "class": "class"
-    },
-    "entityName": "Entity name"
-  }
+	"ok": "ok",
+	"entities": {
+		"title": "entities",
+		"kinds": {
+			"mixin": "mixin",
+			"object": "object",
+			"class": "class"
+		},
+		"entityName": "Entity name"
+	}
 }

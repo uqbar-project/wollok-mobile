@@ -8,34 +8,34 @@ import FabAddScreen from '../../components/FabScreens/FabAddScreen'
 import { Entity } from '../../models/entity'
 
 export type EntitiesScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Entities'
+	RootStackParamList,
+	'Entities'
 >
 
 export function Entities() {
-  const [entities, setEntities] = useState<Entity[]>([])
-  const [modalVisible, setModalVisible] = useState(false)
+	const [entities, setEntities] = useState<Entity[]>([])
+	const [modalVisible, setModalVisible] = useState(false)
 
-  function fabPressed() {
-    setModalVisible(true)
-  }
+	function fabPressed() {
+		setModalVisible(true)
+	}
 
-  function addEntity(entity: Entity) {
-    setEntities([...entities, entity])
-  }
+	function addEntity(entity: Entity) {
+		setEntities([...entities, entity])
+	}
 
-  return (
-    <FabAddScreen onPress={fabPressed}>
-      <ScrollView>
-        {entities.map(ent => (
-          <EntityComponent key={ent.name} entity={ent} />
-        ))}
-      </ScrollView>
-      <NewEntityModal
-        visible={modalVisible}
-        addEntity={addEntity}
-        setVisible={setModalVisible}
-      />
-    </FabAddScreen>
-  )
+	return (
+		<FabAddScreen onPress={fabPressed}>
+			<ScrollView>
+				{entities.map(ent => (
+					<EntityComponent key={ent.name} entity={ent} />
+				))}
+			</ScrollView>
+			<NewEntityModal
+				visible={modalVisible}
+				addEntity={addEntity}
+				setVisible={setModalVisible}
+			/>
+		</FabAddScreen>
+	)
 }

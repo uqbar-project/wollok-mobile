@@ -1,63 +1,38 @@
 import React, { useState } from 'react'
-import {
-  Button,
-  Modal,
-  Portal,
-  Text,
-  TextInput,
-  withTheme,
-} from 'react-native-paper'
+import { TextInput } from 'react-native-paper'
 import { Entity, Kind } from '../../../models/entity'
-import { Theme } from '../../../theme'
 import { translate } from '../../../utils/translation-helpers'
+import FormModal from '../../ui/FormModal/FormModal'
 import { SelectKind } from '../SelectKind/SelectKind'
-import { stylesheet } from './styles'
 
 function NewEntityModal(props: {
-  visible: boolean
-  setVisible: (value: boolean) => void
-  addEntity: (definition: Entity) => void
-  theme: Theme
+	visible: boolean
+	setVisible: (value: boolean) => void
+	addEntity: (definition: Entity) => void
 }) {
-  const styles = stylesheet(props.theme)
-  const [entity, setEntity] = useState<Entity>(getEmptyEntity())
+	const [kind, setKind] = useState<Kind>('Singleton')
+	const [name, setName] = useState<string>('')
 
-  function setName(name: string) {
-    setEntity({ ...entity, name })
-  }
+	return (
+		<FormModal
+			onSubmit={addEntity}
+			resetForm={() => resetForm}
+			setVisible={props.setVisible}
+			visible={props.visible}>
+			<TextInput
+				onChangeText={setName}
+				placeholder={translate('entities.entityName')}></TextInput>
+			<SelectKind kind={kind} setKind={setKind} />
+		</FormModal>
+	)
+	function addEntity() {
+		props.addEntity(new Entity(name, kind))
+	}
 
-  function setKind(kind: Kind) {
-    setEntity({ ...entity, kind })
-  }
-
-  return (
-    <Portal>
-      <Modal
-        contentContainerStyle={styles.modal}
-        visible={props.visible}
-        onDismiss={() => props.setVisible(false)}>
-        <TextInput
-          placeholderTextColor="grey"
-          onChangeText={setName}
-          placeholder={translate('entities.entityName')}></TextInput>
-
-        <SelectKind kind={entity.kind} setKind={setKind} />
-
-        <Button
-          onPress={() => {
-            props.addEntity(entity)
-            setEntity(getEmptyEntity())
-            props.setVisible(false)
-          }}>
-          <Text>{translate('ok').toUpperCase()}</Text>
-        </Button>
-      </Modal>
-    </Portal>
-  )
+	function resetForm() {
+		setName('')
+		setKind('Singleton')
+	}
 }
 
-function getEmptyEntity(): Entity {
-  return new Entity('', 'Singleton')
-}
-
-export default withTheme(NewEntityModal)
+export default NewEntityModal

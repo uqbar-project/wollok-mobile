@@ -8,27 +8,27 @@ import { EntityKindIcon } from '../EntityKindIcon'
 import { stylesheet } from './styles'
 
 type Props = {
-  entity: Entity
-  theme: Theme
+	entity: Entity
+	theme: Theme
 }
 
 function EntityComponent(props: Props) {
-  const styles = stylesheet(props.theme)
-  const navigation = useNavigation<EntitiesScreenNavigationProp>()
-  const goToEntityDetails = () => {
-    navigation.navigate('EntityDetails', { entity: props.entity })
-  }
+	const styles = stylesheet(props.theme)
+	const navigation = useNavigation<EntitiesScreenNavigationProp>()
+	const goToEntityDetails = () => {
+		navigation.navigate('EntityDetails', { entity: props.entity })
+	}
 
-  return (
-    <List.Item
-      onPress={goToEntityDetails}
-      key={props.entity.name}
-      style={styles.item}
-      titleStyle={styles.itemTitle}
-      title={props.entity.name}
-      left={() => <EntityKindIcon kind={props.entity.kind} />}
-    />
-  )
+	return (
+		<List.Item
+			onPress={goToEntityDetails}
+			key={props.entity.name}
+			style={styles.item}
+			titleStyle={styles.itemTitle}
+			title={props.entity.name}
+			left={() => <EntityKindIcon kind={props.entity.kind} />}
+		/>
+	)
 }
 
 export default withTheme(EntityComponent)
