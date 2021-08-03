@@ -10,6 +10,10 @@ export class Entity {
 		public attributes: Attribute[] = [],
 	) {}
 
+	addAttribute(attribute: Attribute){
+		this.attributes.push(attribute)
+	}
+
 	addMethod(method: Method) {
 		this.methods.push(method)
 	}
@@ -21,12 +25,20 @@ export class Method {
 	get description() {
 		return `${this.name}(${this.parameters.join(', ')})`
 	}
+
+	get key(){
+		return this.name
+	}
 }
 
 export class Attribute {
-	constructor(public name: string) {}
+	constructor(public name: string, public constant: boolean) {}
 
 	get description() {
+		return this.name
+	}
+
+	get key(){
 		return this.name
 	}
 }

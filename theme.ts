@@ -1,6 +1,6 @@
 import {
 	DarkTheme as NavigationDarkTheme,
-	Theme as NavigationTheme,
+	Theme as NavigationTheme
 } from '@react-navigation/native'
 import merge from 'deepmerge'
 import { DarkTheme as PaperDarkTheme } from 'react-native-paper'
@@ -20,7 +20,7 @@ export const theme: Theme = {
 		text: '#FFFFFF',
 		notification: '#252939',
 		card: '#0C1A31',
-
+		accent: '#AF254B',
 		placeholder: '#747474',
 	},
 }

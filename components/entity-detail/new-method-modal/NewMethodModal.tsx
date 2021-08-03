@@ -18,6 +18,7 @@ const NewMethodModal = (props: {
 
 	return (
 		<FormModal
+			title={'Nuevo método'}
 			resetForm={reset}
 			onSubmit={newMethod}
 			setVisible={props.setVisible}
@@ -26,6 +27,7 @@ const NewMethodModal = (props: {
 			<Text style={styles.subtitle}>Parametros</Text>
 			{parameters.map((param, i) => (
 				<ParameterInput
+					key={param}
 					icon="trash-can-outline"
 					parameter={param}
 					setParameter={newParam => setParameter(newParam, i)}
