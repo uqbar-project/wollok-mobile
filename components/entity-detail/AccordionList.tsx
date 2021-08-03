@@ -1,26 +1,26 @@
-import React from 'react'
-import { View } from 'react-native'
-import { Divider, List, withTheme } from 'react-native-paper'
-import { Theme } from '../../theme'
+import { Theme, useTheme } from '@react-navigation/native'
+import React, { Key } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Divider, List } from 'react-native-paper'
 
-type Props = {
+type Props<Item> = {
 	title: string
-	items: { description: string }[]
-	theme: Theme
+	items: Item[]
+	getVisualItem: (item: Item) => Element
 }
-const AccordionList = (props: Props) => {
-	const dividerStyle = {
-		marginHorizontal: 10,
-		backgroundColor: props.theme.colors.card,
-	}
+export const AccordionList = function <Item extends { key: Key }>(
+	props: Props<Item>,
+) {
+	const reactNavigationTheme = useTheme()
+	const styles = getStyles(reactNavigationTheme)
 
 	return (
 		<List.Accordion title={props.title}>
-			{props.items.map(a => {
+			{props.items.map(item => {
 				return (
-					<View key={a.description}>
-						<List.Item title={a.description} />
-						<Divider style={dividerStyle} />
+					<View key={item.key}>
+						{props.getVisualItem(item)}
+						<Divider style={styles.divider} />
 					</View>
 				)
 			})}
@@ -28,4 +28,11 @@ const AccordionList = (props: Props) => {
 	)
 }
 
-export default withTheme(AccordionList)
+function getStyles(theme: Theme) {
+	return StyleSheet.create({
+		divider: {
+			marginHorizontal: 10,
+			backgroundColor: theme.colors.card,
+		},
+	})
+}

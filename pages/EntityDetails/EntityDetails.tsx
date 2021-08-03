@@ -1,11 +1,14 @@
 import { RouteProp } from '@react-navigation/native'
 import React, { useState } from 'react'
+import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
-import AccordionList from '../../components/entity-detail/AccordionList'
+import { AccordionList } from '../../components/entity-detail/AccordionList'
+import AttributeItem from '../../components/entity-detail/AttributeItem'
+import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
-import { Method } from '../../models/entity'
+import { Attribute, Method } from '../../models/entity'
 
 export default function (props: {
 	route: RouteProp<RootStackParamList, 'EntityDetails'>
@@ -29,13 +32,28 @@ export default function (props: {
 				},
 			]}>
 			<List.Section>
-				<AccordionList title="ATRIBUTOS" items={entity.attributes} />
-				<AccordionList title="METODOS" items={entity.methods} />
+				<ScrollView>
+					<AccordionList<Attribute>
+						title="ATRIBUTOS"
+						items={entity.attributes}
+						getVisualItem={attributeItem}
+					/>
+					<AccordionList<Method>
+						title="METODOS"
+						items={entity.methods}
+						getVisualItem={methodItem}
+					/>
+				</ScrollView>
 			</List.Section>
 			<NewMethodModal
 				addMethod={addMethod}
 				visible={methodModalVisible}
 				setVisible={setMethodModalVisible}
+			/>
+			<NewAttributeModal
+				onSubmit={addAttribute}
+				setVisible={setAttributeModalVisible}
+				visible={attributeModalVisible}
 			/>
 		</MultiFabScreen>
 	)
@@ -43,4 +61,18 @@ export default function (props: {
 	function addMethod(method: Method) {
 		entity.addMethod(method)
 	}
+
+	function addAttribute(attribute: Attribute) {
+		entity.addAttribute(attribute)
+	}
+}
+
+function attributeItem(attribute: Attribute): Element {
+	return (
+		<AttributeItem key={attribute.name} attribute={attribute}></AttributeItem>
+	)
+}
+
+function methodItem(method: Method): Element {
+	return <List.Item key={method.name} title={method.description} />
 }
