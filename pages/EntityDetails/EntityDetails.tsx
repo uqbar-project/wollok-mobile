@@ -2,6 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
+import { upperCaseFirst } from 'upper-case-first'
 import { RootStackParamList } from '../../App'
 import { AccordionList } from '../../components/entity-detail/AccordionList'
 import AttributeItem from '../../components/entity-detail/AttributeItem'
@@ -9,6 +10,7 @@ import NewAttributeModal from '../../components/entity-detail/new-attribute-moda
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { Attribute, Method } from '../../models/entity'
+import { translate } from '../../utils/translation-helpers'
 
 export default function (props: {
 	route: RouteProp<RootStackParamList, 'EntityDetails'>
@@ -22,24 +24,24 @@ export default function (props: {
 			actions={[
 				{
 					icon: 'database',
-					label: 'Atributo',
+					label: upperCaseFirst(translate('entityDetails.attribute')),
 					onPress: () => setAttributeModalVisible(true),
 				},
 				{
 					icon: 'code-braces',
-					label: 'Metodo',
+					label: upperCaseFirst(translate('entityDetails.method')),
 					onPress: () => setMethodModalVisible(true),
 				},
 			]}>
 			<List.Section>
 				<ScrollView>
 					<AccordionList<Attribute>
-						title="ATRIBUTOS"
+						title={translate('entityDetails.attributes').toUpperCase()}
 						items={entity.attributes}
 						getVisualItem={attributeItem}
 					/>
 					<AccordionList<Method>
-						title="METODOS"
+						title={translate('entityDetails.methods').toUpperCase()}
 						items={entity.methods}
 						getVisualItem={methodItem}
 					/>

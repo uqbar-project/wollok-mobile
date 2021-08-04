@@ -8,5 +8,22 @@
 			"class": "class"
 		},
 		"entityName": "Entity name"
+	},
+	"entityDetails": {
+		"attribute": "attribute",
+		"method": "method",
+		"attributes": "attributes",
+		"methods": "methods",
+		"attributeModal": {
+			"newAttribute": "New attribute",
+			"nameOfAttribute": "Name of the attribute",
+			"constant": "constant"
+		},
+		"methodModal": {
+			"newMethod": "New method",
+			"parameters": "parameters",
+			"nameOfMethod": "Name of the method",
+			"nameOfParameter": "Name of the parameter"
+		}
 	}
 }

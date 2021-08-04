@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Text, TextInput, withTheme } from 'react-native-paper'
+import { upperCaseFirst } from 'upper-case-first'
 import { Method } from '../../../models/entity'
 import { Theme } from '../../../theme'
+import { translate } from '../../../utils/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import ParameterInput from './ParameterInput'
 
@@ -18,13 +20,19 @@ const NewMethodModal = (props: {
 
 	return (
 		<FormModal
-			title={'Nuevo método'}
+			title={translate('entityDetails.methodModal.newMethod')}
 			resetForm={reset}
 			onSubmit={newMethod}
 			setVisible={props.setVisible}
 			visible={props.visible}>
-			<TextInput onChangeText={setName} label={'Nombre del método'} />
-			<Text style={styles.subtitle}>Parametros</Text>
+			<TextInput
+				onChangeText={setName}
+				label={translate('entityDetails.methodModal.nameOfMethod')}
+			/>
+
+			<Text style={styles.subtitle}>
+				{upperCaseFirst(translate('entityDetails.methodModal.parameters'))}
+			</Text>
 			{parameters.map((param, i) => (
 				<ParameterInput
 					key={param}

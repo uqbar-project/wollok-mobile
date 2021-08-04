@@ -1,6 +1,7 @@
 import React from 'react'
 import { TextInput, withTheme } from 'react-native-paper'
 import { Theme } from '../../../theme'
+import { translate } from '../../../utils/translation-helpers'
 
 const ParameterInput = (props: {
 	setParameter: (parameter: string) => void
@@ -11,7 +12,7 @@ const ParameterInput = (props: {
 }) => {
 	return (
 		<TextInput
-			placeholder={'Nombre del parametro'}
+			placeholder={translate('entityDetails.methodModal.nameOfParameter')}
 			onChangeText={props.setParameter}
 			value={props.parameter}
 			right={

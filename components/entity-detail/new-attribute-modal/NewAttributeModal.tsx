@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text, TextInput } from 'react-native-paper'
+import { upperCaseFirst } from 'upper-case-first'
 import { Attribute } from '../../../models/entity'
+import { translate } from '../../../utils/translation-helpers'
 import CheckIcon from '../../ui/CheckIcon'
 import FormModal from '../../ui/FormModal/FormModal'
 
@@ -18,12 +20,16 @@ const AttributeFormModal = (props: Props) => {
 
 	return (
 		<FormModal
-         title={'Nuevo atributo'}
+			title={translate('entityDetails.attributeModal.newAttribute')}
 			resetForm={resetForm}
 			onSubmit={emmitNewAttribute}
 			visible={visible}
 			setVisible={setVisible}>
-			<TextInput label={'Nombre del atributo'} onChangeText={setName} />
+			<TextInput
+				label={translate('entityDetails.attributeModal.nameOfAttribute')}
+				onChangeText={setName}
+			/>
+
 			<View style={styles.checkbox}>
 				<CheckIcon
 					checked={constant}
@@ -31,7 +37,9 @@ const AttributeFormModal = (props: Props) => {
 					checkedIconName="lock"
 					uncheckedIconName="lock-open-outline"
 				/>
-				<Text style={styles.constName}>Constante</Text>
+				<Text style={styles.constName}>
+					{upperCaseFirst(translate('entityDetails.attributeModal.constant'))}
+				</Text>
 			</View>
 		</FormModal>
 	)
