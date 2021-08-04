@@ -6,20 +6,36 @@ import { Theme } from '../../theme'
 
 function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 	const {
-		attribute: { constant, description },
+		attribute: { property, constant, description },
 		theme,
 	} = props
+
+	const icons = [
+		{
+			toggle: property,
+			icon: 'swap-horizontal-circle',
+		},
+		{
+			toggle: constant,
+			icon: 'lock',
+		},
+	]
+
 	return (
 		<List.Item
 			title={description}
-			right={() => {
-				return constant ? (
-					<List.Icon
-						icon="lock"
-						color={theme.colors.text}
-						style={styles.lockIcon}></List.Icon>
-				) : null
-			}}></List.Item>
+			right={() =>
+				icons
+					.filter(i => i.toggle)
+					.map((icon, i) => (
+						<List.Icon
+							key={i}
+							icon={icon.icon}
+							color={theme.colors.text}
+							style={styles.lockIcon}
+						/>
+					))
+			}></List.Item>
 	)
 }
 

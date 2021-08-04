@@ -16,7 +16,25 @@ type Props = {
 const AttributeFormModal = (props: Props) => {
 	const [name, setName] = useState('')
 	const [constant, setConstant] = useState(false)
+	const [property, setProperty] = useState(false)
 	const { visible, setVisible, onSubmit } = props
+
+	const checkboxes = [
+		{
+			checked: property,
+			setChecked: setProperty,
+			checkedIconName: 'swap-horizontal-circle',
+			uncheckedIconName: 'swap-horizontal-circle-outline',
+			text: upperCaseFirst(translate('entityDetails.attributeModal.property')),
+		},
+		{
+			checked: constant,
+			setChecked: setConstant,
+			checkedIconName: 'lock',
+			uncheckedIconName: 'lock-open-outline',
+			text: upperCaseFirst(translate('entityDetails.attributeModal.constant')),
+		},
+	]
 
 	return (
 		<FormModal
@@ -30,27 +48,25 @@ const AttributeFormModal = (props: Props) => {
 				onChangeText={setName}
 			/>
 
-			<View style={styles.checkbox}>
-				<CheckIcon
-					checked={constant}
-					setChecked={setConstant}
-					checkedIconName="lock"
-					uncheckedIconName="lock-open-outline"
-				/>
-				<Text style={styles.constName}>
-					{upperCaseFirst(translate('entityDetails.attributeModal.constant'))}
-				</Text>
-			</View>
+			{checkboxes.map(cbox => {
+				return (
+					<View key={cbox.text} style={styles.checkbox}>
+						<CheckIcon {...cbox} />
+						<Text style={styles.constName}>{cbox.text}</Text>
+					</View>
+				)
+			})}
 		</FormModal>
 	)
 
 	function resetForm() {
 		setName('')
 		setConstant(false)
+		setProperty(false)
 	}
 
 	function emmitNewAttribute() {
-		onSubmit(new Attribute(name, constant))
+		onSubmit(new Attribute(name, constant, property))
 	}
 }
 

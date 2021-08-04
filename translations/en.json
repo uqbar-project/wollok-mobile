@@ -17,7 +17,8 @@
 		"attributeModal": {
 			"newAttribute": "New attribute",
 			"nameOfAttribute": "Name of the attribute",
-			"constant": "constant"
+			"constant": "constant",
+			"property": "property"
 		},
 		"methodModal": {
 			"newMethod": "New method",

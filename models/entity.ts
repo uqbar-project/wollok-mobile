@@ -32,7 +32,7 @@ export class Method {
 }
 
 export class Attribute {
-	constructor(public name: string, public constant: boolean) {}
+	constructor(public name: string, public constant: boolean, public property: boolean) {}
 
 	get description() {
 		return this.name
