@@ -30,7 +30,7 @@ const App = () => {
 	return (
 		<PaperProvider theme={theme}>
 			<NavigationContainer theme={theme}>
-				<Stack.Navigator screenOptions={{ headerStyle }}>
+				<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
 					<Stack.Screen
 						name="Entities"
 						component={Entities}
