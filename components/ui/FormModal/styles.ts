@@ -10,7 +10,7 @@ export function stylesheet(theme: Theme) {
 		},
 		title: {
 			textAlign: 'center',
-			paddingBottom: 10
-		}
+			paddingBottom: 10,
+		},
 	})
 }

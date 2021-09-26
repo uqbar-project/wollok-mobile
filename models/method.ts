@@ -5,7 +5,7 @@ export class Method {
 		return `${this.name}(${this.parameters.join(', ')})`
 	}
 
-	get key(){
+	get key() {
 		return this.name
 	}
 }

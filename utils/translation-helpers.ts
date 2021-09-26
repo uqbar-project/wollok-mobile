@@ -9,12 +9,11 @@ const translationGetters: { [locale: string]: any } = {
 	en: () => require('../translations/en.json'),
 }
 
-export const translate = memoize<
-	(key: string, config?: i18n.TranslateOptions) => string
->(
-	(key, config) => i18n.t(key, config),
-	(key, config) => (config ? key + JSON.stringify(config) : key),
-)
+export const translate =
+	memoize<(key: string, config?: i18n.TranslateOptions) => string>( // prettier-ignore
+		(key, config) => i18n.t(key, config),
+		(key, config) => (config ? key + JSON.stringify(config) : key),
+	)
 
 export function setI18nConfig() {
 	// fallback if no available language fits

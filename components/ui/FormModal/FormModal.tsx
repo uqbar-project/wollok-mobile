@@ -5,7 +5,7 @@ import {
 	Portal,
 	Text,
 	Title,
-	withTheme
+	withTheme,
 } from 'react-native-paper'
 import { Theme } from '../../../theme'
 import { translate } from '../../../utils/translation-helpers'

@@ -1,6 +1,6 @@
 import {
 	DarkTheme as NavigationDarkTheme,
-	Theme as NavigationTheme
+	Theme as NavigationTheme,
 } from '@react-navigation/native'
 import merge from 'deepmerge'
 import { DarkTheme as PaperDarkTheme } from 'react-native-paper'

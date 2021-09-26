@@ -36,7 +36,8 @@ function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 							style={styles.lockIcon}
 						/>
 					))
-			}></List.Item>
+			}
+		/>
 	)
 }
 

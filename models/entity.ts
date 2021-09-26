@@ -12,7 +12,7 @@ export class Entity {
 		public attributes: Attribute[] = [],
 	) {}
 
-	addAttribute(attribute: Attribute){
+	addAttribute(attribute: Attribute) {
 		this.attributes.push(attribute)
 	}
 

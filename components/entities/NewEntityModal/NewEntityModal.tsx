@@ -5,9 +5,8 @@ import { translate } from '../../../utils/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import { SelectKind } from '../SelectKind/SelectKind'
 
-
-const initialName: string =  ''
-const initialKind: Kind =  'Singleton'
+const initialName: string = ''
+const initialKind: Kind = 'Singleton'
 
 function NewEntityModal(props: {
 	visible: boolean
@@ -25,7 +24,8 @@ function NewEntityModal(props: {
 			visible={props.visible}>
 			<TextInput
 				onChangeText={setName}
-				placeholder={translate('entities.entityName')}></TextInput>
+				placeholder={translate('entities.entityName')}
+			/>
 			<SelectKind kind={kind} setKind={setKind} />
 		</FormModal>
 	)
