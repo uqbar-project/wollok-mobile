@@ -5,13 +5,17 @@ import { translate } from '../../../utils/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import { SelectKind } from '../SelectKind/SelectKind'
 
+
+const initialName: string =  ''
+const initialKind: Kind =  'Singleton'
+
 function NewEntityModal(props: {
 	visible: boolean
 	setVisible: (value: boolean) => void
 	addEntity: (definition: Entity) => void
 }) {
-	const [kind, setKind] = useState<Kind>('Singleton')
-	const [name, setName] = useState<string>('')
+	const [kind, setKind] = useState<Kind>(initialKind)
+	const [name, setName] = useState<string>(initialName)
 
 	return (
 		<FormModal
@@ -30,8 +34,8 @@ function NewEntityModal(props: {
 	}
 
 	function resetForm() {
-		setName('')
-		setKind('Singleton')
+		setName(initialName)
+		setKind(initialKind)
 	}
 }
 
