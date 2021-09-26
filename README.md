@@ -39,7 +39,7 @@ For this you'll need to generate a keystore, it will prompt you to set a passwor
 keytool -genkeypair -v -storetype PKCS12 -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-Place the keystore file under the `android/` folder
+Place the keystore file under the `android/app` folder
 
 Then create the file `android/keystores/release.keystore.properties` with the following information:
 
