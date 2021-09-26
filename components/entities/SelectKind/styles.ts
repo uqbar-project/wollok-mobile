@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native'
 
 export const stylesheet = StyleSheet.create({
-    toggleButton: {
-        width: 100
-    },
-    toggleButtonRow: {
-        marginVertical: 15,
-        alignSelf: 'center'
-    }
+	toggleButton: {
+		width: 100,
+	},
+	toggleButtonRow: {
+		marginVertical: 15,
+		alignSelf: 'center',
+	},
 })

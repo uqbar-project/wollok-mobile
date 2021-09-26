@@ -1,12 +1,30 @@
 {
-    "ok": "ok",
-    "entities": {
-        "title": "entidades",
-        "kinds":{
-            "mixin": "mixin",
-            "object": "objeto",
-            "class": "clase"
-        },
-        "entityName": "Nombre entidad"
-    }
+	"ok": "ok",
+	"entities": {
+		"title": "entidades",
+		"kinds": {
+			"mixin": "mixin",
+			"object": "objeto",
+			"class": "clase"
+		},
+		"entityName": "Nombre entidad"
+	},
+	"entityDetails": {
+		"attribute": "atributo",
+		"method": "metodo",
+		"attributes": "atributos",
+		"methods": "metodos",
+		"attributeModal": {
+			"newAttribute": "Nuevo atributo",
+			"nameOfAttribute": "Nombre del atributo",
+			"constant": "constante",
+			"property": "propiedad"
+		},
+		"methodModal": {
+			"newMethod": "Nuevo metodo",
+			"parameters": "parametros",
+			"nameOfMethod": "Nombre del metodo",
+			"nameOfParameter": "Nombre del parametro"
+		}
+	}
 }

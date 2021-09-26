@@ -1,38 +1,41 @@
-import { useTheme } from "@react-navigation/native";
-import React, { useState } from "react";
-import { EntityComponent } from "../../components/entities/Entity/Entity";
-import { Module } from 'wollok-ts/dist/model'
-import { View } from "react-native";
-import { FAB } from 'react-native-paper'
-import { NewEntityModal } from "../../components/entities/NewEntityModal/NewEntityModal";
-import { ScrollView } from "react-native-gesture-handler";
-import { stylesheet } from "./styles";
+import { StackNavigationProp } from '@react-navigation/stack'
+import React, { useState } from 'react'
+import { ScrollView } from 'react-native-gesture-handler'
+import { RootStackParamList } from '../../App'
+import EntityComponent from '../../components/entities/Entity/Entity'
+import NewEntityModal from '../../components/entities/NewEntityModal/NewEntityModal'
+import FabAddScreen from '../../components/FabScreens/FabAddScreen'
+import { Entity } from '../../models/entity'
 
-
-
-
+export type EntitiesScreenNavigationProp = StackNavigationProp<
+	RootStackParamList,
+	'Entities'
+>
 
 export function Entities() {
-    const styles = stylesheet(useTheme())
-    const [entities, setEntities] = useState<Module[]>([]);
-    const [modalVisible, setModalVisible] = useState(false);
-  
-    function fabPressed() {
-        setModalVisible(true);
-    }
+	const [entities, setEntities] = useState<Entity[]>([])
+	const [modalVisible, setModalVisible] = useState(false)
 
-    function addEntity(entity: Module) {
-        setEntities([...entities, entity])
-    }
+	function fabPressed() {
+		setModalVisible(true)
+	}
 
-    
-    return (
-        <View style={{flex: 1}}>            
-            <ScrollView>
-                {entities.map(ent => <EntityComponent key={ent.name} entity={ent}/>)}
-            </ScrollView>
-            <NewEntityModal visible={modalVisible} addEntity={addEntity} setVisible={setModalVisible}/>
-            <FAB icon="plus" onPress={fabPressed} style={ styles.fab } />
-        </View>
-    )
+	function addEntity(entity: Entity) {
+		setEntities([...entities, entity])
+	}
+
+	return (
+		<FabAddScreen onPress={fabPressed}>
+			<ScrollView>
+				{entities.map(ent => (
+					<EntityComponent key={ent.name} entity={ent} />
+				))}
+			</ScrollView>
+			<NewEntityModal
+				visible={modalVisible}
+				addEntity={addEntity}
+				setVisible={setModalVisible}
+			/>
+		</FabAddScreen>
+	)
 }

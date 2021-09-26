@@ -1,62 +1,42 @@
-import { Portal, Modal, TextInput, Text, Button } from "react-native-paper"
-import { Kind, fromJSON, Module } from "wollok-ts/dist/model"
-import React, { useState } from "react"
-import { useTheme } from "@react-navigation/native"
-import { SelectKind } from "../SelectKind/SelectKind"
-import { stylesheet } from "./styles"
-import { translate } from "../../../utils/translation-helpers"
+import React, { useState } from 'react'
+import { TextInput } from 'react-native-paper'
+import { Entity, Kind } from '../../../models/entity'
+import { translate } from '../../../utils/translation-helpers'
+import FormModal from '../../ui/FormModal/FormModal'
+import { SelectKind } from '../SelectKind/SelectKind'
 
-type Entity = {
-    name: string,
-    kind: Kind
-}
 
-export function NewEntityModal(props: {
-    visible: boolean,
-    setVisible: (value: boolean) => void,
-    addEntity: (definition: Module) => void
+const initialName: string =  ''
+const initialKind: Kind =  'Singleton'
+
+function NewEntityModal(props: {
+	visible: boolean
+	setVisible: (value: boolean) => void
+	addEntity: (definition: Entity) => void
 }) {
-    const styles = stylesheet(useTheme())
-    const [entity, setEntity] = useState<Entity>(getEmptyEntity())
+	const [kind, setKind] = useState<Kind>(initialKind)
+	const [name, setName] = useState<string>(initialName)
 
-    function setName(name: string) {
-        setEntity({ ...entity, name })
-    }
+	return (
+		<FormModal
+			onSubmit={addEntity}
+			resetForm={() => resetForm}
+			setVisible={props.setVisible}
+			visible={props.visible}>
+			<TextInput
+				onChangeText={setName}
+				placeholder={translate('entities.entityName')}></TextInput>
+			<SelectKind kind={kind} setKind={setKind} />
+		</FormModal>
+	)
+	function addEntity() {
+		props.addEntity(new Entity(name, kind))
+	}
 
-    function setKind(kind: Kind) {
-        setEntity({ ...entity, kind })
-    }
-
-
-    return (
-        <Portal>
-            <Modal
-                contentContainerStyle={styles.modal}
-                visible={props.visible}
-                onDismiss={() => props.setVisible(false)}
-            >
-                <TextInput placeholderTextColor="grey" onChangeText={setName} placeholder={translate('entities.entityName')}></TextInput>
-
-                <SelectKind kind={entity.kind} setKind={setKind} />
-
-                <Button
-                    onPress={() => {
-                        props.addEntity(fromJSON(entity))
-                        setEntity(getEmptyEntity())
-                        props.setVisible(false)
-                    }}
-                >
-                    <Text>{translate('ok').toUpperCase()}</Text>
-                </Button>
-            </Modal>
-        </Portal>
-    )
-
+	function resetForm() {
+		setName(initialName)
+		setKind(initialKind)
+	}
 }
 
-function getEmptyEntity(): Entity {
-    return {
-        kind: 'Singleton',
-        name: ''
-    }
-}
+export default NewEntityModal
