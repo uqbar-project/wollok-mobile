@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import { List, withTheme } from 'react-native-paper'
 import { Attribute } from '../../models/attribute'
 import { Theme } from '../../theme'
+import { ATTRIBUTE_ICONS } from './attribute-icons'
 
 function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 	const {
@@ -13,11 +14,11 @@ function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 	const icons = [
 		{
 			toggle: property,
-			icon: 'swap-horizontal-circle',
+			icon: ATTRIBUTE_ICONS.property.checked,
 		},
 		{
 			toggle: constant,
-			icon: 'lock',
+			icon: ATTRIBUTE_ICONS.constant.checked,
 		},
 	]
 

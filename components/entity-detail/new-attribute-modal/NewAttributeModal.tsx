@@ -6,6 +6,7 @@ import { Attribute } from '../../../models/attribute'
 import { translate } from '../../../utils/translation-helpers'
 import CheckIcon from '../../ui/CheckIcon'
 import FormModal from '../../ui/FormModal/FormModal'
+import { ATTRIBUTE_ICONS } from '../attribute-icons'
 
 type Props = {
 	visible: boolean
@@ -23,15 +24,13 @@ const AttributeFormModal = (props: Props) => {
 		{
 			checked: property,
 			setChecked: setProperty,
-			checkedIconName: 'swap-horizontal-circle',
-			uncheckedIconName: 'swap-horizontal-circle-outline',
+			icons: ATTRIBUTE_ICONS.property,
 			text: upperCaseFirst(translate('entityDetails.attributeModal.property')),
 		},
 		{
 			checked: constant,
 			setChecked: setConstant,
-			checkedIconName: 'lock',
-			uncheckedIconName: 'lock-open-outline',
+			icons: ATTRIBUTE_ICONS.constant,
 			text: upperCaseFirst(translate('entityDetails.attributeModal.constant')),
 		},
 	]

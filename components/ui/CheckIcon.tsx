@@ -1,21 +1,21 @@
 import React from 'react'
 import { IconButton, withTheme } from 'react-native-paper'
 import { Theme, theme } from '../../theme'
+import { AttributeIcon } from '../entity-detail/attribute-icons'
 
 type Props = {
-	checkedIconName: string
-	uncheckedIconName: string
+	icons: AttributeIcon
 	checked: boolean
-	setChecked: (checked: boolean) => void,
-   theme: Theme
+	setChecked: (checked: boolean) => void
+	theme: Theme
 }
 
 const CheckIcon = (props: Props) => {
-	const { checkedIconName, uncheckedIconName, checked, setChecked } = props
+	const { icons, checked, setChecked } = props
 	return (
 		<IconButton
-         color={checked ? theme.colors.accent : theme.colors.backdrop}
-			icon={checked ? checkedIconName : uncheckedIconName}
+			color={checked ? theme.colors.accent : theme.colors.backdrop}
+			icon={checked ? icons.checked : icons.unchecked}
 			onPress={() => setChecked(!checked)}
 		/>
 	)
