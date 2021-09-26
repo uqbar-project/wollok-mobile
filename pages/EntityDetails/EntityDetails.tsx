@@ -9,7 +9,8 @@ import AttributeItem from '../../components/entity-detail/AttributeItem'
 import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
-import { Attribute, Method } from '../../models/entity'
+import { Method } from '../../models/method'
+import { Attribute } from '../../models/attribute'
 import { translate } from '../../utils/translation-helpers'
 
 export default function (props: {

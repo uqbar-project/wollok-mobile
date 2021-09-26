@@ -1,6 +1,6 @@
 import { Module } from 'wollok-ts/dist/model'
 import { Method } from './method'
-import { Attribute } from './parameter'
+import { Attribute } from './attribute'
 
 export type Kind = Module['kind']
 

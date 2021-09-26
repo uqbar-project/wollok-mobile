@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { List, withTheme } from 'react-native-paper'
-import { Attribute } from '../../models/entity'
+import { Attribute } from '../../models/attribute'
 import { Theme } from '../../theme'
 
 function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
