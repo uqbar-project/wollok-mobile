@@ -37,7 +37,8 @@ const App = () => {
 						options={{
 							title: upperCaseFirst(translate('entities.title')),
 							headerTitleAlign: 'center',
-						}}></Stack.Screen>
+						}}
+					/>
 					<Stack.Screen
 						name="EntityDetails"
 						component={EntityDetails}
@@ -45,7 +46,8 @@ const App = () => {
 							title: route.params.entity.name,
 							headerTitleAlign: 'center',
 							animationEnabled: false,
-						})}></Stack.Screen>
+						})}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</PaperProvider>

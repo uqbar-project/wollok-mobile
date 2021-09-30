@@ -71,9 +71,7 @@ export default function (props: {
 }
 
 function attributeItem(attribute: Attribute): Element {
-	return (
-		<AttributeItem key={attribute.name} attribute={attribute}></AttributeItem>
-	)
+	return <AttributeItem key={attribute.name} attribute={attribute} />
 }
 
 function methodItem(method: Method): Element {

@@ -12,7 +12,7 @@ export function SelectKind(props: {
 	setKind: (value: Kind) => void
 }) {
 	function toggleButtonColorByKind(aKind: Kind) {
-		return props.kind == aKind ? 'grey' : undefined
+		return props.kind === aKind ? 'grey' : undefined
 	}
 
 	return (

@@ -23,7 +23,7 @@ function MultiFabScreen(props: {
 					actions={props.actions.map(addStyleToAction)}
 					open={open}
 					visible={true}
-					onStateChange={({ open }) => setOpen(open)}
+					onStateChange={({ open: newOpenState }) => setOpen(newOpenState)}
 				/>
 			</Portal>
 		</Provider>
