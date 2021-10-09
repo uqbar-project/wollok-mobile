@@ -6,6 +6,7 @@ import EntityComponent from '../../components/entities/Entity/Entity'
 import NewEntityModal from '../../components/entities/NewEntityModal/NewEntityModal'
 import FabAddScreen from '../../components/FabScreens/FabAddScreen'
 import { Entity } from '../../models/entity'
+import { useProject } from '../../state/providers/ProjectProvider'
 
 export type EntitiesScreenNavigationProp = StackNavigationProp<
 	RootStackParamList,
@@ -13,7 +14,7 @@ export type EntitiesScreenNavigationProp = StackNavigationProp<
 >
 
 export function Entities() {
-	const [entities, setEntities] = useState<Entity[]>([])
+	const { state: entities, dispatch } = useProject()
 	const [modalVisible, setModalVisible] = useState(false)
 
 	function fabPressed() {
@@ -21,7 +22,7 @@ export function Entities() {
 	}
 
 	function addEntity(entity: Entity) {
-		setEntities([...entities, entity])
+		dispatch({ type: 'addEntity', payload: entity })
 	}
 
 	return (

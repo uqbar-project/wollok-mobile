@@ -7,6 +7,7 @@ import { upperCaseFirst } from 'upper-case-first'
 import { Entity } from './models/entity'
 import { Entities } from './pages/Entities/Entities'
 import EntityDetails from './pages/EntityDetails/EntityDetails'
+import { ProjectProvider } from './state/providers/ProjectProvider'
 import { theme } from './theme'
 import { setI18nConfig, translate } from './utils/translation-helpers'
 
@@ -29,27 +30,29 @@ const App = () => {
 
 	return (
 		<PaperProvider theme={theme}>
-			<NavigationContainer theme={theme}>
-				<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
-					<Stack.Screen
-						name="Entities"
-						component={Entities}
-						options={{
-							title: upperCaseFirst(translate('entities.title')),
-							headerTitleAlign: 'center',
-						}}
-					/>
-					<Stack.Screen
-						name="EntityDetails"
-						component={EntityDetails}
-						options={({ route }) => ({
-							title: route.params.entity.name,
-							headerTitleAlign: 'center',
-							animationEnabled: false,
-						})}
-					/>
-				</Stack.Navigator>
-			</NavigationContainer>
+			<ProjectProvider>
+				<NavigationContainer theme={theme}>
+					<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
+						<Stack.Screen
+							name="Entities"
+							component={Entities}
+							options={{
+								title: upperCaseFirst(translate('entities.title')),
+								headerTitleAlign: 'center',
+							}}
+						/>
+						<Stack.Screen
+							name="EntityDetails"
+							component={EntityDetails}
+							options={({ route }) => ({
+								title: route.params.entity.name,
+								headerTitleAlign: 'center',
+								animationEnabled: false,
+							})}
+						/>
+					</Stack.Navigator>
+				</NavigationContainer>
+			</ProjectProvider>
 		</PaperProvider>
 	)
 }
