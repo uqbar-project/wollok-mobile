@@ -7,7 +7,7 @@ import { upperCaseFirst } from 'upper-case-first'
 import { Entity } from './models/entity'
 import { Entities } from './pages/Entities/Entities'
 import EntityDetails from './pages/EntityDetails/EntityDetails'
-import { ProjectProvider } from './state/providers/ProjectProvider'
+import { ProjectProvider } from './context/ProjectProvider'
 import { theme } from './theme'
 import { setI18nConfig, translate } from './utils/translation-helpers'
 

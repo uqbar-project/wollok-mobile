@@ -5,8 +5,7 @@ import { RootStackParamList } from '../../App'
 import EntityComponent from '../../components/entities/Entity/Entity'
 import NewEntityModal from '../../components/entities/NewEntityModal/NewEntityModal'
 import FabAddScreen from '../../components/FabScreens/FabAddScreen'
-import { Entity } from '../../models/entity'
-import { useProject } from '../../state/providers/ProjectProvider'
+import { useProject } from '../../context/ProjectProvider'
 
 export type EntitiesScreenNavigationProp = StackNavigationProp<
 	RootStackParamList,
@@ -14,15 +13,12 @@ export type EntitiesScreenNavigationProp = StackNavigationProp<
 >
 
 export function Entities() {
-	const { state: entities, dispatch } = useProject()
+	const { entities, addEntity } = useProject()
+	//TODO: Este booleano no debería estar en FabAddScreen?
 	const [modalVisible, setModalVisible] = useState(false)
 
 	function fabPressed() {
 		setModalVisible(true)
-	}
-
-	function addEntity(entity: Entity) {
-		dispatch({ type: 'addEntity', payload: entity })
 	}
 
 	return (

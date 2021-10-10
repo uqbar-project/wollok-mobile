@@ -1,3 +1,7 @@
 import { Entity } from './entity'
 
-export type Project = Entity[]
+//TODO: Make a class?
+export interface Project {
+	entities: Entity[]
+	addEntity: (entity: Entity) => void
+}
