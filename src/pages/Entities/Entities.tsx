@@ -13,7 +13,10 @@ export type EntitiesScreenNavigationProp = StackNavigationProp<
 >
 
 export function Entities() {
-	const { entities, addEntity } = useProject()
+	const {
+		project,
+		actions: { addEntity },
+	} = useProject()
 	//TODO: Este booleano no debería estar en FabAddScreen?
 	const [modalVisible, setModalVisible] = useState(false)
 
@@ -24,7 +27,7 @@ export function Entities() {
 	return (
 		<FabAddScreen onPress={fabPressed}>
 			<ScrollView>
-				{entities.map(ent => (
+				{project.entities.map(ent => (
 					<EntityComponent key={ent.name} entity={ent} />
 				))}
 			</ScrollView>

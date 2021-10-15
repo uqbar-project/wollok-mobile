@@ -3,13 +3,21 @@ import { Entity } from '../models/entity'
 import { Project } from '../models/project'
 import { OneOrMany } from '../utils/type-helpers'
 
-export const ProjectContext = createContext<Project | null>(null)
+export const ProjectContext = createContext<{
+	project: Project
+	actions: Actions
+} | null>(null)
+
+type Actions = {
+	addEntity: (entity: Entity) => void
+}
 
 export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
-	const [entities, setEntities] = useState<Entity[]>([])
-	const addEntity = (newEntity: Entity) => setEntities([...entities, newEntity])
+	const [project, setProject] = useState<Project>(new Project())
+	const addEntity = (newEntity: Entity) =>
+		setProject(project.addEntity(newEntity))
 
-	const initialContext = { entities, addEntity }
+	const initialContext = { project, actions: { addEntity } }
 	return (
 		<ProjectContext.Provider value={initialContext}>
 			{props.children}
