@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { useEntity } from '../../../context/EntityProvider'
 import { Attribute } from '../../../models/attribute'
 import { translate } from '../../../utils/translation-helpers'
 import CheckIcon from '../../ui/CheckIcon'
@@ -11,14 +12,16 @@ import { ATTRIBUTE_ICONS } from '../attribute-icons'
 type Props = {
 	visible: boolean
 	setVisible: (visible: boolean) => void
-	onSubmit: (attribute: Attribute) => void
 }
 
 const AttributeFormModal = (props: Props) => {
+	const {
+		actions: { addAttribute },
+	} = useEntity()
 	const [name, setName] = useState('')
 	const [constant, setConstant] = useState(false)
 	const [property, setProperty] = useState(false)
-	const { visible, setVisible, onSubmit } = props
+	const { visible, setVisible } = props
 
 	const checkboxes = [
 		{
@@ -39,7 +42,7 @@ const AttributeFormModal = (props: Props) => {
 		<FormModal
 			title={translate('entityDetails.attributeModal.newAttribute')}
 			resetForm={resetForm}
-			onSubmit={emmitNewAttribute}
+			onSubmit={newAttribute}
 			visible={visible}
 			setVisible={setVisible}>
 			<TextInput
@@ -64,8 +67,8 @@ const AttributeFormModal = (props: Props) => {
 		setProperty(false)
 	}
 
-	function emmitNewAttribute() {
-		onSubmit(new Attribute(name, constant, property))
+	function newAttribute() {
+		addAttribute(new Attribute(name, constant, property))
 	}
 }
 
