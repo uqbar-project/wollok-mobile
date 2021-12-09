@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { Entity } from '../models/entity'
+import { Method } from '../models/method'
 import { Project } from '../models/project'
 import { OneOrMany } from '../utils/type-helpers'
 
@@ -13,7 +14,17 @@ type Actions = {
 }
 
 export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
-	const [project, setProject] = useState<Project>(new Project())
+	const [project, setProject] = useState<Project>(
+		new Project()
+			.addEntity(
+				new Entity('pepita', 'Singleton', [new Method('vola', ['kms'])]),
+			)
+			.addEntity(
+				new Entity('manolo', 'Singleton', [
+					new Method('cambiarDeColor', ['color']),
+				]),
+			),
+	)
 	const addEntity = (newEntity: Entity) =>
 		setProject(project.addEntity(newEntity))
 

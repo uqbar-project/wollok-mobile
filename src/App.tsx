@@ -10,10 +10,12 @@ import EntityDetails from './pages/EntityDetails/EntityDetails'
 import { ProjectProvider } from './context/ProjectProvider'
 import { theme } from './theme'
 import { setI18nConfig, translate } from './utils/translation-helpers'
+import ExpressionMaker from './pages/ExpressionMaker/ExpressionMaker'
 
 export type RootStackParamList = {
 	Entities: undefined
 	EntityDetails: { entity: Entity }
+	ExpressionMaker: undefined
 }
 
 const App = () => {
@@ -33,6 +35,15 @@ const App = () => {
 			<ProjectProvider>
 				<NavigationContainer theme={theme}>
 					<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
+						<Stack.Screen
+							name="ExpressionMaker"
+							component={ExpressionMaker}
+							options={{
+								title: 'Expression Maker <title in progress>',
+								headerTitleAlign: 'center',
+								animationEnabled: false,
+							}}
+						/>
 						<Stack.Screen
 							name="Entities"
 							component={Entities}
