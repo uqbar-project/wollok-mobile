@@ -21,7 +21,8 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 			)
 			.addEntity(
 				new Entity('manolo', 'Singleton', [
-					new Method('cambiarDeColor', ['color']),
+					new Method('cambiaDeColor', ['color']),
+					new Method('moveteA', ['posX', 'posY']),
 				]),
 			),
 	)

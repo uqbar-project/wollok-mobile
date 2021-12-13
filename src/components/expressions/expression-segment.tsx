@@ -17,10 +17,8 @@ export const MethodSegment = (props: { method: Method; index: number }) => {
 		<Bullet color="red" index={props.index}>
 			<View style={style.row}>
 				<Text>{props.method.name}</Text>
-				{props.method.parameters.map((p, i) => (
-					<Bullet color="grey" key={p} index={i}>
-						<Text>{p}</Text>
-					</Bullet>
+				{props.method.parameters.map(p => (
+					<Parameter color="grey" key={p} text={p} />
 				))}
 			</View>
 		</Bullet>
@@ -33,7 +31,7 @@ const Bullet = (props: {
 	children: OneOrMany<JSX.Element>
 }) => {
 	const bulletCurve = 20
-	const borderRadius: StyleProp<ViewStyle> =
+	const curve: StyleProp<ViewStyle> =
 		props.index > 0
 			? {
 					marginLeft: -bulletCurve,
@@ -44,8 +42,8 @@ const Bullet = (props: {
 	return (
 		<View
 			style={[
-				style.pill,
-				borderRadius,
+				style.bullet,
+				curve,
 				{
 					backgroundColor: props.color,
 					zIndex: -props.index,
@@ -56,8 +54,16 @@ const Bullet = (props: {
 	)
 }
 
+const Parameter = (props: { text: string; color: string }) => (
+	<View
+		onTouchEnd={() => console.log(props.text)}
+		style={[style.pill, { backgroundColor: props.color }]}>
+		<Text>{props.text}</Text>
+	</View>
+)
+
 const style = StyleSheet.create({
-	pill: {
+	bullet: {
 		paddingHorizontal: 10,
 		display: 'flex',
 		flexDirection: 'row',
@@ -66,9 +72,18 @@ const style = StyleSheet.create({
 		borderBottomLeftRadius: 0,
 		borderRadius: 20,
 	},
+	pill: {
+		marginHorizontal: 5,
+		borderRadius: 20,
+		paddingVertical: 3,
+		paddingHorizontal: 5,
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
 	row: {
 		display: 'flex',
 		flexDirection: 'row',
-		textAlignVertical: 'center',
+		alignItems: 'center',
 	},
 })
