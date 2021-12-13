@@ -1,7 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { List } from 'react-native-paper'
+import { Button, List } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
 import moveToBottom from '../../components/ui/MoveToBottom'
@@ -22,7 +22,7 @@ function ExpressionMaker() {
 	const { project } = useProject()
 	const {
 		expression,
-		actions: { addSegment },
+		actions: { addSegment, reset },
 	} = useExpression()
 
 	return (
@@ -46,7 +46,7 @@ function ExpressionMaker() {
 					))}
 				</List.Section>
 			)}
-
+			<Button onPress={reset}>RESET</Button>
 			{moveToBottom(<ExpressionDisplay />)}
 		</View>
 	)

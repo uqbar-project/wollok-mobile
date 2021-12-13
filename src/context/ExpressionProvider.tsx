@@ -9,6 +9,7 @@ export const ExpressionContext = createContext<{
 
 type Actions = {
 	addSegment: (segment: Segment) => void
+	reset: () => void
 }
 
 export function ExpressionProvider(props: {
@@ -20,6 +21,9 @@ export function ExpressionProvider(props: {
 		actions: {
 			addSegment: (segment: Segment) => {
 				setExpression(expression.addSegment(segment))
+			},
+			reset: () => {
+				setExpression(new Expression())
 			},
 		},
 	}
