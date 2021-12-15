@@ -1,4 +1,4 @@
-# Wollok Mobile
+![Wollok Mobile](assets/logo.jpg)
 
 A mobile IDE for [Wollok](https://www.wollok.org/)
 
