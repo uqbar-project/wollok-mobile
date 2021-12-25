@@ -12,13 +12,14 @@ import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { Method } from '../../models/method'
 import { Attribute } from '../../models/attribute'
 import { translate } from '../../utils/translation-helpers'
+import { EntityProvider, useEntity } from '../../context/EntityProvider'
 
-export default function (props: {
-	route: RouteProp<RootStackParamList, 'EntityDetails'>
-}) {
+type Route = RouteProp<RootStackParamList, 'EntityDetails'>
+
+const EntityDetails = function () {
 	const [methodModalVisible, setMethodModalVisible] = useState(false)
 	const [attributeModalVisible, setAttributeModalVisible] = useState(false)
-	const { entity } = props.route.params
+	const { entity } = useEntity()
 
 	return (
 		<MultiFabScreen
@@ -49,25 +50,15 @@ export default function (props: {
 				</ScrollView>
 			</List.Section>
 			<NewMethodModal
-				addMethod={addMethod}
 				visible={methodModalVisible}
 				setVisible={setMethodModalVisible}
 			/>
 			<NewAttributeModal
-				onSubmit={addAttribute}
 				setVisible={setAttributeModalVisible}
 				visible={attributeModalVisible}
 			/>
 		</MultiFabScreen>
 	)
-
-	function addMethod(method: Method) {
-		entity.addMethod(method)
-	}
-
-	function addAttribute(attribute: Attribute) {
-		entity.addAttribute(attribute)
-	}
 }
 
 function attributeItem(attribute: Attribute): Element {
@@ -76,4 +67,12 @@ function attributeItem(attribute: Attribute): Element {
 
 function methodItem(method: Method): Element {
 	return <List.Item key={method.name} title={method.description} />
+}
+
+export default function (props: { route: Route }) {
+	return (
+		<EntityProvider initialEntity={props.route.params.entity}>
+			<EntityDetails />
+		</EntityProvider>
+	)
 }

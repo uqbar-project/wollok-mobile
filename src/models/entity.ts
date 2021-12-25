@@ -13,10 +13,18 @@ export class Entity {
 	) {}
 
 	addAttribute(attribute: Attribute) {
-		this.attributes.push(attribute)
+		return new Entity(this.name, this.kind, this.methods, [
+			...this.attributes,
+			attribute,
+		])
 	}
 
 	addMethod(method: Method) {
-		this.methods.push(method)
+		return new Entity(
+			this.name,
+			this.kind,
+			[...this.methods, method],
+			this.attributes,
+		)
 	}
 }

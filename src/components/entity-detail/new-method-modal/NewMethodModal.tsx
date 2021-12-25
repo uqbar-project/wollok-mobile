@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Text, TextInput, withTheme } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { useEntity } from '../../../context/EntityProvider'
 import { Method } from '../../../models/method'
 import { Theme } from '../../../theme'
 import { translate } from '../../../utils/translation-helpers'
@@ -11,9 +12,11 @@ import ParameterInput from './ParameterInput'
 const NewMethodModal = (props: {
 	visible: boolean
 	setVisible: (value: boolean) => void
-	addMethod: (method: Method) => void
 	theme: Theme
 }) => {
+	const {
+		actions: { addMethod },
+	} = useEntity()
 	const [name, setName] = useState('')
 	const [parameters, setParameters] = useState<string[]>([])
 	const [nextParameter, setNextParameter] = useState('')
@@ -59,7 +62,7 @@ const NewMethodModal = (props: {
 	}
 
 	function newMethod() {
-		props.addMethod(new Method(name, parameters))
+		addMethod(new Method(name, parameters))
 	}
 
 	function addNextParameter() {
