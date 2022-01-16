@@ -1,7 +1,8 @@
-import { Method } from './method'
-import { Entity } from './entity'
+import { Method } from '../method'
 
-export type Segment = Method | Entity
+export interface Segment {
+	methods: Method[]
+}
 
 export class Expression {
 	constructor(public readonly segments: Segment[] = []) {}

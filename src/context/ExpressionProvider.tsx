@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react'
-import { Expression, Segment } from '../models/expression'
+import { Expression, Segment } from '../models/expression/expression'
 import { OneOrMany } from '../utils/type-helpers'
 
 export const ExpressionContext = createContext<{

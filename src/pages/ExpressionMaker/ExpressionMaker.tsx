@@ -10,7 +10,7 @@ import {
 	useExpression,
 } from '../../context/ExpressionProvider'
 import { ProjectProvider, useProject } from '../../context/ProjectProvider'
-import { Entity } from '../../models/entity'
+import { Literal, MethodSegment } from '../../models/expression/segments'
 import { last } from '../../utils/commons'
 
 export type EntitiesScreenNavigationProp = StackNavigationProp<
@@ -27,12 +27,15 @@ function ExpressionMaker() {
 
 	return (
 		<View style={container}>
-			{expression.segments.length > 0 && expression.segments.length < 2 ? (
+			{expression.segments.length > 0 ? (
 				<List.Section>
 					<List.Subheader>Mensajes</List.Subheader>
-					{(last(expression.segments) as Entity).methods.map(m => (
+					{last(expression.segments)!.methods.map(m => (
 						<View key={m.name}>
-							<List.Item title={m.name} onPress={() => addSegment(m)} />
+							<List.Item
+								title={m.name}
+								onPress={() => addSegment(new MethodSegment(m))}
+							/>
 						</View>
 					))}
 				</List.Section>
@@ -44,6 +47,11 @@ function ExpressionMaker() {
 							<List.Item title={e.name} onPress={() => addSegment(e)} />
 						</View>
 					))}
+					<List.Subheader>Literales</List.Subheader>
+					<List.Item
+						title="Numero"
+						onPress={() => addSegment(new Literal(5))}
+					/>
 				</List.Section>
 			)}
 			<Button onPress={reset}>RESET</Button>
