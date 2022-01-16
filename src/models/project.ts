@@ -4,6 +4,6 @@ export class Project {
 	constructor(public readonly entities: Entity[] = []) {}
 
 	addEntity(entity: Entity) {
-		return new Project([...this.entities, entity])
+		this.entities.push(entity)
 	}
 }

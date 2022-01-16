@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext } from 'react'
 import { Attribute } from '../models/attribute'
 import { Entity } from '../models/entity'
 import { Method } from '../models/method'
@@ -16,21 +16,21 @@ type Actions = {
 
 export function EntityProvider(props: {
 	children: OneOrMany<JSX.Element>
-	initialEntity: Entity
+	entity: Entity
 }) {
-	const [entity, setEntity] = useState<Entity>(props.initialEntity)
-	const addMethod = (newMethod: Method) =>
-		setEntity(entity.addMethod(newMethod))
+	const { children, entity } = props
+	const addMethod = (newMethod: Method) => entity.addMethod(newMethod)
 
 	const addAttribute = (newAttribute: Attribute) =>
-		setEntity(entity.addAttribute(newAttribute))
+		entity.addAttribute(newAttribute)
+
 	const initialContext = {
 		entity: entity,
 		actions: { addMethod, addAttribute },
 	}
 	return (
 		<EntityContext.Provider value={initialContext}>
-			{props.children}
+			{children}
 		</EntityContext.Provider>
 	)
 }

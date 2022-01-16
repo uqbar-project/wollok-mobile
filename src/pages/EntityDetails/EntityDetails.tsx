@@ -71,7 +71,7 @@ function methodItem(method: Method): Element {
 
 export default function (props: { route: Route }) {
 	return (
-		<EntityProvider initialEntity={props.route.params.entity}>
+		<EntityProvider entity={props.route.params.entity}>
 			<EntityDetails />
 		</EntityProvider>
 	)

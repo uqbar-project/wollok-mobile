@@ -36,15 +36,6 @@ const App = () => {
 				<NavigationContainer theme={theme}>
 					<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
 						<Stack.Screen
-							name="ExpressionMaker"
-							component={ExpressionMaker}
-							options={{
-								title: 'Expression Maker <title in progress>',
-								headerTitleAlign: 'center',
-								animationEnabled: false,
-							}}
-						/>
-						<Stack.Screen
 							name="Entities"
 							component={Entities}
 							options={{
@@ -60,6 +51,15 @@ const App = () => {
 								headerTitleAlign: 'center',
 								animationEnabled: false,
 							})}
+						/>
+						<Stack.Screen
+							name="ExpressionMaker"
+							component={ExpressionMaker}
+							options={{
+								title: 'Expression Maker <title in progress>',
+								headerTitleAlign: 'center',
+								animationEnabled: false,
+							}}
 						/>
 					</Stack.Navigator>
 				</NavigationContainer>
