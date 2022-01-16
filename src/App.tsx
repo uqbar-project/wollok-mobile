@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import RNLocalize from 'react-native-localize'
-import { Provider as PaperProvider } from 'react-native-paper'
+import { IconButton, Provider as PaperProvider } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Entity } from './models/entity'
 import { Entities } from './pages/Entities/Entities'
@@ -11,11 +11,12 @@ import { ProjectProvider } from './context/ProjectProvider'
 import { theme } from './theme'
 import { setI18nConfig, translate } from './utils/translation-helpers'
 import ExpressionMaker from './pages/ExpressionMaker/ExpressionMaker'
+import { Expression } from './models/expression/expression'
 
 export type RootStackParamList = {
 	Entities: undefined
 	EntityDetails: { entity: Entity }
-	ExpressionMaker: undefined
+	ExpressionMaker: { onSubmit: (expression: Expression) => void }
 }
 
 const App = () => {
@@ -55,11 +56,17 @@ const App = () => {
 						<Stack.Screen
 							name="ExpressionMaker"
 							component={ExpressionMaker}
-							options={{
+							options={({ navigation }) => ({
 								title: 'Expression Maker <title in progress>',
 								headerTitleAlign: 'center',
 								animationEnabled: false,
-							}}
+								headerRight: () => (
+									<IconButton
+										icon="check"
+										onPress={() => navigation.goBack()}
+									/>
+								),
+							})}
 						/>
 					</Stack.Navigator>
 				</NavigationContainer>

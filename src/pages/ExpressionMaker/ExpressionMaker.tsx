@@ -1,4 +1,4 @@
-import { StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, List } from 'react-native-paper'
@@ -9,20 +9,18 @@ import {
 	ExpressionProvider,
 	useExpression,
 } from '../../context/ExpressionProvider'
-import { ProjectProvider, useProject } from '../../context/ProjectProvider'
 import { Literal } from '../../models/expression/segments'
-import { last } from '../../utils/commons'
 
-export type EntitiesScreenNavigationProp = StackNavigationProp<
+export type ExpressionMakerProp = RouteProp<
 	RootStackParamList,
 	'ExpressionMaker'
 >
 
 function ExpressionMaker() {
-	const { project } = useProject()
+	// const { project } = useProject()
 	const {
 		expression,
-		actions: { addSegment, reset },
+		actions: { addSegment, reset, onSubmit },
 	} = useExpression()
 
 	return (
@@ -42,11 +40,11 @@ function ExpressionMaker() {
 			) : (
 				<List.Section>
 					<List.Subheader>Objetos</List.Subheader>
-					{project.entities.map(e => (
+					{/* {project.entities.map(e => (
 						<View key={e.name}>
 							<List.Item title={e.name} onPress={() => addSegment(e)} />
 						</View>
-					))}
+					))} */}
 					<List.Subheader>Literales</List.Subheader>
 					<List.Item
 						title="Numero"
@@ -55,6 +53,7 @@ function ExpressionMaker() {
 				</List.Section>
 			)}
 			<Button onPress={reset}>RESET</Button>
+			<Button onPress={onSubmit}>OK</Button>
 			{moveToBottom(<ExpressionDisplay />)}
 		</View>
 	)
@@ -64,12 +63,10 @@ const { container } = StyleSheet.create({
 	container: { flex: 1 },
 })
 
-export default function () {
+export default function (props: { route: ExpressionMakerProp }) {
 	return (
-		<ProjectProvider>
-			<ExpressionProvider>
-				<ExpressionMaker />
-			</ExpressionProvider>
-		</ProjectProvider>
+		<ExpressionProvider onSubmit={props.route.params.onSubmit}>
+			<ExpressionMaker />
+		</ExpressionProvider>
 	)
 }

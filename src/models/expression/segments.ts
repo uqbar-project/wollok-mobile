@@ -1,11 +1,13 @@
 import { Method } from '../method'
-import { Kind, Literal as LiteralNode, Node } from 'wollok-ts/dist/model'
-import { Entity } from '../entity'
+import {
+	Literal as LiteralNode,
+	LiteralValue,
+	Node,
+} from 'wollok-ts/dist/model'
 
 export interface Segment {
 	methods: Method[]
 	node: Node
-	kind: Kind
 }
 
 // export class NamedSingleton implements Segment {
@@ -22,7 +24,7 @@ export interface Segment {
 
 export class Literal implements Segment {
 	readonly kind = 'Literal'
-	constructor(readonly value: string | boolean | number) {}
+	constructor(readonly value: LiteralValue) {}
 
 	get methods(): Method[] {
 		return []

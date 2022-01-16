@@ -1,9 +1,12 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Text, TextInput } from 'react-native-paper'
+import { Button, Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { useEntity } from '../../../context/EntityProvider'
 import { Attribute } from '../../../models/attribute'
+import { Expression } from '../../../models/expression/expression'
+import { EntitiesScreenNavigationProp } from '../../../pages/Entities/Entities'
 import { translate } from '../../../utils/translation-helpers'
 import CheckIcon from '../../ui/CheckIcon'
 import FormModal from '../../ui/FormModal/FormModal'
@@ -21,7 +24,12 @@ const AttributeFormModal = (props: Props) => {
 	const [name, setName] = useState('')
 	const [constant, setConstant] = useState(false)
 	const [property, setProperty] = useState(false)
+	const [initialValue, setInitialValue] = useState<Expression | undefined>()
 	const { visible, setVisible } = props
+	const navigation = useNavigation<EntitiesScreenNavigationProp>()
+	const goToExpressionMaker = () => {
+		navigation.navigate('ExpressionMaker', { onSubmit: setInitialValue })
+	}
 
 	const checkboxes = [
 		{
@@ -58,6 +66,14 @@ const AttributeFormModal = (props: Props) => {
 					</View>
 				)
 			})}
+
+			<Button onPress={goToExpressionMaker}>
+				<Text>{translate('Agregar valor inicial')}</Text>
+			</Button>
+
+			<Text style={styles.constName}>
+				{initialValue ? 'Tiene valor inicial' : 'No tiene un carajo'}
+			</Text>
 		</FormModal>
 	)
 
@@ -65,10 +81,11 @@ const AttributeFormModal = (props: Props) => {
 		setName('')
 		setConstant(false)
 		setProperty(false)
+		setInitialValue(undefined)
 	}
 
 	function newAttribute() {
-		addAttribute(new Attribute(name, constant, property))
+		addAttribute(new Attribute(name, constant, property, initialValue))
 	}
 }
 
