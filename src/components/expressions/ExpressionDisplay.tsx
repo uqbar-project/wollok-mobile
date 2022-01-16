@@ -1,15 +1,12 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useExpression } from '../../context/ExpressionProvider'
-import { Segment } from '../../models/expression/expression'
-import { MethodSegment as Method } from '../../models/expression/segments'
-import { Entity } from '../../models/entity'
+import { Segment } from '../../models/expression/segments'
 import {
 	LiteralSegment,
 	MethodSegment,
 	ObjectSegment,
 } from './expression-segment'
-import { Literal } from '../../models/expression/segments'
 
 export function ExpressionDisplay() {
 	const { expression } = useExpression()
@@ -19,24 +16,16 @@ export function ExpressionDisplay() {
 }
 
 function getVisualSegment(segment: Segment, index: number): JSX.Element {
-	let segmentComponent: JSX.Element
-
-	if (segment instanceof Entity) {
-		segmentComponent = (
-			<ObjectSegment text={segment.name} key={index} index={index} />
-		)
-	} else if (segment instanceof Method) {
-		segmentComponent = (
-			<MethodSegment method={segment.method} key={index} index={index} />
-		)
-	} else if (segment instanceof Literal) {
-		segmentComponent = (
-			<LiteralSegment literal={segment} key={index} index={index} />
-		)
-	} else {
-		throw Error('No segment')
+	switch (segment.node.kind) {
+		// case 'Singleton':
+		// 	return <ObjectSegment text={segment.name} key={index} index={index} />
+		// case 'Method':
+		// 	return <MethodSegment method={segment.} key={index} index={index} />
+		case 'Literal':
+			return <LiteralSegment value={segment.node.value} key={index} index={index} />
+		default:
+			throw Error('No segment')
 	}
-	return segmentComponent
 }
 
 const { display } = StyleSheet.create({

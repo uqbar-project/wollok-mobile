@@ -1,8 +1,4 @@
-import { Method } from '../method'
-
-export interface Segment {
-	methods: Method[]
-}
+import { Segment } from './segments'
 
 export class Expression {
 	constructor(public readonly segments: Segment[] = []) {}

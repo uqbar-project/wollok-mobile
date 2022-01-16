@@ -1,8 +1,27 @@
 import { Method } from '../method'
-import { Segment } from './expression'
-import { Literal as LiteralNode } from 'wollok-ts/dist/model'
+import { Kind, Literal as LiteralNode, Node } from 'wollok-ts/dist/model'
+import { Entity } from '../entity'
+
+export interface Segment {
+	methods: Method[]
+	node: Node
+	kind: Kind
+}
+
+// export class NamedSingleton implements Segment {
+// 	readonly kind = 'Singleton'
+// 	constructor(readonly entity: Entity) {}
+// 	get methods(): Method[] {
+// 		return this.entity.methods
+// 	}
+
+// 	get node(){
+// 		return
+// 	}
+// }
 
 export class Literal implements Segment {
+	readonly kind = 'Literal'
 	constructor(readonly value: string | boolean | number) {}
 
 	get methods(): Method[] {
@@ -14,10 +33,11 @@ export class Literal implements Segment {
 	}
 }
 
-export class MethodSegment implements Segment {
-	constructor(readonly method: Method) {}
+// export class MethodSegment implements Segment {
+// 	readonly kind = 'Method'
+// 	constructor(readonly method: Method) {}
 
-	get methods(): Method[] {
-		return []
-	}
-}
+// 	get methods(): Method[] {
+// 		return []
+// 	}
+// }

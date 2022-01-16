@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { Text } from 'react-native-paper'
+import { LiteralValue } from 'wollok-ts/dist/model'
 import { Literal } from '../../models/expression/segments'
 import { Method } from '../../models/method'
 import { OneOrMany } from '../../utils/type-helpers'
@@ -26,11 +27,11 @@ export const MethodSegment = (props: { method: Method; index: number }) => {
 	)
 }
 
-export const LiteralSegment = (props: { literal: Literal; index: number }) => {
+export const LiteralSegment = (props: { value: LiteralValue; index: number }) => {
 	return (
 		<View
 			style={[style.pill, { backgroundColor: 'cyan', zIndex: -props.index }]}>
-			<Text>{props.literal.value}</Text>
+			<Text>{props.value}</Text>
 		</View>
 	)
 }

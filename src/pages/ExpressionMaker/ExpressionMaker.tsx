@@ -10,7 +10,7 @@ import {
 	useExpression,
 } from '../../context/ExpressionProvider'
 import { ProjectProvider, useProject } from '../../context/ProjectProvider'
-import { Literal, MethodSegment } from '../../models/expression/segments'
+import { Literal } from '../../models/expression/segments'
 import { last } from '../../utils/commons'
 
 export type EntitiesScreenNavigationProp = StackNavigationProp<
@@ -30,14 +30,14 @@ function ExpressionMaker() {
 			{expression.segments.length > 0 ? (
 				<List.Section>
 					<List.Subheader>Mensajes</List.Subheader>
-					{last(expression.segments)!.methods.map(m => (
+					{/* {last(expression.segments)!.methods.map(m => (
 						<View key={m.name}>
 							<List.Item
 								title={m.name}
 								onPress={() => addSegment(new MethodSegment(m))}
 							/>
 						</View>
-					))}
+					))} */}
 				</List.Section>
 			) : (
 				<List.Section>
