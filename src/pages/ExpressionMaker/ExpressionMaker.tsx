@@ -5,10 +5,7 @@ import { Button, List } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
 import moveToBottom from '../../components/ui/MoveToBottom'
-import {
-	ExpressionProvider,
-	useExpression,
-} from '../../context/ExpressionProvider'
+import { useExpression } from '../../context/ExpressionProvider'
 import { Literal } from '../../models/expression/segments'
 
 export type ExpressionMakerProp = RouteProp<
@@ -20,7 +17,7 @@ function ExpressionMaker() {
 	// const { project } = useProject()
 	const {
 		expression,
-		actions: { addSegment, reset, onSubmit },
+		actions: { addSegment, reset },
 	} = useExpression()
 
 	return (
@@ -53,7 +50,6 @@ function ExpressionMaker() {
 				</List.Section>
 			)}
 			<Button onPress={reset}>RESET</Button>
-			<Button onPress={onSubmit}>OK</Button>
 			{moveToBottom(
 				<ExpressionDisplay displayColor="white" expression={expression} />,
 			)}
@@ -65,10 +61,4 @@ const { container } = StyleSheet.create({
 	container: { flex: 1 },
 })
 
-export default function (props: { route: ExpressionMakerProp }) {
-	return (
-		<ExpressionProvider onSubmit={props.route.params.onSubmit}>
-			<ExpressionMaker />
-		</ExpressionProvider>
-	)
-}
+export default ExpressionMaker

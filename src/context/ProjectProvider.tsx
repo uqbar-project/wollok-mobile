@@ -1,5 +1,8 @@
 import React, { createContext, useContext } from 'react'
+import { Attribute } from '../models/attribute'
 import { Entity } from '../models/entity'
+import { Expression } from '../models/expression/expression'
+import { Literal } from '../models/expression/segments'
 import { Method } from '../models/method'
 import { Project } from '../models/project'
 import { OneOrMany } from '../utils/type-helpers'
@@ -15,7 +18,19 @@ type Actions = {
 
 function testSeed(project: Project) {
 	project.addEntity(
-		new Entity('pepita', 'Singleton', [new Method('vola', ['kms'])]),
+		new Entity(
+			'pepita',
+			'Singleton',
+			[new Method('vola', ['kms'])],
+			[
+				new Attribute(
+					'energia',
+					false,
+					true,
+					new Expression([new Literal(100)]),
+				),
+			],
+		),
 	)
 	project.addEntity(
 		new Entity('manolo', 'Singleton', [

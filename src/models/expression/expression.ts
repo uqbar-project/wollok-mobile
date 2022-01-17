@@ -6,4 +6,8 @@ export class Expression {
 	addSegment(segment: Segment): Expression {
 		return new Expression([...this.segments, segment])
 	}
+
+	isEmpty() {
+		return this.segments.length === 0
+	}
 }
