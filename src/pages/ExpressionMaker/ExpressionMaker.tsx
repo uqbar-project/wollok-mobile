@@ -54,7 +54,9 @@ function ExpressionMaker() {
 			)}
 			<Button onPress={reset}>RESET</Button>
 			<Button onPress={onSubmit}>OK</Button>
-			{moveToBottom(<ExpressionDisplay />)}
+			{moveToBottom(
+				<ExpressionDisplay displayColor="white" expression={expression} />,
+			)}
 		</View>
 	)
 }

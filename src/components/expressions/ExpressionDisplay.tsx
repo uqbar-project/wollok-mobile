@@ -1,17 +1,17 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { useExpression } from '../../context/ExpressionProvider'
+import { StyleSheet, View, ViewStyle } from 'react-native'
+import { Expression } from '../../models/expression/expression'
 import { Segment } from '../../models/expression/segments'
-import {
-	LiteralSegment,
-	MethodSegment,
-	ObjectSegment,
-} from './expression-segment'
+import { LiteralSegment } from './expression-segment'
 
-export function ExpressionDisplay() {
-	const { expression } = useExpression()
+export function ExpressionDisplay(props: {
+	expression: Expression
+	displayColor?: ViewStyle['backgroundColor']
+}) {
 	return (
-		<View style={display}>{expression.segments.map(getVisualSegment)}</View>
+		<View style={[display, { backgroundColor: props.displayColor }]}>
+			{props.expression.segments.map(getVisualSegment)}
+		</View>
 	)
 }
 
@@ -22,7 +22,9 @@ function getVisualSegment(segment: Segment, index: number): JSX.Element {
 		// case 'Method':
 		// 	return <MethodSegment method={segment.} key={index} index={index} />
 		case 'Literal':
-			return <LiteralSegment value={segment.node.value} key={index} index={index} />
+			return (
+				<LiteralSegment value={segment.node.value} key={index} index={index} />
+			)
 		default:
 			throw Error('No segment')
 	}
@@ -32,7 +34,6 @@ const { display } = StyleSheet.create({
 	display: {
 		height: 40,
 		flexDirection: 'row',
-		backgroundColor: 'white',
 		display: 'flex',
 		paddingVertical: 5,
 		paddingLeft: 2,

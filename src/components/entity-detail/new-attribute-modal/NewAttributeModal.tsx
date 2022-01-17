@@ -8,6 +8,7 @@ import { Attribute } from '../../../models/attribute'
 import { Expression } from '../../../models/expression/expression'
 import { EntitiesScreenNavigationProp } from '../../../pages/Entities/Entities'
 import { translate } from '../../../utils/translation-helpers'
+import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import CheckIcon from '../../ui/CheckIcon'
 import FormModal from '../../ui/FormModal/FormModal'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
@@ -72,7 +73,11 @@ const AttributeFormModal = (props: Props) => {
 			</Button>
 
 			<Text style={styles.constName}>
-				{initialValue ? 'Tiene valor inicial' : 'No tiene un carajo'}
+				{initialValue ? (
+					<ExpressionDisplay expression={initialValue} />
+				) : (
+					'No tiene un carajo'
+				)}
 			</Text>
 		</FormModal>
 	)
