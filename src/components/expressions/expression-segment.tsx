@@ -33,7 +33,7 @@ export const LiteralSegment = (props: {
 	return (
 		<View
 			style={[style.pill, { backgroundColor: 'green', zIndex: -props.index }]}>
-			<Text>{props.value}</Text>
+			<Text>{JSON.stringify(props.value)}</Text>
 		</View>
 	)
 }

@@ -1,12 +1,17 @@
 import { RouteProp } from '@react-navigation/native'
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, List } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
+import {
+	NumberInputModal,
+	TextInputModal,
+} from '../../components/expressions/LiteralModal/LiteralInputModals'
 import moveToBottom from '../../components/ui/MoveToBottom'
 import { useExpression } from '../../context/ExpressionProvider'
 import { Literal } from '../../models/expression/segments'
+import { translate } from '../../utils/translation-helpers'
 
 export type ExpressionMakerProp = RouteProp<
 	RootStackParamList,
@@ -17,8 +22,10 @@ function ExpressionMaker() {
 	// const { project } = useProject()
 	const {
 		expression,
-		actions: { addSegment, reset },
+		actions: { reset, addSegment },
 	} = useExpression()
+	const [showNumberModal, setShowNumberModal] = useState(false)
+	const [showTextModal, setShowTextModal] = useState(false)
 
 	return (
 		<View style={container}>
@@ -39,13 +46,25 @@ function ExpressionMaker() {
 					<List.Subheader>Objetos</List.Subheader>
 					{/* {project.entities.map(e => (
 						<View key={e.name}>
-							<List.Item title={e.name} onPress={() => addSegment(e)} />
+						<List.Item title={e.name} onPress={() => addSegment(e)} />
 						</View>
 					))} */}
 					<List.Subheader>Literales</List.Subheader>
 					<List.Item
-						title="Numero"
-						onPress={() => addSegment(new Literal(5))}
+						title={translate('number')}
+						onPress={() => setShowNumberModal(true)}
+					/>
+					<List.Item
+						title={translate('string')}
+						onPress={() => setShowTextModal(true)}
+					/>
+					<List.Item
+						title="True"
+						onPress={() => addSegment(new Literal(true))}
+					/>
+					<List.Item
+						title="False"
+						onPress={() => addSegment(new Literal(false))}
 					/>
 				</List.Section>
 			)}
@@ -53,6 +72,11 @@ function ExpressionMaker() {
 			{moveToBottom(
 				<ExpressionDisplay displayColor="white" expression={expression} />,
 			)}
+			<NumberInputModal
+				visible={showNumberModal}
+				setVisible={setShowNumberModal}
+			/>
+			<TextInputModal visible={showTextModal} setVisible={setShowTextModal} />
 		</View>
 	)
 }
