@@ -28,7 +28,7 @@ function getVisualSegment(segment: Segment, index: number): JSX.Element {
 				<LiteralSegment value={segment.node.value} key={index} index={index} />
 			)
 		default:
-			throw Error('No segment')
+			throw new Error('No segment')
 	}
 }
 
