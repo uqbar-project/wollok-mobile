@@ -19,7 +19,6 @@ export type ExpressionMakerProp = RouteProp<
 >
 
 function ExpressionMaker() {
-	// const { project } = useProject()
 	const {
 		expression,
 		actions: { reset, addSegment },
@@ -32,23 +31,11 @@ function ExpressionMaker() {
 			{expression.segments.length > 0 ? (
 				<List.Section>
 					<List.Subheader>{translate('expression.messages')}</List.Subheader>
-					{/* {last(expression.segments)!.methods.map(m => (
-						<View key={m.name}>
-							<List.Item
-								title={m.name}
-								onPress={() => addSegment(new MethodSegment(m))}
-							/>
-						</View>
-					))} */}
 				</List.Section>
 			) : (
 				<List.Section>
 					<List.Subheader>{translate('expression.objects')}</List.Subheader>
-					{/* {project.entities.map(e => (
-						<View key={e.name}>
-						<List.Item title={e.name} onPress={() => addSegment(e)} />
-						</View>
-					))} */}
+
 					<List.Subheader>{translate('expression.literals')}</List.Subheader>
 					<List.Item
 						title={translate('expression.aNumber')}
