@@ -1,5 +1,6 @@
 {
 	"ok": "ok",
+	"clear": "limpiar",
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -18,7 +19,9 @@
 			"newAttribute": "Nuevo atributo",
 			"nameOfAttribute": "Nombre del atributo",
 			"constant": "constante",
-			"property": "propiedad"
+			"initialValue": "Valor inicial",
+			"property": "propiedad",
+			"addAnInitialValue": "Agrega un valor inicial"
 		},
 		"methodModal": {
 			"newMethod": "Nuevo metodo",
@@ -26,5 +29,13 @@
 			"nameOfMethod": "Nombre del metodo",
 			"nameOfParameter": "Nombre del parametro"
 		}
+	},
+	"expression": {
+		"title": "Crea una expresion",
+		"objects": "Objetos",
+		"literals": "Literales",
+		"messages": "Mensajes",
+		"aNumber": "Un numero",
+		"aString": "Un texto"
 	}
 }

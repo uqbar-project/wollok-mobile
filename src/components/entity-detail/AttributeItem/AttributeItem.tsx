@@ -1,13 +1,14 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import { List, withTheme } from 'react-native-paper'
-import { Attribute } from '../../models/attribute'
-import { Theme } from '../../theme'
-import { ATTRIBUTE_ICONS } from './attribute-icons'
+import { Attribute } from '../../../models/attribute'
+import { Theme } from '../../../theme'
+import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
+import { ATTRIBUTE_ICONS } from '../attribute-icons'
+import styles from './styles'
 
 function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 	const {
-		attribute: { property, constant, description },
+		attribute: { property, constant, description, initialValue },
 		theme,
 	} = props
 
@@ -25,6 +26,9 @@ function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 	return (
 		<List.Item
 			title={description}
+			description={() =>
+				initialValue && <ExpressionDisplay expression={initialValue} />
+			}
 			right={() =>
 				icons
 					.filter(i => i.toggle)
@@ -40,11 +44,5 @@ function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 		/>
 	)
 }
-
-const styles = StyleSheet.create({
-	lockIcon: {
-		transform: [{ scale: 0.8 }],
-	},
-})
 
 export default withTheme(AttributeItem)

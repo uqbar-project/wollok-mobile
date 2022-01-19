@@ -1,5 +1,9 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext } from 'react'
+import { Attribute } from '../models/attribute'
 import { Entity } from '../models/entity'
+import { Expression } from '../models/expression/expression'
+import { Literal } from '../models/expression/segments'
+import { Method } from '../models/method'
 import { Project } from '../models/project'
 import { OneOrMany } from '../utils/type-helpers'
 
@@ -12,10 +16,36 @@ type Actions = {
 	addEntity: (entity: Entity) => void
 }
 
+function testSeed(project: Project) {
+	project.addEntity(
+		new Entity(
+			'pepita',
+			'Singleton',
+			[new Method('vola', ['kms'])],
+			[
+				new Attribute(
+					'energia',
+					false,
+					true,
+					new Expression([new Literal(100)]),
+				),
+			],
+		),
+	)
+	project.addEntity(
+		new Entity('manolo', 'Singleton', [
+			new Method('cambiaDeColor', ['color']),
+			new Method('moveteA', ['posX', 'posY']),
+		]),
+	)
+}
+
 export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
-	const [project, setProject] = useState<Project>(new Project())
-	const addEntity = (newEntity: Entity) =>
-		setProject(project.addEntity(newEntity))
+	const project = new Project()
+	// TODO: For app testing
+	testSeed(project)
+
+	const addEntity = (newEntity: Entity) => project.addEntity(newEntity)
 
 	const initialContext = { project, actions: { addEntity } }
 	return (
