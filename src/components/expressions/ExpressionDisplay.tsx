@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
+import { IconButton } from 'react-native-paper'
 import { Expression } from '../../models/expression/expression'
 import { Segment } from '../../models/expression/segments'
 import { LiteralSegment } from './expression-segment'
@@ -10,6 +11,7 @@ export function ExpressionDisplay(props: {
 }) {
 	return (
 		<View style={[display, { backgroundColor: props.displayColor }]}>
+			<IconButton style={codeIcon} icon="chevron-right" />
 			{props.expression.segments.map(getVisualSegment)}
 		</View>
 	)
@@ -30,12 +32,15 @@ function getVisualSegment(segment: Segment, index: number): JSX.Element {
 	}
 }
 
-const { display } = StyleSheet.create({
+const { display, codeIcon } = StyleSheet.create({
 	display: {
 		height: 40,
+		alignItems: 'center',
 		flexDirection: 'row',
 		display: 'flex',
 		paddingVertical: 5,
-		paddingLeft: 2,
+	},
+	codeIcon: {
+		marginRight: -9,
 	},
 })

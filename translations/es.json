@@ -1,5 +1,6 @@
 {
 	"ok": "ok",
+	"clear": "limpiar",
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -19,7 +20,8 @@
 			"nameOfAttribute": "Nombre del atributo",
 			"constant": "constante",
 			"initialValue": "Valor inicial",
-			"property": "propiedad"
+			"property": "propiedad",
+			"addAnInitialValue": "Agrega un valor inicial"
 		},
 		"methodModal": {
 			"newMethod": "Nuevo metodo",

@@ -23,19 +23,22 @@ function FormModal(props: {
 }) {
 	const styles = stylesheet(props.theme)
 
+	function closeModal() {
+		props.resetForm?.call(this)
+		props.setVisible(false)
+	}
 	return (
 		<Portal>
 			<Modal
 				contentContainerStyle={styles.modal}
 				visible={props.visible}
-				onDismiss={() => props.setVisible(false)}>
+				onDismiss={closeModal}>
 				{props.title ? <Title style={styles.title}>{props.title}</Title> : null}
 				{props.children}
 				<Button
 					onPress={() => {
 						props.onSubmit()
-						props.resetForm?.call(this)
-						props.setVisible(false)
+						closeModal()
 					}}>
 					<Text>{translate('ok').toUpperCase()}</Text>
 				</Button>

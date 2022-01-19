@@ -1,11 +1,10 @@
 import React from 'react'
-import { View } from 'react-native'
-import styles from './styles'
 import { List, withTheme } from 'react-native-paper'
 import { Attribute } from '../../../models/attribute'
 import { Theme } from '../../../theme'
 import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
+import styles from './styles'
 
 function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 	const {
@@ -28,12 +27,7 @@ function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
 		<List.Item
 			title={description}
 			description={() =>
-				initialValue && (
-					<View style={styles.expressionItemDescription}>
-						<List.Icon style={styles.iconExpression} icon="chevron-right" />
-						<ExpressionDisplay expression={initialValue} />
-					</View>
-				)
+				initialValue && <ExpressionDisplay expression={initialValue} />
 			}
 			right={() =>
 				icons

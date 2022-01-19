@@ -55,7 +55,7 @@ function ExpressionMaker() {
 					/>
 				</List.Section>
 			)}
-			<Button onPress={reset}>RESET</Button>
+			<Button onPress={reset}>{translate('clear').toLocaleUpperCase()}</Button>
 			{moveToBottom(
 				<ExpressionDisplay displayColor="white" expression={expression} />,
 			)}

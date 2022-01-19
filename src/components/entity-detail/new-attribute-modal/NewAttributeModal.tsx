@@ -1,12 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Button, Text, TextInput } from 'react-native-paper'
+import { IconButton, Text, TextInput, withTheme } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { useEntity } from '../../../context/EntityProvider'
+import { useExpression } from '../../../context/ExpressionProvider'
 import { Attribute } from '../../../models/attribute'
 import { Expression } from '../../../models/expression/expression'
 import { EntitiesScreenNavigationProp } from '../../../pages/Entities/Entities'
+import { Theme } from '../../../theme'
 import { translate } from '../../../utils/translation-helpers'
 import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import CheckIcon from '../../ui/CheckIcon'
@@ -16,21 +18,31 @@ import { ATTRIBUTE_ICONS } from '../attribute-icons'
 type Props = {
 	visible: boolean
 	setVisible: (visible: boolean) => void
+	theme: Theme
 }
 
 const AttributeFormModal = (props: Props) => {
 	const {
 		actions: { addAttribute },
 	} = useEntity()
+	const {
+		actions: { setExpression },
+	} = useExpression()
 	const [name, setName] = useState('')
 	const [constant, setConstant] = useState(false)
 	const [property, setProperty] = useState(false)
-	const [initialValue, setInitialValue] = useState<Expression | undefined>()
+	const [initialValue, setInitialValue] = useState<Expression | undefined>(
+		undefined,
+	)
 	const { visible, setVisible } = props
 	const navigation = useNavigation<EntitiesScreenNavigationProp>()
 	const goToExpressionMaker = () => {
+		if (initialValue) {
+			setExpression(initialValue)
+		}
 		navigation.navigate('ExpressionMaker', { onSubmit: setInitialValue })
 	}
+	const styles = getStyles(props.theme)
 
 	const checkboxes = [
 		{
@@ -68,17 +80,26 @@ const AttributeFormModal = (props: Props) => {
 				)
 			})}
 
-			<Button onPress={goToExpressionMaker}>
-				<Text>{translate('entityDetails.attributeModal.initialValue')}</Text>
-			</Button>
-
-			<Text style={styles.constName}>
+			<View
+				style={styles.expressionContainer}
+				onTouchEnd={() => !initialValue && goToExpressionMaker()}>
 				{initialValue ? (
-					<ExpressionDisplay expression={initialValue} />
+					<View style={styles.initialValueInput}>
+						<ExpressionDisplay expression={initialValue} />
+						<View style={styles.initialValueOptions}>
+							<IconButton icon="pencil" onPress={goToExpressionMaker} />
+							<IconButton
+								icon="eraser"
+								onPress={() => setInitialValue(undefined)}
+							/>
+						</View>
+					</View>
 				) : (
-					'No tiene un carajo'
+					<Text style={styles.initialValuePlaceholder}>
+						{translate('entityDetails.attributeModal.addAnInitialValue')}
+					</Text>
 				)}
-			</Text>
+			</View>
 		</FormModal>
 	)
 
@@ -94,9 +115,29 @@ const AttributeFormModal = (props: Props) => {
 	}
 }
 
-const styles = StyleSheet.create({
-	checkbox: { flexDirection: 'row', alignItems: 'center', marginVertical: 5 },
-	constName: { fontSize: 16 },
-})
+const getStyles = (theme: Theme) =>
+	StyleSheet.create({
+		expressionContainer: {
+			borderColor: theme.colors.placeholder,
+			borderWidth: 2,
+			borderRadius: 7,
+			minHeight: 24,
+		},
+		initialValueInput: {
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+		},
+		checkbox: { flexDirection: 'row', alignItems: 'center', marginVertical: 5 },
+		constName: { fontSize: 16 },
+		initialValuePlaceholder: {
+			fontSize: 18,
+			marginVertical: 10,
+			marginLeft: 10,
+			color: theme.colors.placeholder,
+		},
+		initialValueOptions: { display: 'flex', flexDirection: 'row' },
+	})
 
-export default AttributeFormModal
+export default withTheme(AttributeFormModal)
