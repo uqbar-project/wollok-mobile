@@ -18,6 +18,7 @@
 			"newAttribute": "New attribute",
 			"nameOfAttribute": "Name of the attribute",
 			"constant": "constant",
+			"initialValue": "Initial value",
 			"property": "property"
 		},
 		"methodModal": {
@@ -26,5 +27,13 @@
 			"nameOfMethod": "Name of the method",
 			"nameOfParameter": "Name of the parameter"
 		}
+	},
+	"expression": {
+		"title": "Create an expression",
+		"objects": "Objects",
+		"literals": "Literals",
+		"messages": "Messages",
+		"aNumber": "A number",
+		"aString": "A string"
 	}
 }

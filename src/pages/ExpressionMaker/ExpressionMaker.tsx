@@ -31,7 +31,7 @@ function ExpressionMaker() {
 		<View style={container}>
 			{expression.segments.length > 0 ? (
 				<List.Section>
-					<List.Subheader>Mensajes</List.Subheader>
+					<List.Subheader>{translate('expression.messages')}</List.Subheader>
 					{/* {last(expression.segments)!.methods.map(m => (
 						<View key={m.name}>
 							<List.Item
@@ -43,19 +43,19 @@ function ExpressionMaker() {
 				</List.Section>
 			) : (
 				<List.Section>
-					<List.Subheader>Objetos</List.Subheader>
+					<List.Subheader>{translate('expression.objects')}</List.Subheader>
 					{/* {project.entities.map(e => (
 						<View key={e.name}>
 						<List.Item title={e.name} onPress={() => addSegment(e)} />
 						</View>
 					))} */}
-					<List.Subheader>Literales</List.Subheader>
+					<List.Subheader>{translate('expression.literals')}</List.Subheader>
 					<List.Item
-						title={translate('number')}
+						title={translate('expression.aNumber')}
 						onPress={() => setShowNumberModal(true)}
 					/>
 					<List.Item
-						title={translate('string')}
+						title={translate('expression.aString')}
 						onPress={() => setShowTextModal(true)}
 					/>
 					<List.Item

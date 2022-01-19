@@ -69,7 +69,7 @@ const AttributeFormModal = (props: Props) => {
 			})}
 
 			<Button onPress={goToExpressionMaker}>
-				<Text>{translate('Agregar valor inicial')}</Text>
+				<Text>{translate('entityDetails.attributeModal.initialValue')}</Text>
 			</Button>
 
 			<Text style={styles.constName}>

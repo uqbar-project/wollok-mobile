@@ -63,7 +63,7 @@ const App = () => {
 								name="ExpressionMaker"
 								component={ExpressionMaker}
 								options={({ route }) => ({
-									title: 'Expression Maker <title in progress>',
+									title: translate('expression.title'),
 									headerTitleAlign: 'center',
 									animationEnabled: false,
 									headerLeft: () => <ExpressionBackButton />,

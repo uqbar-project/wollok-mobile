@@ -18,6 +18,7 @@
 			"newAttribute": "Nuevo atributo",
 			"nameOfAttribute": "Nombre del atributo",
 			"constant": "constante",
+			"initialValue": "Valor inicial",
 			"property": "propiedad"
 		},
 		"methodModal": {
@@ -26,5 +27,13 @@
 			"nameOfMethod": "Nombre del metodo",
 			"nameOfParameter": "Nombre del parametro"
 		}
+	},
+	"expression": {
+		"title": "Crea una expresion",
+		"objects": "Objetos",
+		"literals": "Literales",
+		"messages": "Mensajes",
+		"aNumber": "Un numero",
+		"aString": "Un texto"
 	}
 }
