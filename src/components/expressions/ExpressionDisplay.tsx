@@ -7,10 +7,10 @@ import { LiteralSegment } from './expression-segment'
 
 export function ExpressionDisplay(props: {
 	expression: Expression
-	displayColor?: ViewStyle['backgroundColor']
+	backgroundColor?: ViewStyle['backgroundColor']
 }) {
 	return (
-		<View style={[display, { backgroundColor: props.displayColor }]}>
+		<View style={[display, { backgroundColor: props?.backgroundColor }]}>
 			<IconButton style={codeIcon} icon="chevron-right" />
 			{props.expression.segments.map(getVisualSegment)}
 		</View>

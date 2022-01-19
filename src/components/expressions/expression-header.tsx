@@ -7,35 +7,42 @@ import { Expression } from '../../models/expression/expression'
 
 export type ExpressionOnSubmit = (expression: Expression) => void
 
-export const ExpressionBackButton = () => {
-	const navigation = useNavigation()
-	const {
-		actions: { reset },
-	} = useExpression()
-	function goBack() {
-		reset()
-		navigation.goBack()
+function withExpressionGoBack<T>(
+	Component: React.FC<T & { goBack: () => void }>,
+) {
+	return (props: T) => {
+		const navigation = useNavigation()
+		const {
+			actions: { reset },
+		} = useExpression()
+		function goBack() {
+			reset()
+			navigation.goBack()
+		}
+		return <Component goBack={goBack} {...props} />
 	}
-	return <HeaderBackButton onPress={goBack} />
 }
 
-export const ExpressionCheckButton = (props: {
+export const ExpressionBackButton = withExpressionGoBack(({ goBack }) => (
+	<HeaderBackButton onPress={goBack} />
+))
+
+// (props: {
+//
+// })
+
+export const ExpressionCheckButton = withExpressionGoBack<{
 	onSubmit: ExpressionOnSubmit
-}) => {
-	const navigation = useNavigation()
-	const {
-		expression,
-		actions: { reset },
-	} = useExpression()
+}>(({ goBack, onSubmit }) => {
+	const { expression } = useExpression()
 	return (
 		<IconButton
 			disabled={expression.isEmpty()}
 			icon="check"
 			onPress={() => {
-				props.onSubmit(expression)
-				reset()
-				navigation.goBack()
+				onSubmit(expression)
+				goBack()
 			}}
 		/>
 	)
-}
+})

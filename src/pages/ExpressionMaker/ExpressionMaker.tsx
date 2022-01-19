@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { Button, List } from 'react-native-paper'
 import { RootStackParamList } from '../../App'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
@@ -8,7 +8,6 @@ import {
 	NumberInputModal,
 	TextInputModal,
 } from '../../components/expressions/LiteralModal/LiteralInputModals'
-import moveToBottom from '../../components/ui/MoveToBottom'
 import { useExpression } from '../../context/ExpressionProvider'
 import { Literal } from '../../models/expression/segments'
 import { translate } from '../../utils/translation-helpers'
@@ -27,7 +26,8 @@ function ExpressionMaker() {
 	const [showTextModal, setShowTextModal] = useState(false)
 
 	return (
-		<View style={container}>
+		<View>
+			<ExpressionDisplay backgroundColor="white" expression={expression} />
 			{expression.segments.length > 0 ? (
 				<List.Section>
 					<List.Subheader>{translate('expression.messages')}</List.Subheader>
@@ -56,9 +56,6 @@ function ExpressionMaker() {
 				</List.Section>
 			)}
 			<Button onPress={reset}>{translate('clear').toLocaleUpperCase()}</Button>
-			{moveToBottom(
-				<ExpressionDisplay displayColor="white" expression={expression} />,
-			)}
 			<NumberInputModal
 				visible={showNumberModal}
 				setVisible={setShowNumberModal}
@@ -67,9 +64,5 @@ function ExpressionMaker() {
 		</View>
 	)
 }
-
-const { container } = StyleSheet.create({
-	container: { flex: 1 },
-})
 
 export default ExpressionMaker

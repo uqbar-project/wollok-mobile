@@ -27,15 +27,18 @@ const literalValueModal = function <T extends LiteralValue>(
 	}
 }
 
-export const NumberInputModal = literalValueModal<number>(({ setValue }) => (
-	<TextInput
-		keyboardType="numeric"
-		onChangeText={text => {
-			setValue(Number.parseFloat(text))
-		}}
-	/>
-))
+export const NumberInputModal = literalValueModal<number>(
+	({ setValue, value }) => (
+		<TextInput
+			keyboardType="numeric"
+			value={value ? value.toString() : ''}
+			onChangeText={text => {
+				setValue(Number.parseFloat(text))
+			}}
+		/>
+	),
+)
 
-export const TextInputModal = literalValueModal<string>(({ setValue }) => (
-	<TextInput onChangeText={setValue} />
-))
+export const TextInputModal = literalValueModal<string>(
+	({ setValue, value }) => <TextInput onChangeText={setValue} value={value} />,
+)
