@@ -35,7 +35,7 @@ export class Literal implements Segment {
 	}
 }
 
-// export class MethodSegment implements Segment {
+// export class MessageSegment implements Segment {
 // 	readonly kind = 'Method'
 // 	constructor(readonly method: Method) {}
 
