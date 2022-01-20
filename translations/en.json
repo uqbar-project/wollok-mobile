@@ -40,5 +40,8 @@
 		"true": "True",
 		"false": "False",
 		"null": "Null"
+	},
+	"sentence": {
+		"assignment": "assignment"
 	}
 }

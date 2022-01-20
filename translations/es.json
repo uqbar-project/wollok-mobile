@@ -40,5 +40,8 @@
 		"true": "Verdadero",
 		"false": "Falso",
 		"null": "Nulo"
+	},
+	"sentence": {
+		"assignment": "asignacion"
 	}
 }

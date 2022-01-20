@@ -4,27 +4,27 @@ import React, { useEffect } from 'react'
 import RNLocalize from 'react-native-localize'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { Method, Module } from 'wollok-ts/dist/model'
+import { Module } from 'wollok-ts/dist/model'
 import {
 	ExpressionBackButton,
 	ExpressionCheckButton,
-	ExpressionOnSubmit,
+	ExpressionOnSubmit
 } from './components/expressions/expression-header'
 import { ExpressionProvider } from './context/ExpressionProvider'
 import { ProjectProvider } from './context/ProjectProvider'
 import { Entities } from './pages/Entities/Entities'
 import EntityDetails from './pages/EntityDetails/EntityDetails'
 import ExpressionMaker from './pages/ExpressionMaker/ExpressionMaker'
-import { MethodDetail } from './pages/MethodDetail'
 import { theme } from './theme'
 import { setI18nConfig, translate } from './utils/translation-helpers'
 
 export type RootStackParamList = {
 	Entities: undefined
-	EntityDetails: { entity: Module }
+	EntityStack: { entity: Module }
 	ExpressionMaker: { onSubmit: ExpressionOnSubmit }
-	MethodDetails: { method: Method }
 }
+
+export const Stack = createStackNavigator<RootStackParamList>()
 
 const App = () => {
 	setI18nConfig()
@@ -35,8 +35,6 @@ const App = () => {
 			RNLocalize.removeEventListener('change', setI18nConfig)
 		}
 	})
-
-	const Stack = createStackNavigator<RootStackParamList>()
 
 	return (
 		<PaperProvider theme={theme}>
@@ -53,23 +51,6 @@ const App = () => {
 								}}
 							/>
 							<Stack.Screen
-								name="EntityDetails"
-								component={EntityDetails}
-								options={({ route }) => ({
-									title: route.params.entity.name,
-									headerTitleAlign: 'center',
-									animationEnabled: false,
-								})}
-							/>
-							<Stack.Screen
-								name="MethodDetails"
-								component={MethodDetail}
-								options={({ route }) => ({
-									//TODO: use label() instead of name
-									title: route.params.method.name,
-								})}
-							/>
-							<Stack.Screen
 								name="ExpressionMaker"
 								component={ExpressionMaker}
 								options={({ route }) => ({
@@ -81,6 +62,11 @@ const App = () => {
 										<ExpressionCheckButton onSubmit={route.params.onSubmit} />
 									),
 								})}
+							/>
+							<Stack.Screen
+								name="EntityStack"
+								component={EntityDetails}
+								options={{headerShown: false}}
 							/>
 						</Stack.Navigator>
 					</NavigationContainer>

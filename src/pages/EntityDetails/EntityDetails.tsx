@@ -1,4 +1,5 @@
 import { RouteProp, useNavigation } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
@@ -12,9 +13,17 @@ import NewMethodModal from '../../components/entity-detail/new-method-modal/NewM
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { EntityProvider, useEntity } from '../../context/EntityProvider'
 import { translate } from '../../utils/translation-helpers'
-import { MethodDetailsScreenNavigationProp } from '../MethodDetail'
+import {
+	MethodDetail,
+	MethodDetailsScreenNavigationProp
+} from '../MethodDetail'
 
-type Route = RouteProp<RootStackParamList, 'EntityDetails'>
+export type EntityStackParamList = {
+	EntityDetails: undefined
+	MethodDetails: { method: Method }
+}
+
+type Route = RouteProp<RootStackParamList, 'EntityStack'>
 
 const EntityDetails = function () {
 	const [methodModalVisible, setMethodModalVisible] = useState(false)
@@ -77,9 +86,29 @@ function MethodItem({ item: method }: { item: Method }) {
 }
 
 export default function (props: { route: Route }) {
+	const Stack = createStackNavigator<EntityStackParamList>()
+
 	return (
 		<EntityProvider entity={props.route.params.entity}>
-			<EntityDetails />
+			<Stack.Navigator>
+				<Stack.Screen
+					name="EntityDetails"
+					component={EntityDetails}
+					options={{
+						title: props.route.params.entity.name,
+						headerTitleAlign: 'center',
+						animationEnabled: false,
+					}}
+				/>
+				<Stack.Screen
+					name="MethodDetails"
+					component={MethodDetail}
+					options={({ route: methodRoute }) => ({
+						//TODO: use label() instead of name
+						title: methodRoute.params.method.name,
+					})}
+				/>
+			</Stack.Navigator>
 		</EntityProvider>
 	)
 }
