@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, StyleSheet } from 'react-native'
-import { Kind } from '../../models/entity'
+import { Kind } from 'wollok-ts/dist/model'
 
 export function EntityKindIcon(props: { kind: Kind }) {
 	return <Image source={getImageFromType(props.kind)} style={styles.icon} />

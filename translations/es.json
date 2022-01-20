@@ -36,6 +36,9 @@
 		"literals": "Literales",
 		"messages": "Mensajes",
 		"aNumber": "Un numero",
-		"aString": "Un texto"
+		"aString": "Un texto",
+		"true": "Verdadero",
+		"false": "Falso",
+		"null": "Nulo"
 	}
 }

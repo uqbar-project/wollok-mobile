@@ -9,10 +9,9 @@ import AttributeItem from '../../components/entity-detail/AttributeItem/Attribut
 import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
-import { Method } from '../../models/method'
-import { Attribute } from '../../models/attribute'
 import { translate } from '../../utils/translation-helpers'
 import { EntityProvider, useEntity } from '../../context/EntityProvider'
+import { Field, is, Method } from 'wollok-ts/dist/model'
 
 type Route = RouteProp<RootStackParamList, 'EntityDetails'>
 
@@ -37,14 +36,14 @@ const EntityDetails = function () {
 			]}>
 			<List.Section>
 				<ScrollView>
-					<AccordionList<Attribute>
+					<AccordionList<Field>
 						title={translate('entityDetails.attributes').toUpperCase()}
-						items={entity.attributes}
+						items={entity.members.filter(is('Field')) as Field[]}
 						getVisualItem={attributeItem}
 					/>
 					<AccordionList<Method>
 						title={translate('entityDetails.methods').toUpperCase()}
-						items={entity.methods}
+						items={entity.members.filter(is('Method')) as Method[]}
 						getVisualItem={methodItem}
 					/>
 				</ScrollView>
@@ -61,12 +60,17 @@ const EntityDetails = function () {
 	)
 }
 
-function attributeItem(attribute: Attribute): Element {
+function attributeItem(attribute: Field): Element {
 	return <AttributeItem key={attribute.name} attribute={attribute} />
 }
 
 function methodItem(method: Method): Element {
-	return <List.Item key={method.name} title={method.description} />
+	return (
+		<List.Item
+			key={method.name}
+			title={`${method.name}(${method.parameters.map(_ => _.name)})`}
+		/>
+	)
 }
 
 export default function (props: { route: Route }) {

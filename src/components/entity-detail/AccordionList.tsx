@@ -1,30 +1,31 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { Key } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Divider, List } from 'react-native-paper'
+import { Divider, List as ListComponent } from 'react-native-paper'
+import { List } from 'wollok-ts/dist/model'
 
 type Props<Item> = {
 	title: string
 	items: Item[]
 	getVisualItem: (item: Item) => Element
 }
-export const AccordionList = function <Item extends { key: Key }>(
-	props: Props<Item>,
-) {
+export const AccordionList = function <
+	Item extends { name: Key; parameters?: List<any> },
+>(props: Props<Item>) {
 	const reactNavigationTheme = useTheme()
 	const styles = getStyles(reactNavigationTheme)
 
 	return (
-		<List.Accordion title={props.title}>
+		<ListComponent.Accordion title={props.title}>
 			{props.items.map(item => {
 				return (
-					<View key={item.key}>
+					<View key={`${item.name}${item.parameters?.length}`}>
 						{props.getVisualItem(item)}
 						<Divider style={styles.divider} />
 					</View>
 				)
 			})}
-		</List.Accordion>
+		</ListComponent.Accordion>
 	)
 }
 

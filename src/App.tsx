@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import RNLocalize from 'react-native-localize'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { Module } from 'wollok-ts/dist/model'
 import {
 	ExpressionBackButton,
 	ExpressionCheckButton,
@@ -11,7 +12,6 @@ import {
 } from './components/expressions/expression-header'
 import { ExpressionProvider } from './context/ExpressionProvider'
 import { ProjectProvider } from './context/ProjectProvider'
-import { Entity } from './models/entity'
 import { Entities } from './pages/Entities/Entities'
 import EntityDetails from './pages/EntityDetails/EntityDetails'
 import ExpressionMaker from './pages/ExpressionMaker/ExpressionMaker'
@@ -20,7 +20,7 @@ import { setI18nConfig, translate } from './utils/translation-helpers'
 
 export type RootStackParamList = {
 	Entities: undefined
-	EntityDetails: { entity: Entity }
+	EntityDetails: { entity: Module }
 	ExpressionMaker: { onSubmit: ExpressionOnSubmit }
 }
 

@@ -1,8 +1,7 @@
 import React from 'react'
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { Text } from 'react-native-paper'
-import { LiteralValue } from 'wollok-ts/dist/model'
-import { Method } from '../../models/method'
+import { LiteralValue, Method } from 'wollok-ts/dist/model'
 import { OneOrMany } from '../../utils/type-helpers'
 
 export const ObjectSegment = (props: { text: string; index: number }) => {
@@ -18,8 +17,8 @@ export const MethodSegment = (props: { method: Method; index: number }) => {
 		<Bullet color="red" index={props.index}>
 			<View style={style.row}>
 				<Text>{props.method.name}</Text>
-				{props.method.parameters.map(p => (
-					<Parameter color="grey" key={p} text={p} />
+				{props.method.parameters.map(({ name }) => (
+					<Parameter color="grey" key={name} text={name} />
 				))}
 			</View>
 		</Bullet>
@@ -68,9 +67,7 @@ const Bullet = (props: {
 }
 
 const Parameter = (props: { text: string; color: string }) => (
-	<View
-		onTouchEnd={() => console.log(props.text)}
-		style={[style.pill, { backgroundColor: props.color }]}>
+	<View style={[style.pill, { backgroundColor: props.color }]}>
 		<Text>{props.text}</Text>
 	</View>
 )

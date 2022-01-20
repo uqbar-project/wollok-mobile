@@ -1,34 +1,32 @@
 import React from 'react'
 import { List, withTheme } from 'react-native-paper'
-import { Attribute } from '../../../models/attribute'
+import { Field } from 'wollok-ts/dist/model'
 import { Theme } from '../../../theme'
 import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 import styles from './styles'
 
-function AttributeItem(props: { attribute: Attribute; theme: Theme }) {
+function AttributeItem(props: { attribute: Field; theme: Theme }) {
 	const {
-		attribute: { property, constant, description, initialValue },
+		attribute: { isProperty, isConstant, name, value },
 		theme,
 	} = props
 
 	const icons = [
 		{
-			toggle: property,
+			toggle: isProperty,
 			icon: ATTRIBUTE_ICONS.property.checked,
 		},
 		{
-			toggle: constant,
+			toggle: isConstant,
 			icon: ATTRIBUTE_ICONS.constant.checked,
 		},
 	]
 
 	return (
 		<List.Item
-			title={description}
-			description={() =>
-				initialValue && <ExpressionDisplay expression={initialValue} />
-			}
+			title={name}
+			description={() => value && <ExpressionDisplay expression={value} />}
 			right={() =>
 				icons
 					.filter(i => i.toggle)

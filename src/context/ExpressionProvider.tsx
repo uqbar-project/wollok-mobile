@@ -1,15 +1,13 @@
 import React, { createContext, useContext, useState } from 'react'
-import { Expression } from '../models/expression/expression'
-import { Segment } from '../models/expression/segments'
+import { Expression } from 'wollok-ts/dist/model'
 import { OneOrMany } from '../utils/type-helpers'
 
 export const ExpressionContext = createContext<{
-	expression: Expression
+	expression?: Expression
 	actions: Actions
 } | null>(null)
 
 type Actions = {
-	addSegment: (segment: Segment) => void
 	reset: () => void
 	setExpression: (expression: Expression) => void
 }
@@ -17,15 +15,12 @@ type Actions = {
 export function ExpressionProvider(props: {
 	children: OneOrMany<JSX.Element>
 }) {
-	const [expression, setExpression] = useState<Expression>(new Expression())
+	const [expression, setExpression] = useState<Expression>()
 	const initialContext = {
 		expression,
 		actions: {
-			addSegment: (segment: Segment) => {
-				setExpression(expression.addSegment(segment))
-			},
 			reset: () => {
-				setExpression(new Expression())
+				setExpression(undefined)
 			},
 			setExpression,
 		},

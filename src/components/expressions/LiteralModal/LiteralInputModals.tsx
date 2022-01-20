@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react'
 import { TextInput } from 'react-native-paper'
-import { LiteralValue } from 'wollok-ts/dist/model'
+import { Literal, LiteralValue } from 'wollok-ts/dist/model'
 import { useExpression } from '../../../context/ExpressionProvider'
-import { Literal } from '../../../models/expression/segments'
 import FormModal from '../../ui/FormModal/FormModal'
 
 type LiteralValueModalProps = {
@@ -15,12 +14,18 @@ const literalValueModal = function <T extends LiteralValue>(
 ) {
 	return function (props: LiteralValueModalProps) {
 		const {
-			actions: { addSegment },
+			actions: { setExpression },
 		} = useExpression()
 		const [value, setValue] = useState<T>()
 
 		return (
-			<FormModal {...props} onSubmit={() => addSegment(new Literal(value!))}>
+			<FormModal
+				{...props}
+				onSubmit={() => {
+					if (value !== undefined) {
+						setExpression(new Literal({ value: value as LiteralValue }))
+					}
+				}}>
 				<Input value={value} setValue={setValue} />
 			</FormModal>
 		)

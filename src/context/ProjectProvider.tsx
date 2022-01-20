@@ -1,11 +1,17 @@
 import React, { createContext, useContext } from 'react'
-import { Attribute } from '../models/attribute'
-import { Entity } from '../models/entity'
-import { Expression } from '../models/expression/expression'
-import { Literal } from '../models/expression/segments'
-import { Method } from '../models/method'
-import { Project } from '../models/project'
-import { OneOrMany } from '../utils/type-helpers'
+import {
+	Body,
+	Field,
+	Literal,
+	Method,
+	Module,
+	Package,
+	Parameter,
+	Singleton,
+} from 'wollok-ts/dist/model'
+import { Mutable, OneOrMany } from '../utils/type-helpers'
+
+export type Project = Mutable<Package>
 
 export const ProjectContext = createContext<{
 	project: Project
@@ -13,39 +19,75 @@ export const ProjectContext = createContext<{
 } | null>(null)
 
 type Actions = {
-	addEntity: (entity: Entity) => void
+	addEntity: (entity: Module) => void
 }
 
-function testSeed(project: Project) {
-	project.addEntity(
-		new Entity(
-			'pepita',
-			'Singleton',
-			[new Method('vola', ['kms'])],
-			[
-				new Attribute(
-					'energia',
-					false,
-					true,
-					new Expression([new Literal(100)]),
-				),
-			],
-		),
-	)
-	project.addEntity(
-		new Entity('manolo', 'Singleton', [
-			new Method('cambiaDeColor', ['color']),
-			new Method('moveteA', ['posX', 'posY']),
-		]),
-	)
+function testMainPackage() {
+	return new Package({
+		name: 'main',
+		members: [
+			new Singleton({
+				name: 'pepita',
+				members: [
+					new Field({
+						name: 'energia',
+						isConstant: false,
+						isProperty: true,
+						value: new Literal({ value: 100 }),
+					}),
+					new Field({
+						name: 'nombre',
+						isConstant: true,
+						isProperty: true,
+						value: new Literal({ value: 'Pepita' }),
+					}),
+					new Method({
+						name: 'vola',
+						parameters: [
+							new Parameter({
+								name: 'kms',
+							}),
+						],
+						body: new Body(),
+					}),
+				],
+			}),
+			new Singleton({
+				name: 'manolo',
+				members: [
+					new Method({
+						name: 'cambiaDeColor',
+						parameters: [
+							new Parameter({
+								name: 'color',
+							}),
+						],
+						body: new Body(),
+					}),
+					new Method({
+						name: 'moveteA',
+						parameters: [
+							new Parameter({
+								name: 'posX',
+							}),
+							new Parameter({
+								name: 'posY',
+							}),
+						],
+						body: new Body(),
+					}),
+				],
+			}),
+		],
+	})
 }
 
 export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
-	const project = new Project()
-	// TODO: For app testing
-	testSeed(project)
+	const project: Project = testMainPackage()
 
-	const addEntity = (newEntity: Entity) => project.addEntity(newEntity)
+	const addEntity = (newEntity: Module) => {
+		project.members = [...project.members, newEntity]
+	}
 
 	const initialContext = { project, actions: { addEntity } }
 	return (

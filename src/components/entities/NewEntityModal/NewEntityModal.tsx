@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper'
-import { Entity, Kind } from '../../../models/entity'
+import { Class, Kind, Mixin, Module, Singleton } from 'wollok-ts/dist/model'
 import { translate } from '../../../utils/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import { SelectKind } from '../SelectKind/SelectKind'
@@ -11,7 +11,7 @@ const initialKind: Kind = 'Singleton'
 function NewEntityModal(props: {
 	visible: boolean
 	setVisible: (value: boolean) => void
-	addEntity: (definition: Entity) => void
+	addEntity: (entity: Module) => void
 }) {
 	const [kind, setKind] = useState<Kind>(initialKind)
 	const [name, setName] = useState<string>(initialName)
@@ -30,7 +30,21 @@ function NewEntityModal(props: {
 		</FormModal>
 	)
 	function addEntity() {
-		props.addEntity(new Entity(name, kind))
+		var entity: Module
+		switch (kind) {
+			case 'Singleton':
+				entity = new Singleton({ name })
+				break
+			case 'Class':
+				entity = new Class({ name })
+				break
+			case 'Mixin':
+				entity = new Mixin({ name })
+				break
+			default:
+				throw `Not supported kind ${kind}`
+		}
+		props.addEntity(entity)
 	}
 
 	function resetForm() {
