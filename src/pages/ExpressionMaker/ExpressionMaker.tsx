@@ -46,12 +46,16 @@ function ExpressionMaker() {
 						onPress={() => setShowTextModal(true)}
 					/>
 					<List.Item
-						title="True"
+						title={translate('expression.true')}
 						onPress={() => setExpression(new Literal({ value: true }))}
 					/>
 					<List.Item
-						title="False"
+						title={translate('expression.false')}
 						onPress={() => setExpression(new Literal({ value: false }))}
+					/>
+					<List.Item
+						title={translate('expression.null')}
+						onPress={() => setExpression(new Literal({ value: null }))}
 					/>
 				</List.Section>
 			)}
