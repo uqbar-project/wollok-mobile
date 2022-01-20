@@ -1,17 +1,18 @@
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { Field, is, Method } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../../App'
 import { AccordionList } from '../../components/entity-detail/AccordionList'
-import AttributeItem from '../../components/entity-detail/AttributeItem/AttributeItem'
+import AttributeItemComponent from '../../components/entity-detail/AttributeItem/AttributeItem'
 import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
-import { translate } from '../../utils/translation-helpers'
 import { EntityProvider, useEntity } from '../../context/EntityProvider'
-import { Field, is, Method } from 'wollok-ts/dist/model'
+import { translate } from '../../utils/translation-helpers'
+import { MethodDetailsScreenNavigationProp } from '../MethodDetail'
 
 type Route = RouteProp<RootStackParamList, 'EntityDetails'>
 
@@ -39,12 +40,12 @@ const EntityDetails = function () {
 					<AccordionList<Field>
 						title={translate('entityDetails.attributes').toUpperCase()}
 						items={entity.members.filter(is('Field')) as Field[]}
-						getVisualItem={attributeItem}
+						VisualItem={AttributeItem}
 					/>
 					<AccordionList<Method>
 						title={translate('entityDetails.methods').toUpperCase()}
 						items={entity.members.filter(is('Method')) as Method[]}
-						getVisualItem={methodItem}
+						VisualItem={MethodItem}
 					/>
 				</ScrollView>
 			</List.Section>
@@ -60,15 +61,17 @@ const EntityDetails = function () {
 	)
 }
 
-function attributeItem(attribute: Field): Element {
-	return <AttributeItem key={attribute.name} attribute={attribute} />
+function AttributeItem({ item: attribute }: { item: Field }) {
+	return <AttributeItemComponent key={attribute.name} attribute={attribute} />
 }
 
-function methodItem(method: Method): Element {
+function MethodItem({ item: method }: { item: Method }) {
+	const navigator = useNavigation<MethodDetailsScreenNavigationProp>()
 	return (
 		<List.Item
 			key={method.name}
 			title={`${method.name}(${method.parameters.map(_ => _.name)})`}
+			onPress={() => navigator.navigate('MethodDetails', { method })}
 		/>
 	)
 }
