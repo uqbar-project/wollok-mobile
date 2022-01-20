@@ -2,6 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { Button, List } from 'react-native-paper'
+import { Literal } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../../App'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
 import {
@@ -9,7 +10,6 @@ import {
 	TextInputModal,
 } from '../../components/expressions/LiteralModal/LiteralInputModals'
 import { useExpression } from '../../context/ExpressionProvider'
-import { Literal } from '../../models/expression/segments'
 import { translate } from '../../utils/translation-helpers'
 
 export type ExpressionMakerProp = RouteProp<
@@ -20,7 +20,7 @@ export type ExpressionMakerProp = RouteProp<
 function ExpressionMaker() {
 	const {
 		expression,
-		actions: { reset, addSegment },
+		actions: { reset, setExpression },
 	} = useExpression()
 	const [showNumberModal, setShowNumberModal] = useState(false)
 	const [showTextModal, setShowTextModal] = useState(false)
@@ -28,7 +28,7 @@ function ExpressionMaker() {
 	return (
 		<View>
 			<ExpressionDisplay backgroundColor="white" expression={expression} />
-			{expression.segments.length > 0 ? (
+			{expression ? (
 				<List.Section>
 					<List.Subheader>{translate('expression.messages')}</List.Subheader>
 				</List.Section>
@@ -47,11 +47,11 @@ function ExpressionMaker() {
 					/>
 					<List.Item
 						title="True"
-						onPress={() => addSegment(new Literal(true))}
+						onPress={() => setExpression(new Literal({ value: true }))}
 					/>
 					<List.Item
 						title="False"
-						onPress={() => addSegment(new Literal(false))}
+						onPress={() => setExpression(new Literal({ value: false }))}
 					/>
 				</List.Section>
 			)}

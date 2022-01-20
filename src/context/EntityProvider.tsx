@@ -1,8 +1,8 @@
 import React, { createContext, useContext } from 'react'
-import { Attribute } from '../models/attribute'
-import { Entity } from '../models/entity'
-import { Method } from '../models/method'
-import { OneOrMany } from '../utils/type-helpers'
+import { Field, Method, Module } from 'wollok-ts/dist/model'
+import { Mutable, OneOrMany } from '../utils/type-helpers'
+
+type Entity = Mutable<Module>
 
 export const EntityContext = createContext<{
 	entity: Entity
@@ -10,8 +10,7 @@ export const EntityContext = createContext<{
 } | null>(null)
 
 type Actions = {
-	addMethod: (method: Method) => void
-	addAttribute: (attribute: Attribute) => void
+	addMember: (method: Method | Field) => void
 }
 
 export function EntityProvider(props: {
@@ -19,14 +18,14 @@ export function EntityProvider(props: {
 	entity: Entity
 }) {
 	const { children, entity } = props
-	const addMethod = (newMethod: Method) => entity.addMethod(newMethod)
 
-	const addAttribute = (newAttribute: Attribute) =>
-		entity.addAttribute(newAttribute)
+	const addMember = (newMember: Method | Field) => {
+		entity.members = [...entity.members, newMember]
+	}
 
 	const initialContext = {
 		entity: entity,
-		actions: { addMethod, addAttribute },
+		actions: { addMember },
 	}
 	return (
 		<EntityContext.Provider value={initialContext}>

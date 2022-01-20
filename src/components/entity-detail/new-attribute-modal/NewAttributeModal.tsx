@@ -3,10 +3,9 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, TextInput, withTheme } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { Expression, Field } from 'wollok-ts/dist/model'
 import { useEntity } from '../../../context/EntityProvider'
 import { useExpression } from '../../../context/ExpressionProvider'
-import { Attribute } from '../../../models/attribute'
-import { Expression } from '../../../models/expression/expression'
 import { EntitiesScreenNavigationProp } from '../../../pages/Entities/Entities'
 import { Theme } from '../../../theme'
 import { translate } from '../../../utils/translation-helpers'
@@ -23,14 +22,14 @@ type Props = {
 
 const AttributeFormModal = (props: Props) => {
 	const {
-		actions: { addAttribute },
+		actions: { addMember },
 	} = useEntity()
 	const {
 		actions: { setExpression },
 	} = useExpression()
 	const [name, setName] = useState('')
-	const [constant, setConstant] = useState(false)
-	const [property, setProperty] = useState(false)
+	const [isConstant, setConstant] = useState(false)
+	const [isProperty, setProperty] = useState(false)
 	const [initialValue, setInitialValue] = useState<Expression | undefined>(
 		undefined,
 	)
@@ -46,13 +45,13 @@ const AttributeFormModal = (props: Props) => {
 
 	const checkboxes = [
 		{
-			checked: property,
+			checked: isProperty,
 			setChecked: setProperty,
 			icons: ATTRIBUTE_ICONS.property,
 			text: upperCaseFirst(translate('entityDetails.attributeModal.property')),
 		},
 		{
-			checked: constant,
+			checked: isConstant,
 			setChecked: setConstant,
 			icons: ATTRIBUTE_ICONS.constant,
 			text: upperCaseFirst(translate('entityDetails.attributeModal.constant')),
@@ -111,7 +110,7 @@ const AttributeFormModal = (props: Props) => {
 	}
 
 	function newAttribute() {
-		addAttribute(new Attribute(name, constant, property, initialValue))
+		addMember(new Field({ name, isConstant, isProperty, value: initialValue }))
 	}
 }
 

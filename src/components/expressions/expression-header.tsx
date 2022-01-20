@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/core'
 import { HeaderBackButton } from '@react-navigation/stack'
 import React from 'react'
 import { IconButton } from 'react-native-paper'
+import { Expression } from 'wollok-ts/dist/model'
 import { useExpression } from '../../context/ExpressionProvider'
-import { Expression } from '../../models/expression/expression'
 
 export type ExpressionOnSubmit = (expression: Expression) => void
 
@@ -27,20 +27,16 @@ export const ExpressionBackButton = withExpressionGoBack(({ goBack }) => (
 	<HeaderBackButton onPress={goBack} />
 ))
 
-// (props: {
-//
-// })
-
 export const ExpressionCheckButton = withExpressionGoBack<{
 	onSubmit: ExpressionOnSubmit
 }>(({ goBack, onSubmit }) => {
 	const { expression } = useExpression()
 	return (
 		<IconButton
-			disabled={expression.isEmpty()}
+			disabled={!expression}
 			icon="check"
 			onPress={() => {
-				onSubmit(expression)
+				onSubmit(expression!)
 				goBack()
 			}}
 		/>

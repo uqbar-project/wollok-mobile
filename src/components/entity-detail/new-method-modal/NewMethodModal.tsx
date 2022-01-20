@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Text, TextInput, withTheme } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { Method, Parameter } from 'wollok-ts/dist/model'
 import { useEntity } from '../../../context/EntityProvider'
-import { Method } from '../../../models/method'
 import { Theme } from '../../../theme'
 import { translate } from '../../../utils/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
@@ -15,7 +15,7 @@ const NewMethodModal = (props: {
 	theme: Theme
 }) => {
 	const {
-		actions: { addMethod },
+		actions: { addMember },
 	} = useEntity()
 	const [name, setName] = useState('')
 	const [parameters, setParameters] = useState<string[]>([])
@@ -62,7 +62,12 @@ const NewMethodModal = (props: {
 	}
 
 	function newMethod() {
-		addMethod(new Method(name, parameters))
+		addMember(
+			new Method({
+				name,
+				parameters: parameters.map(name => new Parameter({ name })),
+			}),
+		)
 	}
 
 	function addNextParameter() {

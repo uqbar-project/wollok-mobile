@@ -1,34 +1,33 @@
 import React from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
 import { IconButton } from 'react-native-paper'
-import { Expression } from '../../models/expression/expression'
-import { Segment } from '../../models/expression/segments'
+import { Expression } from 'wollok-ts/dist/model'
 import { LiteralSegment } from './expression-segment'
 
 export function ExpressionDisplay(props: {
-	expression: Expression
+	expression?: Expression
 	backgroundColor?: ViewStyle['backgroundColor']
 }) {
+	const { expression } = props
 	return (
 		<View style={[display, { backgroundColor: props?.backgroundColor }]}>
 			<IconButton style={codeIcon} icon="chevron-right" />
-			{props.expression.segments.map(getVisualSegment)}
+			{expression && getVisualSegment(expression)}
 		</View>
 	)
 }
 
-function getVisualSegment(segment: Segment, index: number): JSX.Element {
-	switch (segment.node.kind) {
+function getVisualSegment(expression: Expression): JSX.Element {
+	var i = 1
+	switch (expression.kind) {
 		// case 'Singleton':
 		// 	return <ObjectSegment text={segment.name} key={index} index={index} />
 		// case 'Method':
 		// 	return <MethodSegment method={segment.} key={index} index={index} />
 		case 'Literal':
-			return (
-				<LiteralSegment value={segment.node.value} key={index} index={index} />
-			)
+			return <LiteralSegment value={expression.value} key={i} index={i} />
 		default:
-			throw new Error('No segment')
+			throw Error(`Not supported expression ${expression.kind}`)
 	}
 }
 

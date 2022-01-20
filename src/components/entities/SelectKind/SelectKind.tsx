@@ -1,9 +1,9 @@
-import { Kind } from '../../../models/entity'
 import React from 'react'
-import { ToggleButton, Text } from 'react-native-paper'
 import { View } from 'react-native'
-import { stylesheet } from './styles'
+import { Text, ToggleButton } from 'react-native-paper'
+import { Kind } from 'wollok-ts/dist/model'
 import { translate } from '../../../utils/translation-helpers'
+import { stylesheet } from './styles'
 
 type VisualKind = { kind: Kind; description: string }
 
@@ -41,7 +41,7 @@ export function SelectKind(props: {
 	)
 }
 
-function applyTranslation(kind: VisualKind): VisualKind {
+function translateDescription(kind: VisualKind): VisualKind {
 	return {
 		...kind,
 		description: translate(kind.description, {
@@ -54,4 +54,4 @@ const entityKinds: VisualKind[] = [
 	{ kind: 'Singleton' as Kind, description: 'object' },
 	{ kind: 'Class' as Kind, description: 'class' },
 	{ kind: 'Mixin' as Kind, description: 'mixin' },
-].map(applyTranslation)
+].map(translateDescription)
