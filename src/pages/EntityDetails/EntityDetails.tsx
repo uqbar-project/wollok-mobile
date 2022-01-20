@@ -65,7 +65,12 @@ function attributeItem(attribute: Field): Element {
 }
 
 function methodItem(method: Method): Element {
-	return <List.Item key={method.name} title={method.name} />
+	return (
+		<List.Item
+			key={method.name}
+			title={`${method.name}(${method.parameters.map(_ => _.name)})`}
+		/>
+	)
 }
 
 export default function (props: { route: Route }) {

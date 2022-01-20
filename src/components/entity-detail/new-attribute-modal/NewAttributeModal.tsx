@@ -30,9 +30,7 @@ const AttributeFormModal = (props: Props) => {
 	const [name, setName] = useState('')
 	const [isConstant, setConstant] = useState(false)
 	const [isProperty, setProperty] = useState(false)
-	const [initialValue, setInitialValue] = useState<Expression | undefined>(
-		undefined,
-	)
+	const [initialValue, setInitialValue] = useState<Expression>()
 	const { visible, setVisible } = props
 	const navigation = useNavigation<EntitiesScreenNavigationProp>()
 	const goToExpressionMaker = () => {

@@ -20,7 +20,11 @@ export function EntityProvider(props: {
 	const { children, entity } = props
 
 	const addMember = (newMember: Method | Field) => {
-		entity.members = [...entity.members, newMember]
+		// For method instanciation by property
+		const modifiedEntity = entity.copy({
+			members: [...entity.members, newMember],
+		}) as Entity
+		entity.members = modifiedEntity.members
 	}
 
 	const initialContext = {
