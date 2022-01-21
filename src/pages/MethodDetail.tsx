@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
-import { ScrollView } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { IconButton, Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import {
@@ -67,7 +67,7 @@ export const MethodDetail = ({
 					label: upperCaseFirst(translate('sentence.assignment')),
 				},
 			]}>
-			<ScrollView>
+			<ScrollView style={styles.sentences}>
 				{sentences.map((sentence, i) => {
 					switch (sentence.kind) {
 						case 'Assignment':
@@ -117,10 +117,16 @@ function AssignmentFormModal({
 		<FormModal onSubmit={submitAssignment} {...rest}>
 			{/* TODO: Use dropdown with options */}
 			<TextInput
-				label={translate('sentence.nameOfReference')}
+				label={translate('sentence.nameOfVariable')}
 				onChangeText={changeReference}
 			/>
 			<ExpressionView value={value} setValue={setValue} />
 		</FormModal>
 	)
 }
+
+const styles = StyleSheet.create({
+	sentences: {
+		paddingLeft: 15,
+	},
+})
