@@ -42,6 +42,7 @@
 		"null": "Nulo"
 	},
 	"sentence": {
-		"assignment": "asignacion"
+		"assignment": "asignacion",
+		"nameOfVariable": "variable"
 	}
 }

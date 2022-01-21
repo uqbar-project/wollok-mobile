@@ -42,10 +42,18 @@ function testMainPackage() {
 						value: new Literal({ value: 'Pepita' }),
 					}),
 					new Method({
+						name: 'estaCansada',
+						body: new Body(),
+					}),
+					new Method({
 						name: 'vola',
+						body: new Body(),
+					}),
+					new Method({
+						name: 'come',
 						parameters: [
 							new Parameter({
-								name: 'kms',
+								name: 'comida',
 							}),
 						],
 						body: new Body(),
