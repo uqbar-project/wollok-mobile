@@ -1,10 +1,11 @@
 import React from 'react'
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { Text } from 'react-native-paper'
-import { LiteralValue, Method } from 'wollok-ts/dist/model'
+import { LiteralValue, Send } from 'wollok-ts/dist/model'
 import { OneOrMany } from '../../utils/type-helpers'
+import { getVisualSegment } from './ExpressionDisplay'
 
-export const ObjectSegment = (props: { text: string; index: number }) => {
+export const ReferenceSegment = (props: { text: string; index: number }) => {
 	return (
 		<Bullet color="green" index={props.index}>
 			<Text>{props.text}</Text>
@@ -12,14 +13,14 @@ export const ObjectSegment = (props: { text: string; index: number }) => {
 	)
 }
 
-export const MethodSegment = (props: { method: Method; index: number }) => {
+export const MethodSegment = (props: { send: Send; index: number }) => {
 	return (
 		<Bullet color="red" index={props.index}>
 			<View style={style.row}>
-				<Text>{props.method.name}</Text>
-				{props.method.parameters.map(({ name }) => (
-					<Parameter color="grey" key={name} text={name} />
-				))}
+				{getVisualSegment(props.send.receiver)}
+				<Text>{props.send.message}</Text>
+				{/* TODO: Improve this. Use Parameter? */}
+				{props.send.args.map(getVisualSegment)}
 			</View>
 		</Bullet>
 	)
@@ -66,11 +67,11 @@ const Bullet = (props: {
 	)
 }
 
-const Parameter = (props: { text: string; color: string }) => (
-	<View style={[style.pill, { backgroundColor: props.color }]}>
-		<Text>{props.text}</Text>
-	</View>
-)
+// const Parameter = (props: { text: string; color: string }) => (
+// 	<View style={[style.pill, { backgroundColor: props.color }]}>
+// 		<Text>{props.text}</Text>
+// 	</View>
+// )
 
 const style = StyleSheet.create({
 	bullet: {

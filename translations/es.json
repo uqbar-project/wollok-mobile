@@ -32,7 +32,8 @@
 	},
 	"expression": {
 		"title": "Crea una expresion",
-		"objects": "Objetos",
+		"mainObjects": "Mis objectos",
+		"wollokObjects": "Objectos en Wollok",
 		"literals": "Literales",
 		"messages": "Mensajes",
 		"aNumber": "Un numero",

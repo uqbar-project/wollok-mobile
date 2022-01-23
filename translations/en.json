@@ -32,7 +32,8 @@
 	},
 	"expression": {
 		"title": "Create an expression",
-		"objects": "Objects",
+		"mainObjects": "My objects",
+		"wollokObjects": "Wollok objects",
 		"literals": "Literals",
 		"messages": "Messages",
 		"aNumber": "A number",
