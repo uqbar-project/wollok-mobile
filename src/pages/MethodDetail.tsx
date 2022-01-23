@@ -2,14 +2,14 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { IconButton, Text, TextInput } from 'react-native-paper'
+import { Divider, IconButton, Text } from 'react-native-paper'
+import DropDown from 'react-native-paper-dropdown'
 import { upperCaseFirst } from 'upper-case-first'
 import {
 	Assignment,
-	Body,
 	Expression,
 	Field,
-	Literal,
+	Method,
 	Reference,
 	Sentence,
 	Variable,
@@ -20,7 +20,7 @@ import ExpressionView from '../components/ui/ExpressionView'
 import FormModal from '../components/ui/FormModal/FormModal'
 import { Row } from '../components/ui/Row'
 import { translate } from '../utils/translation-helpers'
-import { Mutable } from '../utils/type-helpers'
+import { allFields, allVariables } from '../utils/wollok-helpers'
 import { EntityStackParamList } from './EntityDetails/EntityDetails'
 
 export type MethodDetailsScreenNavigationProp = StackNavigationProp<
@@ -38,14 +38,9 @@ export const MethodDetail = ({
 	route: Route
 }) => {
 	// const { entity } = useEntity()
-	const body = method.body as Mutable<Body>
-	const [sentences, setSentences] = useState<Sentence[]>([
-		...body.sentences,
-		new Assignment({
-			variable: new Reference({ name: 'energia' }),
-			value: new Literal({ value: 90 }),
-		}),
-	])
+	const [sentences, setSentences] = useState<Sentence[]>(
+		Array.from(method.sentences()),
+	)
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 
 	// function submit() {
@@ -86,22 +81,27 @@ export const MethodDetail = ({
 			</ScrollView>
 
 			<AssignmentFormModal
+				method={method}
+				onSubmit={addAssignment}
 				setVisible={setAssignmentModalVisible}
 				visible={assignmentModalVisible}
-				onSubmit={addAssignment}
 			/>
 		</MultiFabScreen>
 	)
 }
 
-function AssignmentFormModal({
-	onSubmit,
-	...rest
-}: {
+type AssignmentFormModalProps = {
+	method: Method
 	onSubmit: (assignment: Assignment) => void
 	setVisible: (value: boolean) => void
 	visible: boolean
-}) {
+}
+function AssignmentFormModal({
+	method,
+	onSubmit,
+	...rest
+}: AssignmentFormModalProps) {
+	const [showVariableDropdown, setShowVariableDropdown] = useState(false)
 	const [value, setValue] = useState<Expression>()
 	const [variable, setReference] = useState<Reference<Field | Variable>>()
 
@@ -109,17 +109,31 @@ function AssignmentFormModal({
 		onSubmit(new Assignment({ value: value!, variable: variable! }))
 	}
 
-	function changeReference(name: string) {
+	function selectVariable(name: string) {
 		setReference(new Reference({ name }))
 	}
 
+	const fields = allFields(method.parent())
+	const params = method.parameters
+	const methodVars = allVariables(method)
+	const variableList = [...fields, ...params, ...methodVars].map(
+		({ name }) => ({ label: name, value: name }),
+	)
+
 	return (
 		<FormModal onSubmit={submitAssignment} {...rest}>
-			{/* TODO: Use dropdown with options */}
-			<TextInput
-				label={translate('sentence.nameOfVariable')}
-				onChangeText={changeReference}
+			<DropDown
+				dropDownStyle={styles.dropdown}
+				label={translate('sentence.selectVariable')}
+				mode={'outlined'}
+				visible={showVariableDropdown}
+				showDropDown={() => setShowVariableDropdown(true)}
+				onDismiss={() => setShowVariableDropdown(false)}
+				value={variable?.name}
+				setValue={selectVariable}
+				list={variableList}
 			/>
+			<Divider style={styles.divider} />
 			<ExpressionView value={value} setValue={setValue} />
 		</FormModal>
 	)
@@ -128,5 +142,12 @@ function AssignmentFormModal({
 const styles = StyleSheet.create({
 	sentences: {
 		paddingLeft: 15,
+	},
+	divider: {
+		marginTop: 10,
+		marginBottom: 10,
+	},
+	dropdown: {
+		marginTop: -25,
 	},
 })

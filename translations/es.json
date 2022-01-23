@@ -43,6 +43,6 @@
 	},
 	"sentence": {
 		"assignment": "asignacion",
-		"nameOfVariable": "variable"
+		"selectVariable": "Seleccionar variable"
 	}
 }

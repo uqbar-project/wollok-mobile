@@ -1,7 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Module } from 'wollok-ts/dist/model'
+import { Module, Package } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../../App'
 import EntityComponent from '../../components/entities/Entity/Entity'
 import NewEntityModal from '../../components/entities/NewEntityModal/NewEntityModal'
@@ -28,7 +28,7 @@ export function Entities() {
 	return (
 		<FabAddScreen onPress={fabPressed}>
 			<ScrollView>
-				{project.members.map(ent => (
+				{project.getNodeByFQN<Package>('main').members.map(ent => (
 					<EntityComponent key={ent.name} entity={ent as Module} />
 				))}
 			</ScrollView>
