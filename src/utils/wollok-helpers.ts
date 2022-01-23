@@ -2,6 +2,7 @@
 // All these funtions are duplicated from Wollok
 import { upperCaseFirst } from 'upper-case-first'
 import {
+	Environment,
 	Field,
 	is,
 	List,
@@ -14,6 +15,7 @@ import {
 	Test,
 	Variable,
 } from 'wollok-ts/dist/model'
+import { last } from './commons'
 
 export function allFields(module: Module): List<Field> {
 	return module.hierarchy().flatMap(parent => parent.fields())
@@ -37,4 +39,36 @@ export function methodLabel(method: Method) {
 
 export function literalClassFQN(literal: Literal): Name {
 	return `wollok.lang.${upperCaseFirst(typeof literal.value)}`
+}
+
+export function allScopedVariables(method: Method) {
+	const fields = allFields(method.parent())
+	const params = method.parameters
+	const methodVars = allVariables(method)
+
+	return [...fields, ...params, ...methodVars]
+}
+
+export function methodFQN(method: Method) {
+	return `${method.parent().fullyQualifiedName()}.${method.name}/${
+		method.parameters.length
+	}`
+}
+
+export function isMethodFQN(fqn: Name) {
+	return fqn.includes('/')
+}
+
+export function methodByFQN(environment: Environment, fqn: Name): Method {
+	const parts = fqn.split('.')
+
+	const methodWithArity = last(parts)
+
+	const [methodName, methodArity] = methodWithArity!.split('/')
+
+	const entityFQN = fqn.replace(`.${methodWithArity}`, '')
+
+	const entity = environment.getNodeByFQN<Module>(entityFQN)
+
+	return entity.lookupMethod(methodName, Number.parseInt(methodArity))!
 }

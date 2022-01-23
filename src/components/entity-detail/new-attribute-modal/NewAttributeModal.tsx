@@ -20,6 +20,7 @@ type Props = {
 const AttributeFormModal = (props: Props) => {
 	const {
 		actions: { addMember },
+		entity,
 	} = useEntity()
 	const [name, setName] = useState('')
 	const [isConstant, setConstant] = useState(false)
@@ -65,7 +66,11 @@ const AttributeFormModal = (props: Props) => {
 				)
 			})}
 
-			<ExpressionView value={initialValue} setValue={setInitialValue} />
+			<ExpressionView
+				value={initialValue}
+				setValue={setInitialValue}
+				fqn={entity.fullyQualifiedName()}
+			/>
 		</FormModal>
 	)
 

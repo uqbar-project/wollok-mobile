@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, withTheme } from 'react-native-paper'
-import { Expression } from 'wollok-ts/dist/model'
+import { Expression, Name } from 'wollok-ts/dist/model'
 import { useExpression } from '../../context/ExpressionProvider'
 import { EntitiesScreenNavigationProp } from '../../pages/Entities/Entities'
 import { Theme } from '../../theme'
@@ -13,6 +13,7 @@ type Props = {
 	value?: Expression
 	setValue: (expression?: Expression) => void
 	theme: Theme
+	fqn: Name
 }
 
 const ExpressionView = (props: Props) => {
@@ -26,7 +27,10 @@ const ExpressionView = (props: Props) => {
 		if (value) {
 			setExpression(value)
 		}
-		navigation.navigate('ExpressionMaker', { onSubmit: setValue })
+		navigation.navigate('ExpressionMaker', {
+			onSubmit: setValue,
+			contextFQN: props.fqn,
+		})
 	}
 
 	const styles = getStyles(props.theme)

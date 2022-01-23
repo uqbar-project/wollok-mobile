@@ -7,6 +7,8 @@ import {
 	Class,
 	Expression,
 	Literal,
+	Method,
+	Module,
 	Package,
 	Reference,
 	Send,
@@ -21,14 +23,21 @@ import { MessageList } from '../../components/expressions/messages-list'
 import { useExpression } from '../../context/ExpressionProvider'
 import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
-import { isNamedSingleton, literalClassFQN } from '../../utils/wollok-helpers'
+import {
+	allFields,
+	allScopedVariables,
+	isMethodFQN,
+	isNamedSingleton,
+	literalClassFQN,
+	methodByFQN,
+} from '../../utils/wollok-helpers'
 
 export type ExpressionMakerProp = RouteProp<
 	RootStackParamList,
 	'ExpressionMaker'
 >
 
-function ExpressionMaker() {
+function ExpressionMaker(props: { context: Module | Method }) {
 	const {
 		expression,
 		actions: { reset, setExpression },
@@ -47,6 +56,18 @@ function ExpressionMaker() {
 					</List.Section>
 				) : (
 					<List.Section>
+						<List.Subheader>{translate('expression.variables')}</List.Subheader>
+						{(props.context instanceof Method
+							? allScopedVariables(props.context)
+							: allFields(props.context)
+						).map(({ id, name }) => (
+							<List.Item
+								key={id}
+								title={name}
+								onPress={() => setExpression(new Reference({ name: name! }))}
+							/>
+						))}
+
 						<List.Subheader>
 							{translate('expression.mainObjects')}
 						</List.Subheader>
@@ -54,6 +75,7 @@ function ExpressionMaker() {
 							packageName="main"
 							setReference={setExpression}
 						/>
+
 						<List.Subheader>{translate('expression.literals')}</List.Subheader>
 						<List.Item
 							title={translate('expression.aNumber')}
@@ -75,6 +97,7 @@ function ExpressionMaker() {
 							title={translate('expression.null')}
 							onPress={() => setExpression(new Literal({ value: null }))}
 						/>
+
 						<List.Subheader>
 							{translate('expression.wollokObjects')}
 						</List.Subheader>
@@ -165,4 +188,16 @@ const styles = StyleSheet.create({
 	view: { display: 'flex', maxHeight: '94%' },
 })
 
-export default ExpressionMaker
+export default function ({
+	route: {
+		params: { contextFQN },
+	},
+}: {
+	route: RouteProp<RootStackParamList, 'ExpressionMaker'>
+}) {
+	const { project } = useProject()
+	const context = isMethodFQN(contextFQN)
+		? methodByFQN(project, contextFQN)
+		: project.getNodeByFQN<Module>(contextFQN)
+	return <ExpressionMaker context={context} />
+}

@@ -31,6 +31,7 @@
 		}
 	},
 	"expression": {
+		"variables": "Variables",
 		"title": "Create an expression",
 		"mainObjects": "My objects",
 		"wollokObjects": "Wollok objects",

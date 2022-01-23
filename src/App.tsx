@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import RNLocalize from 'react-native-localize'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { Name } from 'wollok-ts/dist/model'
 import {
 	ExpressionBackButton,
 	ExpressionCheckButton,
@@ -19,8 +20,8 @@ import { setI18nConfig, translate } from './utils/translation-helpers'
 
 export type RootStackParamList = {
 	Entities: undefined
-	EntityStack: { entityFQN: string }
-	ExpressionMaker: { onSubmit: ExpressionOnSubmit }
+	EntityStack: { entityFQN: Name }
+	ExpressionMaker: { onSubmit: ExpressionOnSubmit; contextFQN: Name }
 }
 
 export const Stack = createStackNavigator<RootStackParamList>()

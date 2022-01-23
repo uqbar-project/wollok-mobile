@@ -23,7 +23,7 @@ import { SubmitCheckButton } from '../components/ui/Header'
 import { Row } from '../components/ui/Row'
 import { useEntity } from '../context/EntityProvider'
 import { translate } from '../utils/translation-helpers'
-import { allFields, allVariables } from '../utils/wollok-helpers'
+import { allScopedVariables, methodFQN } from '../utils/wollok-helpers'
 import { EntityStackParamList } from './EntityDetails/EntityDetails'
 
 export type MethodDetailsScreenNavigationProp = StackNavigationProp<
@@ -136,13 +136,10 @@ function AssignmentFormModal({
 		setReference(new Reference({ name }))
 	}
 
-	// TODO: Filter constants?
-	const fields = allFields(method.parent())
-	const params = method.parameters
-	const methodVars = allVariables(method)
-	const variableList = [...fields, ...params, ...methodVars].map(
-		({ name }) => ({ label: name, value: name }),
-	)
+	const variableList = allScopedVariables(method).map(({ name }) => ({
+		label: name,
+		value: name,
+	}))
 
 	return (
 		<FormModal onSubmit={submitAssignment} {...rest}>
@@ -158,7 +155,11 @@ function AssignmentFormModal({
 				list={variableList}
 			/>
 			<Divider style={styles.divider} />
-			<ExpressionView value={value} setValue={setValue} />
+			<ExpressionView
+				value={value}
+				setValue={setValue}
+				fqn={methodFQN(method)}
+			/>
 		</FormModal>
 	)
 }
