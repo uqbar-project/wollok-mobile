@@ -1,11 +1,10 @@
 import React, { createContext, useContext } from 'react'
 import { Field, Method, Module } from 'wollok-ts/dist/model'
-import { Mutable, OneOrMany } from '../utils/type-helpers'
-
-type Entity = Mutable<Module>
+import { OneOrMany } from '../utils/type-helpers'
+import { useProject } from './ProjectProvider'
 
 export const EntityContext = createContext<{
-	entity: Entity
+	entity: Module
 	actions: Actions
 } | null>(null)
 
@@ -15,16 +14,19 @@ type Actions = {
 
 export function EntityProvider(props: {
 	children: OneOrMany<JSX.Element>
-	entity: Entity
+	entity: Module
 }) {
 	const { children, entity } = props
+	const {
+		actions: { rebuildEnvironment },
+	} = useProject()
 
 	const addMember = (newMember: Method | Field) => {
-		// For method instanciation by property
-		const modifiedEntity = entity.copy({
-			members: [...entity.members, newMember],
-		}) as Entity
-		entity.members = modifiedEntity.members
+		rebuildEnvironment(
+			entity.copy({
+				members: [...entity.members, newMember],
+			}) as Module,
+		)
 	}
 
 	const initialContext = {

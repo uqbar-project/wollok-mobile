@@ -76,6 +76,12 @@ export const MethodDetail = ({
 									/>
 								</Row>
 							)
+						default:
+							return (
+								<Row key={i}>
+									<Text>{sentence.kind}</Text>
+								</Row>
+							)
 					}
 				})}
 			</ScrollView>
@@ -113,6 +119,7 @@ function AssignmentFormModal({
 		setReference(new Reference({ name }))
 	}
 
+	// TODO: Filter constants?
 	const fields = allFields(method.parent())
 	const params = method.parameters
 	const methodVars = allVariables(method)

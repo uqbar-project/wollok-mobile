@@ -1,5 +1,5 @@
+import React, { createContext, useContext, useState } from 'react'
 import 'react-native-get-random-values'
-import React, { createContext, useContext } from 'react'
 import link from 'wollok-ts/dist/linker'
 import {
 	Body,
@@ -15,7 +15,7 @@ import {
 	Singleton,
 } from 'wollok-ts/dist/model'
 import WRE from 'wollok-ts/dist/wre/wre.json'
-import { Mutable, OneOrMany } from '../utils/type-helpers'
+import { OneOrMany } from '../utils/type-helpers'
 
 export const ProjectContext = createContext<{
 	project: Environment
@@ -24,45 +24,47 @@ export const ProjectContext = createContext<{
 
 type Actions = {
 	addEntity: (entity: Module) => void
-	rebuildEnvironment: () => void
+	rebuildEnvironment: (...members: Entity[]) => void
 }
+
+const pepita = new Singleton({
+	name: 'pepita',
+	members: [
+		new Field({
+			name: 'energia',
+			isConstant: false,
+			isProperty: true,
+			value: new Literal({ value: 100 }),
+		}),
+		new Field({
+			name: 'nombre',
+			isConstant: true,
+			isProperty: true,
+			value: new Literal({ value: 'Pepita' }),
+		}),
+		new Method({
+			name: 'estaCansada',
+			body: new Body(),
+		}),
+		new Method({
+			name: 'vola',
+			body: new Body(),
+		}),
+		new Method({
+			name: 'come',
+			parameters: [
+				new Parameter({
+					name: 'comida',
+				}),
+			],
+			body: new Body(),
+		}),
+	],
+})
 
 function testMainEntities() {
 	return [
-		new Singleton({
-			name: 'pepita',
-			members: [
-				new Field({
-					name: 'energia',
-					isConstant: false,
-					isProperty: true,
-					value: new Literal({ value: 100 }),
-				}),
-				new Field({
-					name: 'nombre',
-					isConstant: true,
-					isProperty: true,
-					value: new Literal({ value: 'Pepita' }),
-				}),
-				new Method({
-					name: 'estaCansada',
-					body: new Body(),
-				}),
-				new Method({
-					name: 'vola',
-					body: new Body(),
-				}),
-				new Method({
-					name: 'come',
-					parameters: [
-						new Parameter({
-							name: 'comida',
-						}),
-					],
-					body: new Body(),
-				}),
-			],
-		}),
+		pepita,
 		new Singleton({
 			name: 'manolo',
 			members: [
@@ -93,23 +95,24 @@ function testMainEntities() {
 }
 
 export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
-	const entities: Entity[] = testMainEntities()
+	const [project, setProject] = useState<Environment>(
+		buildEnvironment(testMainEntities(), fromJSON<Environment>(WRE)),
+	)
 
-	const addEntity = (newEntity: Module) => {
-		entities.push(newEntity)
+	function buildEnvironment(
+		members: Entity[],
+		base?: Environment,
+	): Environment {
+		const mainPackage = new Package({ name: 'main', members })
+		return link([mainPackage], base ?? project)
 	}
 
-	const buildEnvironment = () => {
-		const baseEnvironment = fromJSON<Environment>(WRE)
-		const mainPackage = new Package({ name: 'main', members: entities })
-		return link([mainPackage], baseEnvironment)
+	function addEntity(newEntity: Module) {
+		rebuildEnvironment(newEntity)
 	}
 
-	const project = buildEnvironment()
-
-	const rebuildEnvironment = () => {
-		const newEnvironment = buildEnvironment()
-		;(project as Mutable<Environment>).members = newEnvironment.members
+	function rebuildEnvironment(...members: Entity[]) {
+		setProject(buildEnvironment(members))
 	}
 
 	const initialContext = { project, actions: { addEntity, rebuildEnvironment } }
