@@ -16,7 +16,9 @@ function EntityComponent(props: Props) {
 	const styles = stylesheet(props.theme)
 	const navigation = useNavigation<EntitiesScreenNavigationProp>()
 	const goToEntityDetails = () => {
-		navigation.navigate('EntityStack', { entity: props.entity })
+		navigation.navigate('EntityStack', {
+			entityFQN: props.entity.fullyQualifiedName(),
+		})
 	}
 
 	return (

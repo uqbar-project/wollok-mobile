@@ -40,7 +40,7 @@ export function getVisualSegment(expression: Expression): JSX.Element {
 
 const { display, codeIcon } = StyleSheet.create({
 	display: {
-		height: '5%',
+		height: 35,
 		alignItems: 'center',
 		flexDirection: 'row',
 		display: 'flex',

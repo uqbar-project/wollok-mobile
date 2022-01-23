@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { Field, is, Method } from 'wollok-ts/dist/model'
+import { Field, is, Method, Module } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../../App'
 import { AccordionList } from '../../components/entity-detail/AccordionList'
 import AttributeItemComponent from '../../components/entity-detail/AttributeItem/AttributeItem'
@@ -12,6 +12,7 @@ import NewAttributeModal from '../../components/entity-detail/new-attribute-moda
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { EntityProvider, useEntity } from '../../context/EntityProvider'
+import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
 import { methodLabel } from '../../utils/wollok-helpers'
 import {
@@ -87,16 +88,17 @@ function MethodItem({ item: method }: { item: Method }) {
 }
 
 export default function (props: { route: Route }) {
+	const { project } = useProject()
 	const Stack = createStackNavigator<EntityStackParamList>()
-
+	const entity = project.getNodeByFQN<Module>(props.route.params.entityFQN)
 	return (
-		<EntityProvider entity={props.route.params.entity}>
+		<EntityProvider entity={entity}>
 			<Stack.Navigator>
 				<Stack.Screen
 					name="EntityDetails"
 					component={EntityDetails}
 					options={{
-						title: props.route.params.entity.name,
+						title: entity.name,
 						headerTitleAlign: 'center',
 						animationEnabled: false,
 					}}
