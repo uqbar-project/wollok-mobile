@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
@@ -7,6 +7,7 @@ import DropDown from 'react-native-paper-dropdown'
 import { upperCaseFirst } from 'upper-case-first'
 import {
 	Assignment,
+	Body,
 	Expression,
 	Field,
 	Method,
@@ -18,7 +19,9 @@ import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
 import MultiFabScreen from '../components/FabScreens/MultiFabScreen'
 import ExpressionView from '../components/ui/ExpressionView'
 import FormModal from '../components/ui/FormModal/FormModal'
+import { SubmitCheckButton } from '../components/ui/Header'
 import { Row } from '../components/ui/Row'
+import { useEntity } from '../context/EntityProvider'
 import { translate } from '../utils/translation-helpers'
 import { allFields, allVariables } from '../utils/wollok-helpers'
 import { EntityStackParamList } from './EntityDetails/EntityDetails'
@@ -37,15 +40,29 @@ export const MethodDetail = ({
 }: {
 	route: Route
 }) => {
-	// const { entity } = useEntity()
+	const {
+		actions: { changeMember },
+	} = useEntity()
 	const [sentences, setSentences] = useState<Sentence[]>(
 		Array.from(method.sentences()),
 	)
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 
-	// function submit() {
-	// 	body.sentences = sentences
-	// }
+	const navigation = useNavigation()
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<SubmitCheckButton
+					onSubmit={() => {
+						changeMember(
+							method,
+							method.copy({ body: new Body({ sentences }) }) as Method,
+						)
+					}}
+				/>
+			),
+		})
+	}, [navigation, sentences, method, changeMember])
 
 	function addAssignment(assignment: Assignment) {
 		setSentences([...sentences, assignment])

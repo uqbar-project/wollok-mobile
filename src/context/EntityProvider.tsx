@@ -9,7 +9,8 @@ export const EntityContext = createContext<{
 } | null>(null)
 
 type Actions = {
-	addMember: (method: Method | Field) => void
+	addMember: (newMember: Method | Field) => void
+	changeMember: (oldMember: Method | Field, newMember: Method | Field) => void
 }
 
 export function EntityProvider(props: {
@@ -29,9 +30,20 @@ export function EntityProvider(props: {
 		)
 	}
 
+	const changeMember = (
+		oldMember: Method | Field,
+		newMember: Method | Field,
+	) => {
+		rebuildEnvironment(
+			entity.copy({
+				members: [...entity.members.filter(m => m !== oldMember), newMember],
+			}) as Module,
+		)
+	}
+
 	const initialContext = {
 		entity: entity,
-		actions: { addMember },
+		actions: { addMember, changeMember },
 	}
 	return (
 		<EntityContext.Provider value={initialContext}>
