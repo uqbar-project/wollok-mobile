@@ -19,9 +19,12 @@ function FormModal(props: {
 	onSubmit: () => void
 	resetForm?: () => void
 	title?: string
+	valid?: boolean
 	theme: Theme
 }) {
 	const styles = stylesheet(props.theme)
+
+	const disabledSubmit = props.valid === undefined ? false : !props.valid
 
 	function closeModal() {
 		props.resetForm?.call(this)
@@ -36,6 +39,7 @@ function FormModal(props: {
 				{props.title ? <Title style={styles.title}>{props.title}</Title> : null}
 				{props.children}
 				<Button
+					disabled={disabledSubmit}
 					onPress={() => {
 						props.onSubmit()
 						closeModal()

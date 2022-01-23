@@ -4,7 +4,7 @@ import { IconButton } from 'react-native-paper'
 import { Expression } from 'wollok-ts/dist/model'
 import {
 	LiteralSegment,
-	MethodSegment,
+	MessageSegment,
 	ReferenceSegment,
 } from './expression-segment'
 
@@ -24,13 +24,12 @@ export function ExpressionDisplay(props: {
 }
 
 // TODO: Convert to component
-export function getVisualSegment(expression: Expression): JSX.Element {
-	var i = 1
+export function getVisualSegment(expression: Expression, i = 0): JSX.Element {
 	switch (expression.kind) {
 		case 'Reference':
 			return <ReferenceSegment text={expression.name} key={i} index={i} />
 		case 'Send':
-			return <MethodSegment send={expression} key={i} index={i} />
+			return <MessageSegment send={expression} key={i} index={i} />
 		case 'Literal':
 			return <LiteralSegment value={expression.value} key={i} index={i} />
 		default:

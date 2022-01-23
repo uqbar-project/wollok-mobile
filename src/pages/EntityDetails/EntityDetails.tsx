@@ -4,7 +4,14 @@ import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { Field, is, Method, Module } from 'wollok-ts/dist/model'
+import {
+	Expression,
+	Field,
+	is,
+	Method,
+	Module,
+	Name,
+} from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../../App'
 import { AccordionList } from '../../components/entity-detail/AccordionList'
 import AttributeItemComponent from '../../components/entity-detail/AttributeItem/AttributeItem'
@@ -15,6 +22,9 @@ import { EntityProvider, useEntity } from '../../context/EntityProvider'
 import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
 import { methodLabel } from '../../utils/wollok-helpers'
+import ExpressionMaker, {
+	ExpressionOnSubmit,
+} from '../ExpressionMaker/ExpressionMaker'
 import {
 	MethodDetail,
 	MethodDetailsScreenNavigationProp,
@@ -23,6 +33,11 @@ import {
 export type EntityStackParamList = {
 	EntityDetails: undefined
 	MethodDetails: { method: Method }
+	ExpressionMaker: {
+		onSubmit: ExpressionOnSubmit
+		contextFQN: Name
+		initialExpression?: Expression
+	}
 }
 
 type Route = RouteProp<RootStackParamList, 'EntityStack'>
@@ -109,6 +124,15 @@ export default function (props: { route: Route }) {
 					options={({ route: methodRoute }) => ({
 						title: methodLabel(methodRoute.params.method),
 					})}
+				/>
+				<Stack.Screen
+					name="ExpressionMaker"
+					component={ExpressionMaker}
+					options={{
+						title: translate('expression.title'),
+						headerTitleAlign: 'center',
+						animationEnabled: false,
+					}}
 				/>
 			</Stack.Navigator>
 		</EntityProvider>

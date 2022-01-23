@@ -1,9 +1,13 @@
-import { useNavigation } from '@react-navigation/native'
+import {
+	CompositeNavigationProp,
+	useNavigation,
+} from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, withTheme } from 'react-native-paper'
 import { Expression, Name } from 'wollok-ts/dist/model'
 import { EntitiesScreenNavigationProp } from '../../pages/Entities/Entities'
+import { ExpressionMakerScreenProp } from '../../pages/ExpressionMaker/ExpressionMaker'
 import { Theme } from '../../theme'
 import { translate } from '../../utils/translation-helpers'
 import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
@@ -13,14 +17,23 @@ type Props = {
 	setValue: (expression?: Expression) => void
 	theme: Theme
 	fqn: Name
+	navigator?: any
 }
 
 const ExpressionView = (props: Props) => {
 	const { value, setValue } = props
 
-	const navigation = useNavigation<EntitiesScreenNavigationProp>()
+	/* eslint-disable react-hooks/rules-of-hooks */
+	const navigation =
+		props.navigator ||
+		useNavigation<
+			CompositeNavigationProp<
+				ExpressionMakerScreenProp,
+				EntitiesScreenNavigationProp
+			>
+		>()
 	const goToExpressionMaker = () => {
-		navigation.navigate('ExpressionMaker', {
+		navigation.push('ExpressionMaker', {
 			onSubmit: setValue,
 			contextFQN: props.fqn,
 			initialExpression: value,

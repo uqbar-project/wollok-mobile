@@ -1,4 +1,5 @@
 import { RouteProp, useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -11,15 +12,13 @@ import {
 	Module,
 	Package,
 	Reference,
-	Send,
 } from 'wollok-ts/dist/model'
-import { RootStackParamList } from '../../App'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
 import {
 	NumberInputModal,
 	TextInputModal,
 } from '../../components/expressions/LiteralModal/LiteralInputModals'
-import { MessageList } from '../../components/expressions/messages-list'
+import { MessageList } from '../../components/expressions/messages-list/messages-list'
 import { SubmitCheckButton } from '../../components/ui/Header'
 import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
@@ -31,9 +30,15 @@ import {
 	literalClassFQN,
 	methodByFQN,
 } from '../../utils/wollok-helpers'
+import { EntityStackParamList } from '../EntityDetails/EntityDetails'
 
 export type ExpressionMakerProp = RouteProp<
-	RootStackParamList,
+	EntityStackParamList,
+	'ExpressionMaker'
+>
+
+export type ExpressionMakerScreenProp = StackNavigationProp<
+	EntityStackParamList,
 	'ExpressionMaker'
 >
 
@@ -55,7 +60,7 @@ function ExpressionMaker(props: {
 		navigation.setOptions({
 			headerRight: () => (
 				<SubmitCheckButton
-					disabled={!!expression}
+					disabled={!expression}
 					onSubmit={() => {
 						props.onSubmit(expression!)
 					}}
@@ -186,9 +191,8 @@ function ListMessages({ expression, setMessage }: ListMessagesProps) {
 			const singleton = globalSingletons.find(s => s.name === expression.name)
 			return singleton ? (
 				<MessageList
-					newMessageCall={m =>
-						setMessage(new Send({ receiver: expression, message: m.name }))
-					}
+					receiver={expression}
+					newMessageCall={s => setMessage(s)}
 					entity={singleton}
 				/>
 			) : (
@@ -197,9 +201,8 @@ function ListMessages({ expression, setMessage }: ListMessagesProps) {
 		case 'Literal':
 			return (
 				<MessageList
-					newMessageCall={m =>
-						setMessage(new Send({ receiver: expression, message: m.name }))
-					}
+					receiver={expression}
+					newMessageCall={s => setMessage(s)}
 					entity={project.getNodeByFQN<Class>(literalClassFQN(expression))}
 				/>
 			)
@@ -217,7 +220,7 @@ export default function ({
 		params: { contextFQN, onSubmit, initialExpression },
 	},
 }: {
-	route: RouteProp<RootStackParamList, 'ExpressionMaker'>
+	route: RouteProp<EntityStackParamList, 'ExpressionMaker'>
 }) {
 	const { project } = useProject()
 	const context = isMethodFQN(contextFQN)

@@ -7,22 +7,25 @@ import { getVisualSegment } from './ExpressionDisplay'
 
 export const ReferenceSegment = (props: { text: string; index: number }) => {
 	return (
-		<Bullet color="green" index={props.index}>
+		<Pill index={props.index}>
 			<Text>{props.text}</Text>
-		</Bullet>
+		</Pill>
 	)
 }
 
-export const MethodSegment = (props: { send: Send; index: number }) => {
+export const MessageSegment = (props: { send: Send; index: number }) => {
 	return (
-		<Bullet color="red" index={props.index}>
-			<View style={style.row}>
-				{getVisualSegment(props.send.receiver)}
-				<Text>{props.send.message}</Text>
-				{/* TODO: Improve this. Use Parameter? */}
-				{props.send.args.map(getVisualSegment)}
-			</View>
-		</Bullet>
+		<>
+			{getVisualSegment(props.send.receiver, props.index)}
+			<Bullet color="red" index={props.index + 1}>
+				<View style={style.row}>
+					<Text>{props.send.message}(</Text>
+					{/* TODO: Improve this. Use Parameter? */}
+					{props.send.args.map(a => getVisualSegment(a, props.index + 1))}
+					<Text>)</Text>
+				</View>
+			</Bullet>
+		</>
 	)
 }
 
@@ -31,9 +34,20 @@ export const LiteralSegment = (props: {
 	index: number
 }) => {
 	return (
+		<Pill index={props.index}>
+			<Text>{JSON.stringify(props.value)}</Text>
+		</Pill>
+	)
+}
+
+export const Pill = (props: {
+	children: OneOrMany<JSX.Element>
+	index: number
+}) => {
+	return (
 		<View
 			style={[style.pill, { backgroundColor: 'green', zIndex: -props.index }]}>
-			<Text>{JSON.stringify(props.value)}</Text>
+			{props.children}
 		</View>
 	)
 }
@@ -80,6 +94,7 @@ const style = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderTopLeftRadius: 0,
+		paddingVertical: 3,
 		borderBottomLeftRadius: 0,
 		borderRadius: 20,
 	},
