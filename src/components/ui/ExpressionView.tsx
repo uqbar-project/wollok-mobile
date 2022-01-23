@@ -3,7 +3,6 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, withTheme } from 'react-native-paper'
 import { Expression, Name } from 'wollok-ts/dist/model'
-import { useExpression } from '../../context/ExpressionProvider'
 import { EntitiesScreenNavigationProp } from '../../pages/Entities/Entities'
 import { Theme } from '../../theme'
 import { translate } from '../../utils/translation-helpers'
@@ -17,19 +16,14 @@ type Props = {
 }
 
 const ExpressionView = (props: Props) => {
-	const {
-		actions: { setExpression },
-	} = useExpression()
 	const { value, setValue } = props
 
 	const navigation = useNavigation<EntitiesScreenNavigationProp>()
 	const goToExpressionMaker = () => {
-		if (value) {
-			setExpression(value)
-		}
 		navigation.navigate('ExpressionMaker', {
 			onSubmit: setValue,
 			contextFQN: props.fqn,
+			initialExpression: value,
 		})
 	}
 

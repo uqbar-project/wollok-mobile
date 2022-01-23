@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
@@ -20,7 +20,7 @@ import {
 	TextInputModal,
 } from '../../components/expressions/LiteralModal/LiteralInputModals'
 import { MessageList } from '../../components/expressions/messages-list'
-import { useExpression } from '../../context/ExpressionProvider'
+import { SubmitCheckButton } from '../../components/ui/Header'
 import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
 import {
@@ -37,13 +37,32 @@ export type ExpressionMakerProp = RouteProp<
 	'ExpressionMaker'
 >
 
-function ExpressionMaker(props: { context: Module | Method }) {
-	const {
-		expression,
-		actions: { reset, setExpression },
-	} = useExpression()
+export type ExpressionOnSubmit = (expression: Expression) => void
+
+function ExpressionMaker(props: {
+	context: Module | Method
+	initialExpression?: Expression
+	onSubmit: ExpressionOnSubmit
+}) {
+	const [expression, setExpression] = useState(props.initialExpression)
 	const [showNumberModal, setShowNumberModal] = useState(false)
 	const [showTextModal, setShowTextModal] = useState(false)
+	function reset() {
+		setExpression(undefined)
+	}
+	const navigation = useNavigation()
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<SubmitCheckButton
+					disabled={!!expression}
+					onSubmit={() => {
+						props.onSubmit(expression!)
+					}}
+				/>
+			),
+		})
+	}, [navigation, expression, props])
 
 	return (
 		<View>
@@ -111,10 +130,15 @@ function ExpressionMaker(props: { context: Module | Method }) {
 					{translate('clear').toLocaleUpperCase()}
 				</Button>
 				<NumberInputModal
+					setExpression={setExpression}
 					visible={showNumberModal}
 					setVisible={setShowNumberModal}
 				/>
-				<TextInputModal visible={showTextModal} setVisible={setShowTextModal} />
+				<TextInputModal
+					setExpression={setExpression}
+					visible={showTextModal}
+					setVisible={setShowTextModal}
+				/>
 			</ScrollView>
 		</View>
 	)
@@ -190,7 +214,7 @@ const styles = StyleSheet.create({
 
 export default function ({
 	route: {
-		params: { contextFQN },
+		params: { contextFQN, onSubmit, initialExpression },
 	},
 }: {
 	route: RouteProp<RootStackParamList, 'ExpressionMaker'>
@@ -199,5 +223,11 @@ export default function ({
 	const context = isMethodFQN(contextFQN)
 		? methodByFQN(project, contextFQN)
 		: project.getNodeByFQN<Module>(contextFQN)
-	return <ExpressionMaker context={context} />
+	return (
+		<ExpressionMaker
+			context={context}
+			onSubmit={onSubmit}
+			initialExpression={initialExpression}
+		/>
+	)
 }
