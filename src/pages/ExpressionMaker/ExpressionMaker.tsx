@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Button, List, Text } from 'react-native-paper'
 import {
+	Class,
 	Expression,
 	Literal,
 	Package,
@@ -16,10 +17,11 @@ import {
 	NumberInputModal,
 	TextInputModal,
 } from '../../components/expressions/LiteralModal/LiteralInputModals'
+import { MessageList } from '../../components/expressions/messages-list'
 import { useExpression } from '../../context/ExpressionProvider'
 import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
-import { allMethods, isNamedSingleton } from '../../utils/wollok-helpers'
+import { isNamedSingleton, literalClassFQN } from '../../utils/wollok-helpers'
 
 export type ExpressionMakerProp = RouteProp<
 	RootStackParamList,
@@ -136,22 +138,24 @@ function ListMessages({ expression, setMessage }: ListMessagesProps) {
 		case 'Reference':
 			const singleton = globalSingletons.find(s => s.name === expression.name)
 			return singleton ? (
-				<>
-					{allMethods(singleton).map(({ id, name }) => (
-						<List.Item
-							key={id}
-							title={name}
-							onPress={() =>
-								// TODO: Open Message modal
-								setMessage(new Send({ receiver: expression, message: name }))
-							}
-						/>
-					))}
-				</>
+				<MessageList
+					newMessageCall={m =>
+						setMessage(new Send({ receiver: expression, message: m.name }))
+					}
+					entity={singleton}
+				/>
 			) : (
 				<Text>{`No se pudo resolver la referencia ${expression.name}`}</Text>
 			)
-
+		case 'Literal':
+			return (
+				<MessageList
+					newMessageCall={m =>
+						setMessage(new Send({ receiver: expression, message: m.name }))
+					}
+					entity={project.getNodeByFQN<Class>(literalClassFQN(expression))}
+				/>
+			)
 		default:
 			return <Text>{`Todavía no hay mensajes para ${expression.kind}`}</Text>
 	}

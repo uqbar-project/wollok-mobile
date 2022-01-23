@@ -1,11 +1,14 @@
 // TODO: import form Wollok
 // All these funtions are duplicated from Wollok
+import { upperCaseFirst } from 'upper-case-first'
 import {
 	Field,
 	is,
 	List,
+	Literal,
 	Method,
 	Module,
+	Name,
 	Node,
 	Singleton,
 	Test,
@@ -30,4 +33,8 @@ export function isNamedSingleton(node: Node): node is Singleton {
 
 export function methodLabel(method: Method) {
 	return `${method.name}(${method.parameters.map(_ => _.name).join(',')})`
+}
+
+export function literalClassFQN(literal: Literal): Name {
+	return `wollok.lang.${upperCaseFirst(typeof literal.value)}`
 }
