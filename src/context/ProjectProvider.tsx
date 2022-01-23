@@ -113,6 +113,7 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 
 	function rebuildEnvironment(...members: Entity[]) {
 		setProject(buildEnvironment(members))
+		//TODO: Run validations
 	}
 
 	const initialContext = { project, actions: { addEntity, rebuildEnvironment } }

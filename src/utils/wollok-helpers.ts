@@ -27,3 +27,7 @@ export function allVariables(node: Method | Test): List<Variable> {
 export function isNamedSingleton(node: Node): node is Singleton {
 	return node.is('Singleton') && !!node.name
 }
+
+export function methodLabel(method: Method) {
+	return `${method.name}(${method.parameters.map(_ => _.name).join(',')})`
+}

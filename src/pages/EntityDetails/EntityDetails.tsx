@@ -13,9 +13,10 @@ import NewMethodModal from '../../components/entity-detail/new-method-modal/NewM
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { EntityProvider, useEntity } from '../../context/EntityProvider'
 import { translate } from '../../utils/translation-helpers'
+import { methodLabel } from '../../utils/wollok-helpers'
 import {
 	MethodDetail,
-	MethodDetailsScreenNavigationProp
+	MethodDetailsScreenNavigationProp,
 } from '../MethodDetail'
 
 export type EntityStackParamList = {
@@ -79,7 +80,7 @@ function MethodItem({ item: method }: { item: Method }) {
 	return (
 		<List.Item
 			key={method.name}
-			title={`${method.name}(${method.parameters.map(_ => _.name)})`}
+			title={methodLabel(method)}
 			onPress={() => navigator.navigate('MethodDetails', { method })}
 		/>
 	)
@@ -104,8 +105,7 @@ export default function (props: { route: Route }) {
 					name="MethodDetails"
 					component={MethodDetail}
 					options={({ route: methodRoute }) => ({
-						//TODO: use label() instead of name
-						title: methodRoute.params.method.name,
+						title: methodLabel(methodRoute.params.method),
 					})}
 				/>
 			</Stack.Navigator>
