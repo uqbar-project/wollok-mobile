@@ -17,15 +17,11 @@ type Props = {
 	setValue: (expression?: Expression) => void
 	theme: Theme
 	fqn: Name
-	navigator?: any
 }
 
 const ExpressionView = (props: Props) => {
 	const { value, setValue } = props
-
-	/* eslint-disable react-hooks/rules-of-hooks */
 	const navigation =
-		props.navigator ||
 		useNavigation<
 			CompositeNavigationProp<
 				ExpressionMakerScreenProp,

@@ -20,6 +20,7 @@ import {
 } from '../../components/expressions/LiteralModal/LiteralInputModals'
 import { MessageList } from '../../components/expressions/messages-list/messages-list'
 import { SubmitCheckButton } from '../../components/ui/Header'
+import { Context, ContextProvider } from '../../context/ContextProvider'
 import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
 import {
@@ -223,14 +224,16 @@ export default function ({
 	route: RouteProp<EntityStackParamList, 'ExpressionMaker'>
 }) {
 	const { project } = useProject()
-	const context = isMethodFQN(contextFQN)
+	const context: Context = isMethodFQN(contextFQN)
 		? methodByFQN(project, contextFQN)
 		: project.getNodeByFQN<Module>(contextFQN)
 	return (
-		<ExpressionMaker
-			context={context}
-			onSubmit={onSubmit}
-			initialExpression={initialExpression}
-		/>
+		<ContextProvider context={context} fqn={contextFQN}>
+			<ExpressionMaker
+				context={context}
+				onSubmit={onSubmit}
+				initialExpression={initialExpression}
+			/>
+		</ContextProvider>
 	)
 }

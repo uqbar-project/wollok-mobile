@@ -11,6 +11,7 @@ import {
 	Method,
 	Module,
 	Name,
+	Send,
 } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../../App'
 import { AccordionList } from '../../components/entity-detail/AccordionList'
@@ -20,6 +21,7 @@ import NewMethodModal from '../../components/entity-detail/new-method-modal/NewM
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { EntityProvider, useEntity } from '../../context/EntityProvider'
 import { useProject } from '../../context/ProjectProvider'
+import { NewMessageCall } from '../../pages/NewMessageCall'
 import { translate } from '../../utils/translation-helpers'
 import { methodLabel } from '../../utils/wollok-helpers'
 import ExpressionMaker, {
@@ -37,6 +39,12 @@ export type EntityStackParamList = {
 		onSubmit: ExpressionOnSubmit
 		contextFQN: Name
 		initialExpression?: Expression
+	}
+	NewMessageSend: {
+		receiver: Expression
+		method: Method
+		contextFQN: Name
+		onSubmit: (s: Send) => void
 	}
 }
 
@@ -133,6 +141,11 @@ export default function (props: { route: Route }) {
 						headerTitleAlign: 'center',
 						animationEnabled: false,
 					}}
+				/>
+				<Stack.Screen
+					name="NewMessageSend"
+					component={NewMessageCall}
+					options={route => ({ title: route.route.params.method.name })}
 				/>
 			</Stack.Navigator>
 		</EntityProvider>
