@@ -43,7 +43,7 @@ const { display, codeIcon } = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'row',
 		display: 'flex',
-		paddingVertical: 5,
+		paddingVertical: 2,
 	},
 	codeIcon: {
 		marginRight: -9,
