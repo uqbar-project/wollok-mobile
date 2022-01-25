@@ -41,7 +41,12 @@
 		"aString": "Un texto",
 		"true": "Verdadero",
 		"false": "Falso",
-		"null": "Nulo"
+		"null": "Nulo",
+		"notSeggestions": "No tenemos sugerencias aquí, usá el panel de búsqueda",
+		"search": {
+			"message": "Buscá algún mensaje",
+			"entity": "Buscá alguna entidad"
+		}
 	},
 	"sentence": {
 		"assignment": "asignacion",

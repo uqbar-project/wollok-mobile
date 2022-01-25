@@ -17,6 +17,8 @@ import {
 } from 'wollok-ts/dist/model'
 import { last } from './commons'
 
+export type Named = { name: Name }
+
 export function allFields(module: Module): List<Field> {
 	return module.hierarchy().flatMap(parent => parent.fields())
 }
@@ -29,7 +31,7 @@ export function allVariables(node: Method | Test): List<Variable> {
 	return node.sentences().filter(is('Variable'))
 }
 
-export function isNamedSingleton(node: Node): node is Singleton {
+export function isNamedSingleton(node: Node): node is Singleton & Named {
 	return node.is('Singleton') && !!node.name
 }
 
