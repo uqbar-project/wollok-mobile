@@ -13,6 +13,7 @@ import {
 } from 'wollok-ts/dist/model'
 import { useContext } from '../../../context/ContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
+import { ExpressionMakerScreenProp } from '../../../pages/ExpressionMaker/ExpressionMaker'
 import { translate } from '../../../utils/translation-helpers'
 import {
 	allMethods,
@@ -74,22 +75,25 @@ function MessageItem({
 	message: Method
 	onSubmit: (method: Send) => void
 }) {
-	const navigation = useNavigation()
+	const navigation = useNavigation<ExpressionMakerScreenProp>()
 	const { fqn } = useContext()
+
+	function onPress() {
+		if (m.parameters.length) {
+			navigation.push('NewMessageSend', {
+				method: m,
+				receiver,
+				onSubmit,
+				contextFQN: fqn,
+			})
+		} else {
+			onSubmit(new Send({ message: m.name, receiver: receiver }))
+		}
+	}
+
 	return (
 		<>
-			<ListComponent.Item
-				key={m.id}
-				title={methodLabel(m)}
-				onPress={() => {
-					;(navigation as any).push('NewMessageSend', {
-						method: m,
-						receiver,
-						onSubmit,
-						contextFQN: fqn,
-					})
-				}}
-			/>
+			<ListComponent.Item key={m.id} title={methodLabel(m)} onPress={onPress} />
 		</>
 	)
 }

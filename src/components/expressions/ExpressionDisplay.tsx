@@ -1,6 +1,5 @@
 import React from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 import { IconButton } from 'react-native-paper'
 import { Expression } from 'wollok-ts/dist/model'
 import {
@@ -17,16 +16,10 @@ export function ExpressionDisplay(props: {
 	const { expression, backgroundColor } = props
 	const showIcon = props.withIcon === undefined ? true : props.withIcon
 	return (
-		<ScrollView
-			directionalLockEnabled={true}
-			horizontal={true}
-			bounces={false}
-			endFillColor="white">
-			<View style={[display, { backgroundColor: backgroundColor }]}>
-				{showIcon && <IconButton style={codeIcon} icon="chevron-right" />}
-				{expression && getVisualSegment(expression, 0)}
-			</View>
-		</ScrollView>
+		<View style={[display, { backgroundColor: backgroundColor }]}>
+			{showIcon && <IconButton style={codeIcon} icon="chevron-right" />}
+			{expression && getVisualSegment(expression, 0)}
+		</View>
 	)
 }
 
@@ -50,7 +43,6 @@ export function getVisualSegment(
 const { display, codeIcon } = StyleSheet.create({
 	display: {
 		paddingVertical: 4,
-		width: '100%',
 		height: 35,
 		alignItems: 'center',
 		flexDirection: 'row',
