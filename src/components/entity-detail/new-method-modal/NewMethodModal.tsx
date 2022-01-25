@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Text, TextInput, withTheme } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { Method, Parameter } from 'wollok-ts/dist/model'
+import { Body, Method, Parameter } from 'wollok-ts/dist/model'
 import { useEntity } from '../../../context/EntityProvider'
 import { Theme } from '../../../theme'
 import { translate } from '../../../utils/translation-helpers'
@@ -66,6 +66,7 @@ const NewMethodModal = (props: {
 			new Method({
 				name,
 				parameters: parameters.map(name => new Parameter({ name })),
+				body: new Body({ sentences: [] }),
 			}),
 		)
 	}
