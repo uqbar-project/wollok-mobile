@@ -72,7 +72,11 @@ function ExpressionMaker(props: {
 
 	return (
 		<View>
-			<ExpressionDisplay backgroundColor="white" expression={expression} />
+			<ExpressionDisplay
+				backgroundColor="white"
+				withIcon={false}
+				expression={expression}
+			/>
 			<ScrollView style={styles.view}>
 				{expression ? (
 					<List.Section>
