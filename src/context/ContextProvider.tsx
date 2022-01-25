@@ -1,16 +1,26 @@
-import React, { createContext, useContext as useReactContext } from 'react'
-import { Method, Module, Name } from 'wollok-ts/dist/model'
+import React, {
+	createContext,
+	useContext as useReactContext,
+	useState,
+} from 'react'
+import { List, Method, Module, Name } from 'wollok-ts/dist/model'
 import { OneOrMany } from '../utils/type-helpers'
+import { Named } from '../utils/wollok-helpers'
 
 export type Context = Module | Method
 
 export const ContextContext = createContext<{
 	context: Context
 	fqn: Name
+	search: string
 	actions: Actions
 } | null>(null)
 
-type Actions = {}
+type Actions = {
+	setSearch: (value: string) => void
+	clearSearch: () => void
+	filterBySearch: <T extends Named>(entities: List<T>) => List<T>
+}
 
 export function ContextProvider(props: {
 	children: OneOrMany<JSX.Element>
@@ -18,11 +28,23 @@ export function ContextProvider(props: {
 	fqn: Name
 }) {
 	const { children, context, fqn } = props
+	const [search, setSearch] = useState('')
+
+	function clearSearch() {
+		setSearch('')
+	}
+
+	function filterBySearch<T extends Named>(entities: List<T>) {
+		return entities.filter(m =>
+			m.name.toLowerCase().includes(search.toLowerCase()),
+		)
+	}
 
 	const initialContext = {
 		context,
 		fqn,
-		actions: {},
+		search,
+		actions: { setSearch, filterBySearch, clearSearch },
 	}
 	return (
 		<ContextContext.Provider value={initialContext}>

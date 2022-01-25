@@ -41,7 +41,12 @@
 		"aString": "A string",
 		"true": "True",
 		"false": "False",
-		"null": "Null"
+		"null": "Null",
+		"notSeggestions": "We don't have suggestions here, use search input",
+		"search": {
+			"message": "Search any message",
+			"entity": "Search any entity"
+		}
 	},
 	"sentence": {
 		"assignment": "assignment",

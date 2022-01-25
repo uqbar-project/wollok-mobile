@@ -3,34 +3,22 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Button, List, Text } from 'react-native-paper'
-import {
-	Class,
-	Expression,
-	Literal,
-	Method,
-	Module,
-	Package,
-	Reference,
-} from 'wollok-ts/dist/model'
+import { Button, List, TextInput } from 'react-native-paper'
+import { Expression, Module } from 'wollok-ts/dist/model'
+import { ListLiterals } from '../../components/expressions/expression-lists/literals-list'
+import { ListMessages } from '../../components/expressions/expression-lists/messages-list'
+import { ListSingletons } from '../../components/expressions/expression-lists/singletons-list'
+import { ListVariables } from '../../components/expressions/expression-lists/variables-list'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
-import {
-	NumberInputModal,
-	TextInputModal,
-} from '../../components/expressions/LiteralModal/LiteralInputModals'
-import { MessageList } from '../../components/expressions/messages-list/messages-list'
 import { SubmitCheckButton } from '../../components/ui/Header'
-import { Context, ContextProvider } from '../../context/ContextProvider'
+import {
+	Context,
+	ContextProvider,
+	useContext,
+} from '../../context/ContextProvider'
 import { useProject } from '../../context/ProjectProvider'
 import { translate } from '../../utils/translation-helpers'
-import {
-	allFields,
-	allScopedVariables,
-	isMethodFQN,
-	isNamedSingleton,
-	literalClassFQN,
-	methodByFQN,
-} from '../../utils/wollok-helpers'
+import { isMethodFQN, methodByFQN } from '../../utils/wollok-helpers'
 import { EntityStackParamList } from '../EntityDetails/EntityDetails'
 
 export type ExpressionMakerProp = RouteProp<
@@ -46,16 +34,24 @@ export type ExpressionMakerScreenProp = StackNavigationProp<
 export type ExpressionOnSubmit = (expression: Expression) => void
 
 function ExpressionMaker(props: {
-	context: Module | Method
 	initialExpression?: Expression
 	onSubmit: ExpressionOnSubmit
 }) {
-	const [expression, setExpression] = useState(props.initialExpression)
-	const [showNumberModal, setShowNumberModal] = useState(false)
-	const [showTextModal, setShowTextModal] = useState(false)
+	const {
+		search,
+		actions: { setSearch, clearSearch },
+	} = useContext()
+	const [expression, setInitialExpression] = useState(props.initialExpression)
+
+	function setExpression(e?: Expression) {
+		clearSearch()
+		setInitialExpression(e)
+	}
+
 	function reset() {
 		setExpression(undefined)
 	}
+
 	const navigation = useNavigation()
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
@@ -77,6 +73,13 @@ function ExpressionMaker(props: {
 				withIcon={false}
 				expression={expression}
 			/>
+			<TextInput
+				label={translate(
+					`expression.search.${expression ? 'message' : 'entity'}`,
+				)}
+				value={search}
+				onChangeText={setSearch}
+			/>
 			<ScrollView style={styles.view}>
 				{expression ? (
 					<List.Section>
@@ -86,138 +89,32 @@ function ExpressionMaker(props: {
 				) : (
 					<List.Section>
 						<List.Subheader>{translate('expression.variables')}</List.Subheader>
-						{(props.context instanceof Method
-							? allScopedVariables(props.context)
-							: allFields(props.context)
-						).map(({ id, name }) => (
-							<List.Item
-								key={id}
-								title={name}
-								onPress={() => setExpression(new Reference({ name: name! }))}
-							/>
-						))}
+						<ListVariables setReference={setExpression} />
 
 						<List.Subheader>
 							{translate('expression.mainObjects')}
 						</List.Subheader>
-						<ListObjectsReferences
-							packageName="main"
-							setReference={setExpression}
-						/>
+						<ListSingletons packageName="main" setReference={setExpression} />
 
 						<List.Subheader>{translate('expression.literals')}</List.Subheader>
-						<List.Item
-							title={translate('expression.aNumber')}
-							onPress={() => setShowNumberModal(true)}
-						/>
-						<List.Item
-							title={translate('expression.aString')}
-							onPress={() => setShowTextModal(true)}
-						/>
-						<List.Item
-							title={translate('expression.true')}
-							onPress={() => setExpression(new Literal({ value: true }))}
-						/>
-						<List.Item
-							title={translate('expression.false')}
-							onPress={() => setExpression(new Literal({ value: false }))}
-						/>
-						<List.Item
-							title={translate('expression.null')}
-							onPress={() => setExpression(new Literal({ value: null }))}
-						/>
+						<ListLiterals setLiteral={setExpression} />
 
 						<List.Subheader>
 							{translate('expression.wollokObjects')}
 						</List.Subheader>
-						<ListObjectsReferences
-							packageName="wollok"
-							setReference={setExpression}
-						/>
+						<ListSingletons packageName="wollok" setReference={setExpression} />
 					</List.Section>
 				)}
 				<Button onPress={reset}>
 					{translate('clear').toLocaleUpperCase()}
 				</Button>
-				<NumberInputModal
-					setExpression={setExpression}
-					visible={showNumberModal}
-					setVisible={setShowNumberModal}
-				/>
-				<TextInputModal
-					setExpression={setExpression}
-					visible={showTextModal}
-					setVisible={setShowTextModal}
-				/>
 			</ScrollView>
 		</View>
 	)
 }
 
-type ListObjectsReferencesProps = {
-	packageName: string
-	setReference: (ref: Expression) => void
-}
-function ListObjectsReferences({
-	packageName,
-	setReference,
-}: ListObjectsReferencesProps) {
-	const { project } = useProject()
-
-	// TODO: Add variables
-	return (
-		<>
-			{project
-				.getNodeByFQN<Package>(packageName)
-				.descendants()
-				.filter(isNamedSingleton)
-				.map(({ id, name }) => (
-					<List.Item
-						key={id}
-						title={name}
-						onPress={() => setReference(new Reference({ name: name! }))}
-					/>
-				))}
-		</>
-	)
-}
-
-type ListMessagesProps = {
-	expression: Expression
-	setMessage: (ref: Expression) => void
-}
-function ListMessages({ expression, setMessage }: ListMessagesProps) {
-	const { project } = useProject()
-	// TODO: This is a workaroud, use scopes?
-	const globalSingletons = project.descendants().filter(isNamedSingleton)
-
-	switch (expression.kind) {
-		case 'Reference':
-			const singleton = globalSingletons.find(s => s.name === expression.name)
-			return singleton ? (
-				<MessageList
-					receiver={expression}
-					newMessageCall={s => setMessage(s)}
-					entity={singleton}
-				/>
-			) : (
-				<Text>{`No se pudo resolver la referencia ${expression.name}`}</Text>
-			)
-		case 'Literal':
-			return (
-				<MessageList
-					receiver={expression}
-					newMessageCall={s => setMessage(s)}
-					entity={project.getNodeByFQN<Class>(literalClassFQN(expression))}
-				/>
-			)
-		default:
-			return <Text>{`Todavía no hay mensajes para ${expression.kind}`}</Text>
-	}
-}
-
 const styles = StyleSheet.create({
-	view: { display: 'flex', maxHeight: '94%' },
+	view: { display: 'flex', maxHeight: '85%' },
 })
 
 export default function ({
@@ -234,7 +131,6 @@ export default function ({
 	return (
 		<ContextProvider context={context} fqn={contextFQN}>
 			<ExpressionMaker
-				context={context}
 				onSubmit={onSubmit}
 				initialExpression={initialExpression}
 			/>
