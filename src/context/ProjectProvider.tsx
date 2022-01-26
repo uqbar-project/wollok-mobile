@@ -12,6 +12,8 @@ import {
 	Module,
 	Package,
 	Parameter,
+	Reference,
+	Send,
 	Singleton,
 } from 'wollok-ts/dist/model'
 import WRE from 'wollok-ts/dist/wre/wre.json'
@@ -57,7 +59,14 @@ const pepita = new Singleton({
 					name: 'comida',
 				}),
 			],
-			body: new Body(),
+			body: new Body({
+				sentences: [
+					new Send({
+						receiver: new Reference({ name: 'comida' }),
+						message: 'energiaQueAporta',
+					}),
+				],
+			}),
 		}),
 	],
 })

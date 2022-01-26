@@ -50,6 +50,7 @@
 	},
 	"sentence": {
 		"assignment": "assignment",
-		"selectVariable": "Select variable"
+		"selectVariable": "Select variable",
+		"messageSend": "Send message"
 	}
 }

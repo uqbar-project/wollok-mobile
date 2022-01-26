@@ -64,13 +64,25 @@ export const MethodDetail = ({
 		})
 	}, [navigation, sentences, method, changeMember])
 
-	function addAssignment(assignment: Assignment) {
+	function goToExpressionMaker() {
+		navigation.navigate('ExpressionMaker', {
+			onSubmit: addSentence,
+			contextFQN: methodFQN(method),
+		})
+	}
+
+	function addSentence(assignment: Sentence) {
 		setSentences([...sentences, assignment])
 	}
 
 	return (
 		<MultiFabScreen
 			actions={[
+				{
+					icon: 'message',
+					onPress: goToExpressionMaker,
+					label: upperCaseFirst(translate('sentence.messageSend')),
+				},
 				{
 					icon: 'arrow-right',
 					onPress: () => {
@@ -80,11 +92,19 @@ export const MethodDetail = ({
 				},
 			]}>
 			<ScrollView style={styles.sentences}>
-				{sentences.map((sentence, i) => {
+				{sentences.map(sentence => {
 					switch (sentence.kind) {
+						case 'Send':
+							return (
+								<ExpressionDisplay
+									key={sentence.id}
+									expression={sentence}
+									withIcon={false}
+								/>
+							)
 						case 'Assignment':
 							return (
-								<Row key={i}>
+								<Row key={sentence.id}>
 									<Text>{sentence.variable.name}</Text>
 									<IconButton icon="arrow-right" />
 									<ExpressionDisplay
@@ -95,7 +115,7 @@ export const MethodDetail = ({
 							)
 						default:
 							return (
-								<Row key={i}>
+								<Row key={sentence.id}>
 									<Text>{sentence.kind}</Text>
 								</Row>
 							)
@@ -105,7 +125,7 @@ export const MethodDetail = ({
 
 			<AssignmentFormModal
 				method={method}
-				onSubmit={addAssignment}
+				onSubmit={addSentence}
 				setVisible={setAssignmentModalVisible}
 				visible={assignmentModalVisible}
 			/>
