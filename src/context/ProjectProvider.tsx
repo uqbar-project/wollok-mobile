@@ -2,22 +2,16 @@ import React, { createContext, useContext, useState } from 'react'
 import 'react-native-get-random-values'
 import link from 'wollok-ts/dist/linker'
 import {
-	Body,
 	Entity,
 	Environment,
-	Field,
 	fromJSON,
-	Literal,
-	Method,
 	Module,
 	Package,
-	Parameter,
-	Reference,
-	Send,
-	Singleton,
+	Test,
 } from 'wollok-ts/dist/model'
 import WRE from 'wollok-ts/dist/wre/wre.json'
 import { OneOrMany } from '../utils/type-helpers'
+import { mainModules } from './initialProject'
 
 export const ProjectContext = createContext<{
 	project: Environment
@@ -25,107 +19,43 @@ export const ProjectContext = createContext<{
 } | null>(null)
 
 type Actions = {
-	addEntity: (entity: Module) => void
-	rebuildEnvironment: (...members: Entity[]) => void
-}
-
-const pepita = new Singleton({
-	name: 'pepita',
-	members: [
-		new Field({
-			name: 'energia',
-			isConstant: false,
-			isProperty: true,
-			value: new Literal({ value: 100 }),
-		}),
-		new Field({
-			name: 'nombre',
-			isConstant: true,
-			isProperty: true,
-			value: new Literal({ value: 'Pepita' }),
-		}),
-		new Method({
-			name: 'estaCansada',
-			body: new Body(),
-		}),
-		new Method({
-			name: 'vola',
-			body: new Body(),
-		}),
-		new Method({
-			name: 'come',
-			parameters: [
-				new Parameter({
-					name: 'comida',
-				}),
-			],
-			body: new Body({
-				sentences: [
-					new Send({
-						receiver: new Reference({ name: 'comida' }),
-						message: 'energiaQueAporta',
-					}),
-				],
-			}),
-		}),
-	],
-})
-
-function testMainEntities() {
-	return [
-		pepita,
-		new Singleton({
-			name: 'manolo',
-			members: [
-				new Method({
-					name: 'cambiaDeColor',
-					parameters: [
-						new Parameter({
-							name: 'color',
-						}),
-					],
-					body: new Body(),
-				}),
-				new Method({
-					name: 'moveteA',
-					parameters: [
-						new Parameter({
-							name: 'posX',
-						}),
-						new Parameter({
-							name: 'posY',
-						}),
-					],
-					body: new Body(),
-				}),
-			],
-		}),
-	]
+	addEntity: (module: Module) => void
+	addTest: (test: Test) => void
+	rebuildEnvironment: (modules: Module[], tests?: Test[]) => void
 }
 
 export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 	const [project, setProject] = useState<Environment>(
-		buildEnvironment(testMainEntities(), fromJSON<Environment>(WRE)),
+		buildEnvironment(mainModules, [], fromJSON<Environment>(WRE)),
 	)
 
 	function buildEnvironment(
 		members: Entity[],
+		tests?: Test[],
 		base?: Environment,
 	): Environment {
 		const mainPackage = new Package({ name: 'main', members })
-		return link([mainPackage], base ?? project)
+		const testsPackage = new Package({ name: 'tests', members: tests })
+		return link([mainPackage, testsPackage], base ?? project)
 	}
 
 	function addEntity(newEntity: Module) {
-		rebuildEnvironment(newEntity)
+		rebuildEnvironment([newEntity])
 	}
 
-	function rebuildEnvironment(...members: Entity[]) {
-		setProject(buildEnvironment(members))
+	function addTest(newTest: Test) {
+		rebuildEnvironment([], [newTest])
+	}
+
+	function rebuildEnvironment(members: Entity[], tests?: Test[]) {
+		setProject(buildEnvironment(members, tests))
 		//TODO: Run validations
 	}
 
-	const initialContext = { project, actions: { addEntity, rebuildEnvironment } }
+	const initialContext = {
+		project,
+		actions: { addEntity, addTest, rebuildEnvironment },
+	}
 	return (
 		<ProjectContext.Provider value={initialContext}>
 			{props.children}

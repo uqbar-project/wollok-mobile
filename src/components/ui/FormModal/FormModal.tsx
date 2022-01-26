@@ -8,7 +8,7 @@ import {
 	withTheme,
 } from 'react-native-paper'
 import { Theme } from '../../../theme'
-import { translate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
 import { OneOrMany } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 
@@ -44,7 +44,7 @@ function FormModal(props: {
 						props.onSubmit()
 						closeModal()
 					}}>
-					<Text>{translate('ok').toUpperCase()}</Text>
+					<Text>{wTranslate('ok').toUpperCase()}</Text>
 				</Button>
 			</Modal>
 		</Portal>

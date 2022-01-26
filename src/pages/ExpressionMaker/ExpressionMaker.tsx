@@ -17,7 +17,7 @@ import {
 	useContext,
 } from '../../context/ContextProvider'
 import { useProject } from '../../context/ProjectProvider'
-import { translate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation-helpers'
 import { isMethodFQN, methodByFQN } from '../../utils/wollok-helpers'
 import { EntityStackParamList } from '../EntityDetails/EntityDetails'
 
@@ -74,7 +74,7 @@ function ExpressionMaker(props: {
 				expression={expression}
 			/>
 			<TextInput
-				label={translate(
+				label={wTranslate(
 					`expression.search.${expression ? 'message' : 'entity'}`,
 				)}
 				value={search}
@@ -83,30 +83,32 @@ function ExpressionMaker(props: {
 			<ScrollView style={styles.view}>
 				{expression ? (
 					<List.Section>
-						<List.Subheader>{translate('expression.messages')}</List.Subheader>
+						<List.Subheader>{wTranslate('expression.messages')}</List.Subheader>
 						<ListMessages expression={expression} setMessage={setExpression} />
 					</List.Section>
 				) : (
 					<List.Section>
-						<List.Subheader>{translate('expression.variables')}</List.Subheader>
+						<List.Subheader>
+							{wTranslate('expression.variables')}
+						</List.Subheader>
 						<ListVariables setReference={setExpression} />
 
 						<List.Subheader>
-							{translate('expression.mainObjects')}
+							{wTranslate('expression.mainObjects')}
 						</List.Subheader>
 						<ListSingletons packageName="main" setReference={setExpression} />
 
-						<List.Subheader>{translate('expression.literals')}</List.Subheader>
+						<List.Subheader>{wTranslate('expression.literals')}</List.Subheader>
 						<ListLiterals setLiteral={setExpression} />
 
 						<List.Subheader>
-							{translate('expression.wollokObjects')}
+							{wTranslate('expression.wollokObjects')}
 						</List.Subheader>
 						<ListSingletons packageName="wollok" setReference={setExpression} />
 					</List.Section>
 				)}
 				<Button onPress={reset}>
-					{translate('clear').toLocaleUpperCase()}
+					{wTranslate('clear').toLocaleUpperCase()}
 				</Button>
 			</ScrollView>
 		</View>

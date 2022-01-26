@@ -9,7 +9,7 @@ import { Expression, Name } from 'wollok-ts/dist/model'
 import { EntitiesScreenNavigationProp } from '../../pages/Entities/Entities'
 import { ExpressionMakerScreenProp } from '../../pages/ExpressionMaker/ExpressionMaker'
 import { Theme } from '../../theme'
-import { translate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation-helpers'
 import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
 
 type Props = {
@@ -52,7 +52,7 @@ const ExpressionView = (props: Props) => {
 			) : (
 				<Text style={styles.initialValuePlaceholder}>
 					{/* TODO: Param this text? */}
-					{translate('entityDetails.attributeModal.addAnInitialValue')}
+					{wTranslate('entityDetails.attributeModal.addAnInitialValue')}
 				</Text>
 			)}
 		</View>

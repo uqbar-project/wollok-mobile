@@ -22,19 +22,27 @@ import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { EntityProvider, useEntity } from '../../context/EntityProvider'
 import { useProject } from '../../context/ProjectProvider'
 import { NewMessageCall } from '../../pages/NewMessageCall'
-import { translate } from '../../utils/translation-helpers'
-import { methodLabel } from '../../utils/wollok-helpers'
+import { wTranslate } from '../../utils/translation-helpers'
+import {
+	EntityMemberWithBody,
+	entityMemberLabel,
+	methodFQN,
+	methodLabel,
+} from '../../utils/wollok-helpers'
 import ExpressionMaker, {
 	ExpressionOnSubmit,
 } from '../ExpressionMaker/ExpressionMaker'
 import {
-	MethodDetail,
+	EntityMemberDetail,
 	MethodDetailsScreenNavigationProp,
-} from '../MethodDetail'
+} from '../EntityMemberDetail'
 
 export type EntityStackParamList = {
 	EntityDetails: undefined
-	MethodDetails: { method: Method }
+	EntityMemberDetails: {
+		entityMember: EntityMemberWithBody
+		fqn: Name
+	}
 	ExpressionMaker: {
 		onSubmit: ExpressionOnSubmit
 		contextFQN: Name
@@ -60,24 +68,24 @@ const EntityDetails = function () {
 			actions={[
 				{
 					icon: 'database',
-					label: upperCaseFirst(translate('entityDetails.attribute')),
+					label: upperCaseFirst(wTranslate('entityDetails.attribute')),
 					onPress: () => setAttributeModalVisible(true),
 				},
 				{
 					icon: 'code-braces',
-					label: upperCaseFirst(translate('entityDetails.method')),
+					label: upperCaseFirst(wTranslate('entityDetails.method')),
 					onPress: () => setMethodModalVisible(true),
 				},
 			]}>
 			<List.Section>
 				<ScrollView>
 					<AccordionList<Field>
-						title={translate('entityDetails.attributes').toUpperCase()}
+						title={wTranslate('entityDetails.attributes').toUpperCase()}
 						items={entity.members.filter(is('Field')) as Field[]}
 						VisualItem={AttributeItem}
 					/>
 					<AccordionList<Method>
-						title={translate('entityDetails.methods').toUpperCase()}
+						title={wTranslate('entityDetails.methods').toUpperCase()}
 						items={entity.members.filter(is('Method')) as Method[]}
 						VisualItem={MethodItem}
 					/>
@@ -105,7 +113,12 @@ function MethodItem({ item: method }: { item: Method }) {
 		<List.Item
 			key={method.name}
 			title={methodLabel(method)}
-			onPress={() => navigator.navigate('MethodDetails', { method })}
+			onPress={() =>
+				navigator.navigate('EntityMemberDetails', {
+					entityMember: method,
+					fqn: methodFQN(method),
+				})
+			}
 		/>
 	)
 }
@@ -127,17 +140,17 @@ export default function (props: { route: Route }) {
 					}}
 				/>
 				<Stack.Screen
-					name="MethodDetails"
-					component={MethodDetail}
+					name="EntityMemberDetails"
+					component={EntityMemberDetail}
 					options={({ route: methodRoute }) => ({
-						title: methodLabel(methodRoute.params.method),
+						title: entityMemberLabel(methodRoute.params.entityMember),
 					})}
 				/>
 				<Stack.Screen
 					name="ExpressionMaker"
 					component={ExpressionMaker}
 					options={{
-						title: translate('expression.title'),
+						title: wTranslate('expression.title'),
 						headerTitleAlign: 'center',
 						animationEnabled: false,
 					}}
