@@ -1,42 +1,70 @@
-import { StackNavigationProp } from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Package, Test } from 'wollok-ts/dist/model'
-import { RootStackParamList } from '../App'
-import FabAddScreen from '../components/FabScreens/FabAddScreen'
+import { IconButton, List } from 'react-native-paper'
+import { upperCaseFirst } from 'upper-case-first'
+import { Test } from 'wollok-ts/dist/model'
+import MultiFabScreen from '../components/FabScreens/MultiFabScreen'
 import NewTestModal from '../components/tests/NewTestModal'
-import TestItem from '../components/tests/TestItem'
-import { useProject } from '../context/ProjectProvider'
+import { useEntity } from '../context/EntityProvider'
+import { wTranslate } from '../utils/translation-helpers'
+import { Maybe } from '../utils/type-helpers'
+import { MethodDetailsScreenNavigationProp } from './EntityMemberDetail'
 
-export type TestsScreenNavigationProp = StackNavigationProp<
-	RootStackParamList,
-	'Tests'
->
-
-export function Tests() {
-	const {
-		project,
-		actions: { addTest },
-	} = useProject()
-
-	const [modalVisible, setModalVisible] = useState(false)
-
-	function fabPressed() {
-		setModalVisible(true)
-	}
+export const Tests = function () {
+	const [testModalVisible, setTestModalVisible] = useState(false)
+	const { entity } = useEntity()
+	const tests = entity.members as Test[]
 
 	return (
-		<FabAddScreen onPress={fabPressed}>
-			<ScrollView>
-				{project.getNodeByFQN<Package>('tests').members.map(test => (
-					<TestItem key={test.id} test={test as Test} />
-				))}
-			</ScrollView>
+		<MultiFabScreen
+			actions={[
+				{
+					icon: 'test-tube',
+					label: upperCaseFirst(wTranslate('describe.newTest')),
+					onPress: () => setTestModalVisible(true),
+				},
+			]}>
+			<List.Section>
+				<ScrollView>
+					{tests.map(test => (
+						<TestItem key={test.id} item={test} />
+					))}
+				</ScrollView>
+			</List.Section>
 			<NewTestModal
-				visible={modalVisible}
-				addTest={addTest}
-				setVisible={setModalVisible}
+				visible={testModalVisible}
+				setVisible={setTestModalVisible}
 			/>
-		</FabAddScreen>
+		</MultiFabScreen>
+	)
+}
+
+function TestItem({ item: test }: { item: Test }) {
+	const navigator = useNavigation<MethodDetailsScreenNavigationProp>()
+	const [passed, setPassed] = useState<Maybe<boolean>>(undefined)
+	const icon =
+		passed === undefined
+			? 'test-tube-empty'
+			: passed
+			? 'test-tube'
+			: 'test-tube-off'
+	return (
+		<List.Item
+			title={test.name}
+			left={() => (
+				<IconButton
+					// color={checked ? theme.colors.accent : theme.colors.backdrop}
+					icon={icon}
+					onPress={() => setPassed(true)}
+				/>
+			)}
+			onPress={() =>
+				navigator.navigate('EntityMemberDetails', {
+					entityMember: test,
+					fqn: test.fullyQualifiedName(),
+				})
+			}
+		/>
 	)
 }

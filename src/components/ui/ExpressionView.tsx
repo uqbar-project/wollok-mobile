@@ -1,12 +1,8 @@
-import {
-	CompositeNavigationProp,
-	useNavigation,
-} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, withTheme } from 'react-native-paper'
 import { Expression, Name } from 'wollok-ts/dist/model'
-import { EntitiesScreenNavigationProp } from '../../pages/Entities/Entities'
 import { ExpressionMakerScreenProp } from '../../pages/ExpressionMaker/ExpressionMaker'
 import { Theme } from '../../theme'
 import { wTranslate } from '../../utils/translation-helpers'
@@ -21,13 +17,7 @@ type Props = {
 
 const ExpressionView = (props: Props) => {
 	const { value, setValue } = props
-	const navigation =
-		useNavigation<
-			CompositeNavigationProp<
-				ExpressionMakerScreenProp,
-				EntitiesScreenNavigationProp
-			>
-		>()
+	const navigation = useNavigation<ExpressionMakerScreenProp>()
 	const goToExpressionMaker = () => {
 		navigation.push('ExpressionMaker', {
 			onSubmit: setValue,

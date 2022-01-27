@@ -6,7 +6,7 @@ import { Expression, Send } from 'wollok-ts/dist/model'
 import ExpressionView from '../components/ui/ExpressionView'
 import { SubmitCheckButton } from '../components/ui/Header'
 import { Row } from '../components/ui/Row'
-import { EntityStackParamList } from './EntityDetails/EntityDetails'
+import { EntityStackParamList } from './EntityStack'
 
 export function NewMessageCall({
 	route: {

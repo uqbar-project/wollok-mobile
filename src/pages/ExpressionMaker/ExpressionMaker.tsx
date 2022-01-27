@@ -19,7 +19,7 @@ import {
 import { useProject } from '../../context/ProjectProvider'
 import { wTranslate } from '../../utils/translation-helpers'
 import { isMethodFQN, methodByFQN } from '../../utils/wollok-helpers'
-import { EntityStackParamList } from '../EntityDetails/EntityDetails'
+import { EntityStackParamList } from '../EntityStack'
 
 export type ExpressionMakerProp = RouteProp<
 	EntityStackParamList,

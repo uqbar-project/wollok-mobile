@@ -24,6 +24,8 @@ export type Referenciable = Variable | Field | Parameter
 
 export type EntityMemberWithBody = Method | Test
 
+export type EntityMember = EntityMemberWithBody | Field
+
 export function allFields(module: Module): List<Field> {
 	return module.hierarchy().flatMap(parent => parent.fields())
 }

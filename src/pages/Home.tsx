@@ -1,9 +1,16 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 import { upperCaseFirst } from 'upper-case-first'
+import { RootStackParamList } from '../App'
 import { wTranslate } from '../utils/translation-helpers'
+import { Describes } from './Describes'
 import { Entities } from './Entities/Entities'
-import { Tests } from './Tests'
+
+export type HomeScreenNavigationProp = StackNavigationProp<
+	RootStackParamList,
+	'Home'
+>
 
 const Tab = createBottomTabNavigator()
 
@@ -16,7 +23,7 @@ export function Home() {
 			/>
 			<Tab.Screen
 				name={upperCaseFirst(wTranslate('tests.title'))}
-				component={Tests}
+				component={Describes}
 			/>
 		</Tab.Navigator>
 	)

@@ -8,7 +8,7 @@ import {
 	allScopedVariables,
 	EntityMemberWithBody,
 } from '../utils/wollok-helpers'
-import { EntityStackParamList } from './EntityDetails/EntityDetails'
+import { EntityStackParamList } from './EntityStack'
 
 export type MethodDetailsScreenNavigationProp = StackNavigationProp<
 	EntityStackParamList,

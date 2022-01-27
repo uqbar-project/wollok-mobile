@@ -82,4 +82,4 @@ const manolo = new Singleton({
 const describe = new Describe({ name: 'Main Describe' })
 
 export const mainModules = [pepita, manolo]
-export const mainDescribe = [describe]
+export const mainDescribe = describe

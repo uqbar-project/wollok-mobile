@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { List, withTheme } from 'react-native-paper'
 import { Module } from 'wollok-ts/dist/model'
-import { EntitiesScreenNavigationProp } from '../../../pages/Entities/Entities'
+import { HomeScreenNavigationProp } from '../../../pages/Home'
 import { Theme } from '../../../theme'
 import { EntityKindIcon } from '../EntityKindIcon'
 import { stylesheet } from './styles'
@@ -14,7 +14,7 @@ type Props = {
 
 function EntityComponent(props: Props) {
 	const styles = stylesheet(props.theme)
-	const navigation = useNavigation<EntitiesScreenNavigationProp>()
+	const navigation = useNavigation<HomeScreenNavigationProp>()
 	const goToEntityDetails = () => {
 		navigation.navigate('EntityStack', {
 			entityFQN: props.entity.fullyQualifiedName(),
