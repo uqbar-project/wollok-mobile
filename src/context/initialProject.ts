@@ -8,6 +8,7 @@ import {
 	Reference,
 	Send,
 	Singleton,
+	Test,
 } from 'wollok-ts/dist/model'
 
 const pepita = new Singleton({
@@ -79,7 +80,23 @@ const manolo = new Singleton({
 	],
 })
 
-const describe = new Describe({ name: 'Main Describe' })
+const describe = new Describe({
+	name: 'Main Describe',
+	members: [
+		new Test({
+			name: 'Prueba',
+			body: new Body({
+				sentences: [
+					new Send({
+						receiver: new Reference({ name: 'assert' }),
+						message: 'that',
+						args: [new Literal({ value: true })],
+					}),
+				],
+			}),
+		}),
+	],
+})
 
 export const mainModules = [pepita, manolo]
 export const mainDescribe = describe

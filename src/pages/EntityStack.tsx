@@ -5,7 +5,6 @@ import { Expression, Method, Module, Name, Send } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import { EntityProvider } from '../context/EntityProvider'
 import { useProject } from '../context/ProjectProvider'
-import { log } from '../utils/commons'
 import { wTranslate } from '../utils/translation-helpers'
 import {
 	entityMemberLabel,
@@ -44,7 +43,6 @@ export type EntityStackParamList = {
 export default function (props: { route: EntityStackRoute }) {
 	const { project } = useProject()
 	const Stack = createStackNavigator<EntityStackParamList>()
-	log(props.route.params.entityFQN)
 	const entity = project.getNodeByFQN<Module>(props.route.params.entityFQN)
 	return (
 		<EntityProvider entity={entity}>

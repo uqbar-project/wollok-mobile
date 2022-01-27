@@ -7,6 +7,7 @@ import { Test } from 'wollok-ts/dist/model'
 import MultiFabScreen from '../components/FabScreens/MultiFabScreen'
 import NewTestModal from '../components/tests/NewTestModal'
 import { useEntity } from '../context/EntityProvider'
+import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
 import { Maybe } from '../utils/type-helpers'
 import { MethodDetailsScreenNavigationProp } from './EntityMemberDetail'
@@ -41,8 +42,11 @@ export const Tests = function () {
 }
 
 function TestItem({ item: test }: { item: Test }) {
-	const navigator = useNavigation<MethodDetailsScreenNavigationProp>()
+	const {
+		actions: { runTest },
+	} = useProject()
 	const [passed, setPassed] = useState<Maybe<boolean>>(undefined)
+	const navigator = useNavigation<MethodDetailsScreenNavigationProp>()
 	const icon =
 		passed === undefined
 			? 'test-tube-empty'
@@ -56,7 +60,9 @@ function TestItem({ item: test }: { item: Test }) {
 				<IconButton
 					// color={checked ? theme.colors.accent : theme.colors.backdrop}
 					icon={icon}
-					onPress={() => setPassed(true)}
+					onPress={() => {
+						setPassed(runTest(test))
+					}}
 				/>
 			)}
 			onPress={() =>
