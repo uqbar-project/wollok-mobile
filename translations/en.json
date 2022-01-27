@@ -52,5 +52,14 @@
 		"assignment": "Variable assignment",
 		"selectVariable": "Select variable",
 		"messageSend": "Send message"
+	},
+	"tests": {
+		"title": "Groups of tests",
+		"describeName": "New group name",
+		"newTest": "New test",
+		"testName": "New test name"
+	},
+	"project": {
+		"title": "My Project"
 	}
 }

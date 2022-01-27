@@ -56,7 +56,7 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 	}
 
 	function rebuildEnvironment(entity: Entity) {
-		const packageName = entity.is('Describe') ? 'tests' : 'mail'
+		const packageName = entity.is('Describe') ? 'tests' : 'main'
 		setProject(buildEnvironment(packageName, [entity]))
 		//TODO: Run validations
 	}

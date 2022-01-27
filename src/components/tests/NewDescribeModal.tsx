@@ -21,7 +21,7 @@ function NewDescribeModal(props: {
 			visible={props.visible}>
 			<TextInput
 				onChangeText={setName}
-				placeholder={wTranslate('describe.name')}
+				placeholder={wTranslate('tests.describeName')}
 			/>
 		</FormModal>
 	)

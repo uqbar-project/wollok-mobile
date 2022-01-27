@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { List, Text, withTheme } from 'react-native-paper'
+import { List, withTheme } from 'react-native-paper'
 import { Describe } from 'wollok-ts/dist/model'
 import { Theme } from '../../theme'
 import { stylesheet } from '../entities/Entity/styles'
+import IconImage from '../ui/IconImage'
+const icon = require('../../assets/describe.png')
 
 type Props = {
 	describe: Describe
@@ -27,7 +29,7 @@ function DescribeItem({ describe, theme }: Props) {
 			style={styles.item}
 			titleStyle={styles.itemTitle}
 			title={describe.name}
-			left={() => <Text>"Test Describe"</Text>}
+			left={() => <IconImage icon={icon} />}
 		/>
 	)
 }

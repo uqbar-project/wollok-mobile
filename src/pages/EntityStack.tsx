@@ -16,7 +16,7 @@ import ExpressionMaker, {
 	ExpressionOnSubmit,
 } from './ExpressionMaker/ExpressionMaker'
 import { NewMessageCall } from './NewMessageCall'
-import { Tests } from './Tests'
+import { Tests } from '../components/tests/Tests'
 
 export type EntityStackRoute = RouteProp<RootStackParamList, 'EntityStack'>
 
