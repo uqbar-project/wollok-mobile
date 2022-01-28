@@ -22,7 +22,10 @@ function NewTestModal(props: {
 			resetForm={resetForm}
 			setVisible={props.setVisible}
 			visible={props.visible}>
-			<TextInput onChangeText={setName} placeholder={wTranslate('test.name')} />
+			<TextInput
+				onChangeText={setName}
+				placeholder={wTranslate('tests.newTestName')}
+			/>
 		</FormModal>
 	)
 

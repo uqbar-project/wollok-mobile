@@ -7,13 +7,16 @@ import {
 	Entity,
 	Environment,
 	fromJSON,
+	Import,
 	Module,
 	Name,
 	Package,
+	Reference,
 	Test,
 } from 'wollok-ts/dist/model'
 import WRE from 'wollok-ts/dist/wre/wre.json'
 import WRENatives from 'wollok-ts/dist/wre/wre.natives'
+import { log } from '../utils/commons'
 import { OneOrMany } from '../utils/type-helpers'
 import { mainDescribe, mainModules } from './initialProject'
 
@@ -43,7 +46,16 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 		members: Entity[],
 		base?: Environment,
 	): Environment {
-		const pack = new Package({ name, members })
+		const mainImport =
+			name !== 'main'
+				? [
+						new Import({
+							entity: new Reference({ name: 'main' }),
+							isGeneric: true,
+						}),
+				  ]
+				: undefined
+		const pack = new Package({ name, members, imports: mainImport })
 		return link([pack], base ?? project)
 	}
 
@@ -66,8 +78,9 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 			const interpreter = interpret(project, WRENatives)
 			interpreter.exec(test)
 			return true
-		} catch (_) {
+		} catch (e: any) {
 			//TODO: Feedback from error
+			log(e.name)
 			return false
 		}
 	}

@@ -57,7 +57,7 @@
 		"title": "Grupos de tests",
 		"describeName": "Nombre del grupo",
 		"newTest": "Crear test",
-		"testName": "Nombre del test"
+		"newTestName": "Nombre del test"
 	},
 	"project": {
 		"title": "Mi Proyecto"

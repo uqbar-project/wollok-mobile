@@ -57,7 +57,7 @@
 		"title": "Groups of tests",
 		"describeName": "New group name",
 		"newTest": "New test",
-		"testName": "New test name"
+		"newTestName": "New test name"
 	},
 	"project": {
 		"title": "My Project"
