@@ -12,7 +12,7 @@ import {
 } from 'wollok-ts/dist/model'
 import { wTranslate } from '../../../utils/translation-helpers'
 import { Referenciable } from '../../../utils/wollok-helpers'
-import ExpressionView from '../ExpressionView'
+import ExpressionInput from '../ExpressionInput'
 import FormModal from '../FormModal/FormModal'
 
 type AssignmentFormModalProps = {
@@ -59,7 +59,7 @@ export function AssignmentFormModal({
 				list={variableList}
 			/>
 			<Divider style={styles.divider} />
-			<ExpressionView
+			<ExpressionInput
 				value={value}
 				setValue={setValue}
 				fqn={contextFQN}

@@ -7,7 +7,7 @@ import { useEntity } from '../../../context/EntityProvider'
 import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation-helpers'
 import CheckIcon from '../../ui/CheckIcon'
-import ExpressionView from '../../ui/ExpressionView'
+import ExpressionInput from '../../ui/ExpressionInput'
 import FormModal from '../../ui/FormModal/FormModal'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 
@@ -65,7 +65,7 @@ const AttributeFormModal = (props: Props) => {
 				))}
 			</>
 
-			<ExpressionView
+			<ExpressionInput
 				value={initialValue}
 				setValue={setInitialValue}
 				fqn={entity.fullyQualifiedName()}

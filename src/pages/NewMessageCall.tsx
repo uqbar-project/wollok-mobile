@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Send } from 'wollok-ts/dist/model'
-import ExpressionView from '../components/ui/ExpressionView'
+import ExpressionInput from '../components/ui/ExpressionInput'
 import { SubmitCheckButton } from '../components/ui/Header'
 import { Row } from '../components/ui/Row'
 import { wTranslate } from '../utils/translation-helpers'
@@ -53,7 +53,7 @@ export function NewMessageCall({
 			{method.parameters.map((_, i) => (
 				<Row key={i}>
 					<Text>{_.name}</Text>
-					<ExpressionView
+					<ExpressionInput
 						fqn={contextFQN}
 						setValue={expression => setParameter(i, expression)}
 						value={args[i]}

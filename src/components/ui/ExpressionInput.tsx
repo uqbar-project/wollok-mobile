@@ -15,7 +15,7 @@ type Props = {
 	inputPlaceholder: string
 }
 
-const ExpressionView = (props: Props) => {
+const ExpressionInput = (props: Props) => {
 	const { value, setValue } = props
 	const navigation = useNavigation<ExpressionMakerScreenProp>()
 	const goToExpressionMaker = () => {
@@ -71,4 +71,4 @@ const getStyles = (theme: Theme) =>
 		initialValueOptions: { display: 'flex', flexDirection: 'row' },
 	})
 
-export default withTheme(ExpressionView)
+export default withTheme(ExpressionInput)
