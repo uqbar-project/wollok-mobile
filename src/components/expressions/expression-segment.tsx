@@ -7,7 +7,7 @@ import {
 	ViewStyle,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-import { LiteralValue, Send } from 'wollok-ts/dist/model'
+import { Expression, LiteralValue, Send } from 'wollok-ts/dist/model'
 import { OneOrMany } from '../../utils/type-helpers'
 import { getVisualSegment } from './ExpressionDisplay'
 
@@ -27,9 +27,12 @@ export const MessageSegment = (props: { send: Send; index: number }) => {
 				<View style={style.row}>
 					<Text>{props.send.message}(</Text>
 					{props.send.args.map((a, i) => (
-						<Parameter key={i} color="#907AD6">
-							{getVisualSegment(a, props.index - 1)}
-						</Parameter>
+						<Parameter
+							key={i}
+							color="#907AD6"
+							arg={a}
+							index={props.index - 1}
+						/>
 					))}
 					<Text>)</Text>
 				</View>
@@ -97,11 +100,12 @@ const Bullet = (props: {
 }
 
 const Parameter = (props: {
-	children: OneOrMany<JSX.Element>
 	color: ColorValue
+	arg: Expression
+	index: number
 }) => (
 	<View style={[style.pill, style.row, { backgroundColor: props.color }]}>
-		{props.children}
+		{getVisualSegment(props.arg, props.index)}
 	</View>
 )
 
