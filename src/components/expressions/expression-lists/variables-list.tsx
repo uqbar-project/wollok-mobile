@@ -21,7 +21,7 @@ export function ListVariables({ setReference }: ListVariablesProps) {
 				<List.Item
 					key={id}
 					title={name}
-					onPress={() => setReference(new Reference({ name: name! }))}
+					onPress={() => setReference(new Reference({ name }))}
 				/>
 			))}
 		</>
