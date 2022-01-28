@@ -5,7 +5,6 @@ import { IconButton, Text, withTheme } from 'react-native-paper'
 import { Expression, Name } from 'wollok-ts/dist/model'
 import { ExpressionMakerScreenProp } from '../../pages/ExpressionMaker/ExpressionMaker'
 import { Theme } from '../../theme'
-import { wTranslate } from '../../utils/translation-helpers'
 import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
 
 type Props = {
@@ -13,6 +12,7 @@ type Props = {
 	setValue: (expression?: Expression) => void
 	theme: Theme
 	fqn: Name
+	inputPlaceholder: string
 }
 
 const ExpressionView = (props: Props) => {
@@ -41,8 +41,7 @@ const ExpressionView = (props: Props) => {
 				</View>
 			) : (
 				<Text style={styles.initialValuePlaceholder}>
-					{/* TODO: Param this text? */}
-					{wTranslate('entityDetails.attributeModal.addAnInitialValue')}
+					{props.inputPlaceholder}
 				</Text>
 			)}
 		</View>

@@ -2,10 +2,12 @@ import { RouteProp, useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { Text } from 'react-native-paper'
+import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Send } from 'wollok-ts/dist/model'
 import ExpressionView from '../components/ui/ExpressionView'
 import { SubmitCheckButton } from '../components/ui/Header'
 import { Row } from '../components/ui/Row'
+import { wTranslate } from '../utils/translation-helpers'
 import { EntityStackParamList } from './EntityStack'
 
 export function NewMessageCall({
@@ -55,6 +57,9 @@ export function NewMessageCall({
 						fqn={contextFQN}
 						setValue={expression => setParameter(i, expression)}
 						value={args[i]}
+						inputPlaceholder={upperCaseFirst(
+							wTranslate('expression.enterValue'),
+						)}
 					/>
 				</Row>
 			))}

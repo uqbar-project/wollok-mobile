@@ -1,6 +1,7 @@
 {
 	"ok": "ok",
 	"clear": "limpiar",
+	"enterValue": "ingresar valor", 
 	"entities": {
 		"title": "entidades",
 		"kinds": {

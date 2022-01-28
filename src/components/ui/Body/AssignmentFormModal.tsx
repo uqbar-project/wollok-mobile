@@ -59,7 +59,12 @@ export function AssignmentFormModal({
 				list={variableList}
 			/>
 			<Divider style={styles.divider} />
-			<ExpressionView value={value} setValue={setValue} fqn={contextFQN} />
+			<ExpressionView
+				value={value}
+				setValue={setValue}
+				fqn={contextFQN}
+				inputPlaceholder={wTranslate('expression.enterValue')}
+			/>
 		</FormModal>
 	)
 }

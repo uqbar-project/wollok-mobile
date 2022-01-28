@@ -56,20 +56,22 @@ const AttributeFormModal = (props: Props) => {
 				label={wTranslate('entityDetails.attributeModal.nameOfAttribute')}
 				onChangeText={setName}
 			/>
-
-			{checkboxes.map(cbox => {
-				return (
+			<>
+				{checkboxes.map(cbox => (
 					<View key={cbox.text} style={styles.checkbox}>
 						<CheckIcon {...cbox} />
 						<Text style={styles.constName}>{cbox.text}</Text>
 					</View>
-				)
-			})}
+				))}
+			</>
 
 			<ExpressionView
 				value={initialValue}
 				setValue={setInitialValue}
 				fqn={entity.fullyQualifiedName()}
+				inputPlaceholder={wTranslate(
+					'entityDetails.attributeModal.addAnInitialValue',
+				)}
 			/>
 		</FormModal>
 	)
