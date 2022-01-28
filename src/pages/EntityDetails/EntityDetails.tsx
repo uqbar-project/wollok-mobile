@@ -12,7 +12,7 @@ import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { useEntity } from '../../context/EntityProvider'
 import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
-import { MethodDetailsScreenNavigationProp } from '../EntityMemberDetail'
+import { EntityMemberScreenNavigationProp } from '../EntityMemberDetail'
 
 export const EntityDetails = function () {
 	const [methodModalVisible, setMethodModalVisible] = useState(false)
@@ -64,7 +64,7 @@ function AttributeItem({ item: attribute }: { item: Field }) {
 }
 
 function MethodItem({ item: method }: { item: Method }) {
-	const navigator = useNavigation<MethodDetailsScreenNavigationProp>()
+	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
 	return (
 		<List.Item
 			key={method.name}

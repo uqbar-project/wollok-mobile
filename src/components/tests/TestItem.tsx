@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { IconButton, List, withTheme } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
-import { MethodDetailsScreenNavigationProp } from '../../pages/EntityMemberDetail'
+import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
 import { Theme } from '../../theme'
 import { Maybe } from '../../utils/type-helpers'
 
@@ -16,7 +16,7 @@ function TestItem({ item: test, theme }: TestItemProps) {
 		actions: { runTest },
 	} = useProject()
 	const [passed, setPassed] = useState<Maybe<boolean>>(undefined)
-	const navigator = useNavigation<MethodDetailsScreenNavigationProp>()
+	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
 	const { icon, color } =
 		passed === undefined
 			? { icon: 'test-tube-empty', color: theme.colors.disabled }

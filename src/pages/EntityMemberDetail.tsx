@@ -10,7 +10,7 @@ import {
 } from '../utils/wollok-helpers'
 import { EntityStackParamList } from './EntityStack'
 
-export type MethodDetailsScreenNavigationProp = StackNavigationProp<
+export type EntityMemberScreenNavigationProp = StackNavigationProp<
 	EntityStackParamList,
 	'EntityMemberDetails'
 >
