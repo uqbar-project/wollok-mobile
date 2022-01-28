@@ -32,7 +32,7 @@
 	},
 	"expression": {
 		"variables": "Variables",
-		"title": "Crea una expresion",
+		"title": "Crea una expresión",
 		"mainObjects": "Mis objectos",
 		"wollokObjects": "Objectos en Wollok",
 		"literals": "Literales",
