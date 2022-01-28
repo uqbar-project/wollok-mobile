@@ -8,28 +8,31 @@ import {
 } from 'react-native'
 import { Text } from 'react-native-paper'
 import { Expression, LiteralValue, Send } from 'wollok-ts/dist/model'
+import { useTheme } from '../../theme'
 import { OneOrMany } from '../../utils/type-helpers'
 import { getVisualSegment } from './ExpressionDisplay'
 
 export const ReferenceSegment = (props: { text: string; index: number }) => {
+	const theme = useTheme()
 	return (
-		<Pill index={props.index} color="#EF5B5B">
+		<Pill index={props.index} color={theme.colors.expression.reference}>
 			<Text>{props.text}</Text>
 		</Pill>
 	)
 }
 
 export const MessageSegment = (props: { send: Send; index: number }) => {
+	const theme = useTheme()
 	return (
 		<>
 			{getVisualSegment(props.send.receiver, props.index)}
-			<Bullet color="#4F518C" index={props.index + 1}>
+			<Bullet color={theme.colors.expression.message} index={props.index + 1}>
 				<View style={style.row}>
 					<Text>{props.send.message}(</Text>
 					{props.send.args.map((a, i) => (
 						<Parameter
 							key={i}
-							color="#907AD6"
+							color={theme.colors.expression.parameter}
 							arg={a}
 							index={props.index - 1}
 						/>
@@ -45,8 +48,9 @@ export const LiteralSegment = (props: {
 	value: LiteralValue
 	index: number
 }) => {
+	const theme = useTheme()
 	return (
-		<Pill index={props.index} color="#20A39E">
+		<Pill index={props.index} color={theme.colors.expression.literal}>
 			<Text>{JSON.stringify(props.value)}</Text>
 		</Pill>
 	)
@@ -104,7 +108,18 @@ const Parameter = (props: {
 	arg: Expression
 	index: number
 }) => (
-	<View style={[style.pill, style.row, { backgroundColor: props.color }]}>
+	<View
+		style={[
+			style.pill,
+			style.row,
+			{
+				backgroundColor: props.color,
+				shadowOffset: { height: 0, width: 0 },
+				shadowRadius: 3,
+				shadowColor: 'black',
+				shadowOpacity: 50,
+			},
+		]}>
 		{getVisualSegment(props.arg, props.index)}
 	</View>
 )
