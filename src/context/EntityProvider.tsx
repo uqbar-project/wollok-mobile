@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from 'react'
-import { Field, Method, Module } from 'wollok-ts/dist/model'
+import { Module } from 'wollok-ts/dist/model'
 import { OneOrMany } from '../utils/type-helpers'
+import { EntityMember } from '../utils/wollok-helpers'
 import { useProject } from './ProjectProvider'
 
 export const EntityContext = createContext<{
@@ -9,8 +10,8 @@ export const EntityContext = createContext<{
 } | null>(null)
 
 type Actions = {
-	addMember: (newMember: Method | Field) => void
-	changeMember: (oldMember: Method | Field, newMember: Method | Field) => void
+	addMember: (newMember: EntityMember) => void
+	changeMember: (oldMember: EntityMember, newMember: EntityMember) => void
 }
 
 export function EntityProvider(props: {
@@ -22,7 +23,7 @@ export function EntityProvider(props: {
 		actions: { rebuildEnvironment },
 	} = useProject()
 
-	const addMember = (newMember: Method | Field) => {
+	const addMember = (newMember: EntityMember) => {
 		rebuildEnvironment(
 			entity.copy({
 				members: [...entity.members, newMember],
@@ -30,10 +31,7 @@ export function EntityProvider(props: {
 		)
 	}
 
-	const changeMember = (
-		oldMember: Method | Field,
-		newMember: Method | Field,
-	) => {
+	const changeMember = (oldMember: EntityMember, newMember: EntityMember) => {
 		rebuildEnvironment(
 			entity.copy({
 				members: [...entity.members.filter(m => m !== oldMember), newMember],

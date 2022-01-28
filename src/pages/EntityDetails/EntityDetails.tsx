@@ -1,56 +1,20 @@
-import { RouteProp, useNavigation } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import {
-	Expression,
-	Field,
-	is,
-	Method,
-	Module,
-	Name,
-	Send,
-} from 'wollok-ts/dist/model'
-import { RootStackParamList } from '../../App'
+import { Field, is, Method } from 'wollok-ts/dist/model'
 import { AccordionList } from '../../components/entity-detail/AccordionList'
 import AttributeItemComponent from '../../components/entity-detail/AttributeItem/AttributeItem'
 import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
-import { EntityProvider, useEntity } from '../../context/EntityProvider'
-import { useProject } from '../../context/ProjectProvider'
-import { NewMessageCall } from '../../pages/NewMessageCall'
-import { translate } from '../../utils/translation-helpers'
-import { methodLabel } from '../../utils/wollok-helpers'
-import ExpressionMaker, {
-	ExpressionOnSubmit,
-} from '../ExpressionMaker/ExpressionMaker'
-import {
-	MethodDetail,
-	MethodDetailsScreenNavigationProp,
-} from '../MethodDetail'
+import { useEntity } from '../../context/EntityProvider'
+import { wTranslate } from '../../utils/translation-helpers'
+import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
+import { EntityMemberScreenNavigationProp } from '../EntityMemberDetail'
 
-export type EntityStackParamList = {
-	EntityDetails: undefined
-	MethodDetails: { method: Method }
-	ExpressionMaker: {
-		onSubmit: ExpressionOnSubmit
-		contextFQN: Name
-		initialExpression?: Expression
-	}
-	NewMessageSend: {
-		receiver: Expression
-		method: Method
-		contextFQN: Name
-		onSubmit: (s: Send) => void
-	}
-}
-
-type Route = RouteProp<RootStackParamList, 'EntityStack'>
-
-const EntityDetails = function () {
+export const EntityDetails = function () {
 	const [methodModalVisible, setMethodModalVisible] = useState(false)
 	const [attributeModalVisible, setAttributeModalVisible] = useState(false)
 	const { entity } = useEntity()
@@ -60,24 +24,24 @@ const EntityDetails = function () {
 			actions={[
 				{
 					icon: 'database',
-					label: upperCaseFirst(translate('entityDetails.attribute')),
+					label: upperCaseFirst(wTranslate('entityDetails.attribute')),
 					onPress: () => setAttributeModalVisible(true),
 				},
 				{
 					icon: 'code-braces',
-					label: upperCaseFirst(translate('entityDetails.method')),
+					label: upperCaseFirst(wTranslate('entityDetails.method')),
 					onPress: () => setMethodModalVisible(true),
 				},
 			]}>
 			<List.Section>
 				<ScrollView>
 					<AccordionList<Field>
-						title={translate('entityDetails.attributes').toUpperCase()}
+						title={wTranslate('entityDetails.attributes').toUpperCase()}
 						items={entity.members.filter(is('Field')) as Field[]}
 						VisualItem={AttributeItem}
 					/>
 					<AccordionList<Method>
-						title={translate('entityDetails.methods').toUpperCase()}
+						title={wTranslate('entityDetails.methods').toUpperCase()}
 						items={entity.members.filter(is('Method')) as Method[]}
 						VisualItem={MethodItem}
 					/>
@@ -100,54 +64,17 @@ function AttributeItem({ item: attribute }: { item: Field }) {
 }
 
 function MethodItem({ item: method }: { item: Method }) {
-	const navigator = useNavigation<MethodDetailsScreenNavigationProp>()
+	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
 	return (
 		<List.Item
 			key={method.name}
 			title={methodLabel(method)}
-			onPress={() => navigator.navigate('MethodDetails', { method })}
+			onPress={() =>
+				navigator.navigate('EntityMemberDetails', {
+					entityMember: method,
+					fqn: methodFQN(method),
+				})
+			}
 		/>
-	)
-}
-
-export default function (props: { route: Route }) {
-	const { project } = useProject()
-	const Stack = createStackNavigator<EntityStackParamList>()
-	const entity = project.getNodeByFQN<Module>(props.route.params.entityFQN)
-	return (
-		<EntityProvider entity={entity}>
-			<Stack.Navigator>
-				<Stack.Screen
-					name="EntityDetails"
-					component={EntityDetails}
-					options={{
-						title: entity.name,
-						headerTitleAlign: 'center',
-						animationEnabled: false,
-					}}
-				/>
-				<Stack.Screen
-					name="MethodDetails"
-					component={MethodDetail}
-					options={({ route: methodRoute }) => ({
-						title: methodLabel(methodRoute.params.method),
-					})}
-				/>
-				<Stack.Screen
-					name="ExpressionMaker"
-					component={ExpressionMaker}
-					options={{
-						title: translate('expression.title'),
-						headerTitleAlign: 'center',
-						animationEnabled: false,
-					}}
-				/>
-				<Stack.Screen
-					name="NewMessageSend"
-					component={NewMessageCall}
-					options={route => ({ title: route.route.params.method.name })}
-				/>
-			</Stack.Navigator>
-		</EntityProvider>
 	)
 }

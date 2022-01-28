@@ -13,10 +13,12 @@ export function ExpressionDisplay(props: {
 	backgroundColor?: ViewStyle['backgroundColor']
 	withIcon?: boolean
 }) {
-	const { expression, backgroundColor } = props
-	const showIcon = props.withIcon === undefined ? true : props.withIcon
+	const { expression, backgroundColor, withIcon, ...innerProps } = props
+	const showIcon = withIcon === undefined ? true : withIcon
 	return (
-		<View style={[display, { backgroundColor: backgroundColor }]}>
+		<View
+			style={[display, { backgroundColor: backgroundColor }]}
+			{...innerProps}>
 			{showIcon && <IconButton style={codeIcon} icon="chevron-right" />}
 			{expression && getVisualSegment(expression, 0)}
 		</View>
@@ -40,7 +42,7 @@ export function getVisualSegment(
 	}
 }
 
-const { display, codeIcon } = StyleSheet.create({
+export const { display, codeIcon } = StyleSheet.create({
 	display: {
 		paddingVertical: 4,
 		height: 35,

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { List } from 'react-native-paper'
 import { Expression, Literal } from 'wollok-ts/dist/model'
 import { useContext } from '../../../context/ContextProvider'
-import { translate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
 import {
 	NumberInputModal,
 	TextInputModal,
@@ -20,23 +20,23 @@ export function ListLiterals({ setLiteral }: ListLiteralsProps) {
 
 	const literalsList = [
 		{
-			name: translate('expression.aNumber'),
+			name: wTranslate('expression.aNumber'),
 			onPress: () => setShowNumberModal(true),
 		},
 		{
-			name: translate('expression.aString'),
+			name: wTranslate('expression.aString'),
 			onPress: () => setShowTextModal(true),
 		},
 		{
-			name: translate('expression.true'),
+			name: wTranslate('expression.true'),
 			onPress: () => setLiteral(new Literal({ value: true })),
 		},
 		{
-			name: translate('expression.false'),
+			name: wTranslate('expression.false'),
 			onPress: () => setLiteral(new Literal({ value: false })),
 		},
 		{
-			name: translate('expression.null'),
+			name: wTranslate('expression.null'),
 			onPress: () => setLiteral(new Literal({ value: null })),
 		},
 	]

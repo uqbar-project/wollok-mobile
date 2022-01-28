@@ -1,15 +1,11 @@
-import {
-	CompositeNavigationProp,
-	useNavigation,
-} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, withTheme } from 'react-native-paper'
 import { Expression, Name } from 'wollok-ts/dist/model'
-import { EntitiesScreenNavigationProp } from '../../pages/Entities/Entities'
 import { ExpressionMakerScreenProp } from '../../pages/ExpressionMaker/ExpressionMaker'
 import { Theme } from '../../theme'
-import { translate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation-helpers'
 import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
 
 type Props = {
@@ -21,13 +17,7 @@ type Props = {
 
 const ExpressionView = (props: Props) => {
 	const { value, setValue } = props
-	const navigation =
-		useNavigation<
-			CompositeNavigationProp<
-				ExpressionMakerScreenProp,
-				EntitiesScreenNavigationProp
-			>
-		>()
+	const navigation = useNavigation<ExpressionMakerScreenProp>()
 	const goToExpressionMaker = () => {
 		navigation.push('ExpressionMaker', {
 			onSubmit: setValue,
@@ -52,7 +42,7 @@ const ExpressionView = (props: Props) => {
 			) : (
 				<Text style={styles.initialValuePlaceholder}>
 					{/* TODO: Param this text? */}
-					{translate('entityDetails.attributeModal.addAnInitialValue')}
+					{wTranslate('entityDetails.attributeModal.addAnInitialValue')}
 				</Text>
 			)}
 		</View>

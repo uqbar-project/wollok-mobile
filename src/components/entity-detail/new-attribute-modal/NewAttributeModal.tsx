@@ -5,7 +5,7 @@ import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Field } from 'wollok-ts/dist/model'
 import { useEntity } from '../../../context/EntityProvider'
 import { Theme } from '../../../theme'
-import { translate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
 import CheckIcon from '../../ui/CheckIcon'
 import ExpressionView from '../../ui/ExpressionView'
 import FormModal from '../../ui/FormModal/FormModal'
@@ -35,25 +35,25 @@ const AttributeFormModal = (props: Props) => {
 			checked: isProperty,
 			setChecked: setProperty,
 			icons: ATTRIBUTE_ICONS.property,
-			text: upperCaseFirst(translate('entityDetails.attributeModal.property')),
+			text: upperCaseFirst(wTranslate('entityDetails.attributeModal.property')),
 		},
 		{
 			checked: isConstant,
 			setChecked: setConstant,
 			icons: ATTRIBUTE_ICONS.constant,
-			text: upperCaseFirst(translate('entityDetails.attributeModal.constant')),
+			text: upperCaseFirst(wTranslate('entityDetails.attributeModal.constant')),
 		},
 	]
 
 	return (
 		<FormModal
-			title={translate('entityDetails.attributeModal.newAttribute')}
+			title={wTranslate('entityDetails.attributeModal.newAttribute')}
 			resetForm={resetForm}
 			onSubmit={newAttribute}
 			visible={visible}
 			setVisible={setVisible}>
 			<TextInput
-				label={translate('entityDetails.attributeModal.nameOfAttribute')}
+				label={wTranslate('entityDetails.attributeModal.nameOfAttribute')}
 				onChangeText={setName}
 			/>
 

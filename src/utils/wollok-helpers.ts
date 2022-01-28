@@ -11,6 +11,7 @@ import {
 	Module,
 	Name,
 	Node,
+	Parameter,
 	Singleton,
 	Test,
 	Variable,
@@ -18,6 +19,12 @@ import {
 import { last } from './commons'
 
 export type Named = { name: Name }
+
+export type Referenciable = Variable | Field | Parameter
+
+export type EntityMemberWithBody = Method | Test
+
+export type EntityMember = EntityMemberWithBody | Field
 
 export function allFields(module: Module): List<Field> {
 	return module.hierarchy().flatMap(parent => parent.fields())
@@ -35,18 +42,24 @@ export function isNamedSingleton(node: Node): node is Singleton & Named {
 	return node.is('Singleton') && !!node.name
 }
 
-export function methodLabel(method: Method) {
+export function methodLabel(method: Method): string {
 	return `${method.name}(${method.parameters.map(_ => _.name).join(',')})`
+}
+
+export function entityMemberLabel(node: EntityMemberWithBody): string {
+	return node.is('Method') ? methodLabel(node) : node.name
 }
 
 export function literalClassFQN(literal: Literal): Name {
 	return `wollok.lang.${upperCaseFirst(typeof literal.value)}`
 }
 
-export function allScopedVariables(method: Method) {
-	const fields = allFields(method.parent())
-	const params = method.parameters
-	const methodVars = allVariables(method)
+export function allScopedVariables(
+	node: EntityMemberWithBody,
+): Referenciable[] {
+	const fields = allFields(node.parent())
+	const params = node.is('Method') ? node.parameters : []
+	const methodVars = allVariables(node)
 
 	return [...fields, ...params, ...methodVars]
 }

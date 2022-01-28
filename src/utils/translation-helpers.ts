@@ -9,7 +9,7 @@ const translationGetters: { [locale: string]: any } = {
 	en: () => require('../../translations/en.json'),
 }
 
-export const translate =
+export const wTranslate =
 	memoize<(key: string, config?: i18n.TranslateOptions) => string>( // prettier-ignore
 		(key, config) => i18n.t(key, config),
 		(key, config) => (config ? key + JSON.stringify(config) : key),
@@ -24,7 +24,7 @@ export function setI18nConfig() {
 		fallback
 
 	// clear translation cache
-	translate.cache.clear!()
+	wTranslate.cache.clear!()
 	// update layout direction
 	I18nManager.forceRTL(isRTL)
 	// set i18n-js config

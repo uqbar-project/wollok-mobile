@@ -14,7 +14,7 @@ import {
 import { useContext } from '../../../context/ContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
 import { ExpressionMakerScreenProp } from '../../../pages/ExpressionMaker/ExpressionMaker'
-import { translate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
 import {
 	allMethods,
 	isNamedSingleton,
@@ -39,7 +39,7 @@ export function ListMessages({ expression, setMessage }: ListMessagesProps) {
 		/>
 	) : (
 		<Text style={styles.suggestion}>
-			{translate('expression.notSeggestions')}
+			{wTranslate('expression.notSeggestions')}
 		</Text>
 	)
 }

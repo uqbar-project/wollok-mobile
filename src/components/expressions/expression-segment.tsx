@@ -26,8 +26,8 @@ export const MessageSegment = (props: { send: Send; index: number }) => {
 			<Bullet color="#4F518C" index={props.index + 1}>
 				<View style={style.row}>
 					<Text>{props.send.message}(</Text>
-					{props.send.args.map(a => (
-						<Parameter color="#907AD6">
+					{props.send.args.map((a, i) => (
+						<Parameter key={i} color="#907AD6">
 							{getVisualSegment(a, props.index - 1)}
 						</Parameter>
 					))}

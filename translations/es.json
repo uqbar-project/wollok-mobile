@@ -49,7 +49,17 @@
 		}
 	},
 	"sentence": {
-		"assignment": "asignación",
-		"selectVariable": "Seleccionar variable"
+		"assignment": "Asignar variable",
+		"selectVariable": "Seleccionar variable",
+		"messageSend": "Enviar mensaje"
+	},
+	"tests": {
+		"title": "Grupos de tests",
+		"describeName": "Nombre del grupo",
+		"newTest": "Crear test",
+		"newTestName": "Nombre del test"
+	},
+	"project": {
+		"title": "Mi Proyecto"
 	}
 }

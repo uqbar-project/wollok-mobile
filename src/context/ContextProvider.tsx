@@ -3,11 +3,11 @@ import React, {
 	useContext as useReactContext,
 	useState,
 } from 'react'
-import { List, Method, Module, Name } from 'wollok-ts/dist/model'
+import { List, Method, Module, Name, Test } from 'wollok-ts/dist/model'
 import { OneOrMany } from '../utils/type-helpers'
 import { Named } from '../utils/wollok-helpers'
 
-export type Context = Module | Method
+export type Context = Module | Method | Test
 
 export const ContextContext = createContext<{
 	context: Context

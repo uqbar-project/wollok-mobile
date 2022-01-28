@@ -6,13 +6,13 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Name } from 'wollok-ts/dist/model'
 import { ProjectProvider } from './context/ProjectProvider'
-import { Entities } from './pages/Entities/Entities'
-import EntityDetails from './pages/EntityDetails/EntityDetails'
+import EntityStack from './pages/EntityStack'
+import { Home } from './pages/Home'
 import { theme } from './theme'
-import { setI18nConfig, translate } from './utils/translation-helpers'
+import { setI18nConfig, wTranslate } from './utils/translation-helpers'
 
 export type RootStackParamList = {
-	Entities: undefined
+	Home: undefined
 	EntityStack: { entityFQN: Name }
 }
 
@@ -34,16 +34,16 @@ const App = () => {
 				<NavigationContainer theme={theme}>
 					<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
 						<Stack.Screen
-							name="Entities"
-							component={Entities}
+							name="Home"
+							component={Home}
 							options={{
-								title: upperCaseFirst(translate('entities.title')),
+								title: upperCaseFirst(wTranslate('project.title')),
 								headerTitleAlign: 'center',
 							}}
 						/>
 						<Stack.Screen
 							name="EntityStack"
-							component={EntityDetails}
+							component={EntityStack}
 							options={{ headerShown: false }}
 						/>
 					</Stack.Navigator>
