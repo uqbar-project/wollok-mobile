@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { List } from 'react-native-paper'
-import { Expression, Literal } from 'wollok-ts/dist/model'
+import { Expression, Literal, Self } from 'wollok-ts/dist/model'
 import { useContext } from '../../../context/ContextProvider'
 import { wTranslate } from '../../../utils/translation-helpers'
 import {
@@ -38,6 +38,10 @@ export function ListLiterals({ setLiteral }: ListLiteralsProps) {
 		{
 			name: wTranslate('expression.null'),
 			onPress: () => setLiteral(new Literal({ value: null })),
+		},
+		{
+			name: 'self',
+			onPress: () => setLiteral(new Self()),
 		},
 	]
 
