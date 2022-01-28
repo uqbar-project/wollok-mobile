@@ -1,7 +1,7 @@
 import React from 'react'
 import { List } from 'react-native-paper'
 import { Expression, Reference } from 'wollok-ts/dist/model'
-import { useContext } from '../../../context/ContextProvider'
+import { useExpressionContext } from '../../../context/ExpressionContextProvider'
 import { allFields, allScopedVariables } from '../../../utils/wollok-helpers'
 
 type ListVariablesProps = {
@@ -11,7 +11,7 @@ export function ListVariables({ setReference }: ListVariablesProps) {
 	const {
 		context,
 		actions: { filterBySearch },
-	} = useContext()
+	} = useExpressionContext()
 	const variables = context.is('Module')
 		? allFields(context)
 		: allScopedVariables(context)

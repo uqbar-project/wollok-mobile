@@ -13,9 +13,9 @@ import { ExpressionDisplay } from '../../components/expressions/ExpressionDispla
 import { SubmitCheckButton } from '../../components/ui/Header'
 import {
 	Context,
-	ContextProvider,
-	useContext,
-} from '../../context/ContextProvider'
+	ExpressionContextProvider,
+	useExpressionContext,
+} from '../../context/ExpressionContextProvider'
 import { useProject } from '../../context/ProjectProvider'
 import { wTranslate } from '../../utils/translation-helpers'
 import { isMethodFQN, methodByFQN } from '../../utils/wollok-helpers'
@@ -40,7 +40,7 @@ function ExpressionMaker(props: {
 	const {
 		search,
 		actions: { setSearch, clearSearch },
-	} = useContext()
+	} = useExpressionContext()
 	const [expression, setInitialExpression] = useState(props.initialExpression)
 
 	function setExpression(e?: Expression) {
@@ -131,11 +131,11 @@ export default function ({
 		? methodByFQN(project, contextFQN)
 		: project.getNodeByFQN<Module>(contextFQN)
 	return (
-		<ContextProvider context={context} fqn={contextFQN}>
+		<ExpressionContextProvider context={context} fqn={contextFQN}>
 			<ExpressionMaker
 				onSubmit={onSubmit}
 				initialExpression={initialExpression}
 			/>
-		</ContextProvider>
+		</ExpressionContextProvider>
 	)
 }

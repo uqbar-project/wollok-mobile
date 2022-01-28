@@ -1,8 +1,4 @@
-import React, {
-	createContext,
-	useContext as useReactContext,
-	useState,
-} from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { List, Method, Module, Name, Test } from 'wollok-ts/dist/model'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { Named } from '../utils/wollok-helpers'
@@ -22,7 +18,7 @@ type Actions = {
 	filterBySearch: <T extends Named>(entities: List<T>) => List<T>
 }
 
-export function ContextProvider(
+export function ExpressionContextProvider(
 	props: ParentComponentProp<{
 		context: Context
 		fqn: Name
@@ -54,8 +50,8 @@ export function ContextProvider(
 	)
 }
 
-export function useContext() {
-	const context = useReactContext(ContextContext)
+export function useExpressionContext() {
+	const context = useContext(ContextContext)
 	if (context === null) {
 		throw new Error('useContext must be used within an ContextProvider')
 	}
