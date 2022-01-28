@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react'
 import { Module } from 'wollok-ts/dist/model'
-import { OneOrMany } from '../utils/type-helpers'
+import { ParentComponentProp } from '../utils/type-helpers'
 import { EntityMember } from '../utils/wollok-helpers'
 import { useProject } from './ProjectProvider'
 
@@ -14,10 +14,11 @@ type Actions = {
 	changeMember: (oldMember: EntityMember, newMember: EntityMember) => void
 }
 
-export function EntityProvider(props: {
-	children: OneOrMany<JSX.Element>
-	entity: Module
-}) {
+export function EntityProvider(
+	props: ParentComponentProp<{
+		entity: Module
+	}>,
+) {
 	const { children, entity } = props
 	const {
 		actions: { rebuildEnvironment },

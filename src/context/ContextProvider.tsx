@@ -4,7 +4,7 @@ import React, {
 	useState,
 } from 'react'
 import { List, Method, Module, Name, Test } from 'wollok-ts/dist/model'
-import { OneOrMany } from '../utils/type-helpers'
+import { ParentComponentProp } from '../utils/type-helpers'
 import { Named } from '../utils/wollok-helpers'
 
 export type Context = Module | Method | Test
@@ -22,11 +22,12 @@ type Actions = {
 	filterBySearch: <T extends Named>(entities: List<T>) => List<T>
 }
 
-export function ContextProvider(props: {
-	children: OneOrMany<JSX.Element>
-	context: Context
-	fqn: Name
-}) {
+export function ContextProvider(
+	props: ParentComponentProp<{
+		context: Context
+		fqn: Name
+	}>,
+) {
 	const { children, context, fqn } = props
 	const [search, setSearch] = useState('')
 

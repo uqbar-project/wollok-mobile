@@ -9,7 +9,7 @@ import {
 import { Text } from 'react-native-paper'
 import { Expression, LiteralValue, Send } from 'wollok-ts/dist/model'
 import { useTheme } from '../../theme'
-import { OneOrMany } from '../../utils/type-helpers'
+import { ParentComponentProp } from '../../utils/type-helpers'
 import { getVisualSegment } from './ExpressionDisplay'
 
 export const ReferenceSegment = (props: { text: string; index: number }) => {
@@ -56,11 +56,12 @@ export const LiteralSegment = (props: {
 	)
 }
 
-export const Pill = (props: {
-	children: OneOrMany<JSX.Element>
-	color: ColorValue
-	index: number
-}) => {
+export const Pill = (
+	props: ParentComponentProp<{
+		color: ColorValue
+		index: number
+	}>,
+) => {
 	return (
 		<View
 			style={[
@@ -73,11 +74,12 @@ export const Pill = (props: {
 	)
 }
 
-const Bullet = (props: {
-	color: string
-	index: number
-	children: OneOrMany<JSX.Element>
-}) => {
+const Bullet = (
+	props: ParentComponentProp<{
+		color: string
+		index: number
+	}>,
+) => {
 	const bulletCurve = 20
 	const curve: StyleProp<ViewStyle> =
 		props.index > 0

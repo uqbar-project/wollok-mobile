@@ -17,7 +17,7 @@ import {
 import WRE from 'wollok-ts/dist/wre/wre.json'
 import WRENatives from 'wollok-ts/dist/wre/wre.natives'
 import { log } from '../utils/commons'
-import { OneOrMany } from '../utils/type-helpers'
+import { ParentComponentProp } from '../utils/type-helpers'
 import { mainDescribe, mainModules } from './initialProject'
 
 export const ProjectContext = createContext<{
@@ -32,7 +32,7 @@ type Actions = {
 	runTest: (test: Test) => boolean
 }
 
-export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
+export function ProjectProvider(props: ParentComponentProp) {
 	const [project, setProject] = useState<Environment>(
 		buildEnvironment(
 			'tests',
