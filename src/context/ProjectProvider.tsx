@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import 'react-native-get-random-values'
 import link from 'wollok-ts/dist/linker'
 import {
@@ -14,9 +14,12 @@ import {
 	Test,
 } from 'wollok-ts/dist/model'
 import WRE from 'wollok-ts/dist/wre/wre.json'
-import { OneOrMany } from '../utils/type-helpers'
+import { ParentComponentProp } from '../utils/type-helpers'
 import { interpretTest, TestRun } from '../utils/wollok-helpers'
+import { createContextHook } from './create-context-hook'
 import { mainDescribe, mainModules } from './initialProject'
+
+export const mainPackageName = 'main'
 
 export const ProjectContext = createContext<{
 	project: Environment
@@ -30,12 +33,16 @@ type Actions = {
 	runTest: (test: Test) => TestRun
 }
 
-export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
+export function ProjectProvider(props: ParentComponentProp) {
 	const [project, setProject] = useState<Environment>(
 		buildEnvironment(
 			'tests',
 			[mainDescribe],
-			buildEnvironment('main', mainModules, fromJSON<Environment>(WRE)),
+			buildEnvironment(
+				mainPackageName,
+				mainModules,
+				fromJSON<Environment>(WRE),
+			),
 		),
 	)
 
@@ -45,10 +52,10 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 		base?: Environment,
 	): Environment {
 		const mainImport =
-			name !== 'main'
+			name !== mainPackageName
 				? [
 						new Import({
-							entity: new Reference({ name: 'main' }),
+							entity: new Reference({ name: mainPackageName }),
 							isGeneric: true,
 						}),
 				  ]
@@ -66,7 +73,7 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 	}
 
 	function rebuildEnvironment(entity: Entity) {
-		const packageName = entity.is('Describe') ? 'tests' : 'main'
+		const packageName = entity.is('Describe') ? 'tests' : mainPackageName
 		setProject(buildEnvironment(packageName, [entity]))
 		//TODO: Run validations
 	}
@@ -86,10 +93,7 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 	)
 }
 
-export function useProject() {
-	const context = useContext(ProjectContext)
-	if (context === null) {
-		throw new Error('useProject must be used within a ProjectProvider')
-	}
-	return context
-}
+export const useProject = createContextHook(ProjectContext, {
+	hookName: 'useProject',
+	contextName: 'ProjectProvider',
+})

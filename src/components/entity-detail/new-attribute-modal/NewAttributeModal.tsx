@@ -7,7 +7,7 @@ import { useEntity } from '../../../context/EntityProvider'
 import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation-helpers'
 import CheckIcon from '../../ui/CheckIcon'
-import ExpressionView from '../../ui/ExpressionView'
+import ExpressionInput from '../../ui/ExpressionInput'
 import FormModal from '../../ui/FormModal/FormModal'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 
@@ -56,20 +56,22 @@ const AttributeFormModal = (props: Props) => {
 				label={wTranslate('entityDetails.attributeModal.nameOfAttribute')}
 				onChangeText={setName}
 			/>
-
-			{checkboxes.map(cbox => {
-				return (
+			<>
+				{checkboxes.map(cbox => (
 					<View key={cbox.text} style={styles.checkbox}>
 						<CheckIcon {...cbox} />
 						<Text style={styles.constName}>{cbox.text}</Text>
 					</View>
-				)
-			})}
+				))}
+			</>
 
-			<ExpressionView
+			<ExpressionInput
 				value={initialValue}
 				setValue={setInitialValue}
 				fqn={entity.fullyQualifiedName()}
+				inputPlaceholder={wTranslate(
+					'entityDetails.attributeModal.addAnInitialValue',
+				)}
 			/>
 		</FormModal>
 	)

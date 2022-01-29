@@ -1,7 +1,8 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext } from 'react'
 import { Module } from 'wollok-ts/dist/model'
-import { OneOrMany } from '../utils/type-helpers'
+import { ParentComponentProp } from '../utils/type-helpers'
 import { EntityMember } from '../utils/wollok-helpers'
+import { createContextHook } from './create-context-hook'
 import { useProject } from './ProjectProvider'
 
 export const EntityContext = createContext<{
@@ -14,10 +15,11 @@ type Actions = {
 	changeMember: (oldMember: EntityMember, newMember: EntityMember) => void
 }
 
-export function EntityProvider(props: {
-	children: OneOrMany<JSX.Element>
-	entity: Module
-}) {
+export function EntityProvider(
+	props: ParentComponentProp<{
+		entity: Module
+	}>,
+) {
 	const { children, entity } = props
 	const {
 		actions: { rebuildEnvironment },
@@ -50,10 +52,7 @@ export function EntityProvider(props: {
 	)
 }
 
-export function useEntity() {
-	const context = useContext(EntityContext)
-	if (context === null) {
-		throw new Error('useEntity must be used within an EntityProvider')
-	}
-	return context
-}
+export const useEntity = createContextHook(EntityContext, {
+	hookName: 'useEntity',
+	contextName: 'EntityProvider',
+})

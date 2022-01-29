@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { List } from 'react-native-paper'
-import { Expression, Literal } from 'wollok-ts/dist/model'
-import { useContext } from '../../../context/ContextProvider'
+import { Expression, Literal, Self } from 'wollok-ts/dist/model'
+import { useExpressionContext } from '../../../context/ExpressionContextProvider'
 import { wTranslate } from '../../../utils/translation-helpers'
 import {
 	NumberInputModal,
@@ -14,7 +14,7 @@ type ListLiteralsProps = {
 export function ListLiterals({ setLiteral }: ListLiteralsProps) {
 	const {
 		actions: { filterBySearch },
-	} = useContext()
+	} = useExpressionContext()
 	const [showNumberModal, setShowNumberModal] = useState(false)
 	const [showTextModal, setShowTextModal] = useState(false)
 
@@ -38,6 +38,10 @@ export function ListLiterals({ setLiteral }: ListLiteralsProps) {
 		{
 			name: wTranslate('expression.null'),
 			onPress: () => setLiteral(new Literal({ value: null })),
+		},
+		{
+			name: 'self',
+			onPress: () => setLiteral(new Self()),
 		},
 	]
 

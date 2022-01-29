@@ -1,6 +1,7 @@
 {
 	"ok": "ok",
 	"clear": "limpiar",
+	"enterValue": "ingresar valor", 
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -32,12 +33,12 @@
 	},
 	"expression": {
 		"variables": "Variables",
-		"title": "Crea una expresion",
+		"title": "Crea una expresión",
 		"mainObjects": "Mis objectos",
 		"wollokObjects": "Objectos en Wollok",
 		"literals": "Literales",
 		"messages": "Mensajes",
-		"aNumber": "Un numero",
+		"aNumber": "Un número",
 		"aString": "Un texto",
 		"true": "Verdadero",
 		"false": "Falso",

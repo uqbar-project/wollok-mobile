@@ -1,11 +1,8 @@
-import React, {
-	createContext,
-	useContext as useReactContext,
-	useState,
-} from 'react'
+import React, { createContext, useState } from 'react'
 import { List, Method, Module, Name, Test } from 'wollok-ts/dist/model'
-import { OneOrMany } from '../utils/type-helpers'
+import { ParentComponentProp } from '../utils/type-helpers'
 import { Named } from '../utils/wollok-helpers'
+import { createContextHook } from './create-context-hook'
 
 export type Context = Module | Method | Test
 
@@ -22,11 +19,12 @@ type Actions = {
 	filterBySearch: <T extends Named>(entities: List<T>) => List<T>
 }
 
-export function ContextProvider(props: {
-	children: OneOrMany<JSX.Element>
-	context: Context
-	fqn: Name
-}) {
+export function ExpressionContextProvider(
+	props: ParentComponentProp<{
+		context: Context
+		fqn: Name
+	}>,
+) {
 	const { children, context, fqn } = props
 	const [search, setSearch] = useState('')
 
@@ -53,10 +51,7 @@ export function ContextProvider(props: {
 	)
 }
 
-export function useContext() {
-	const context = useReactContext(ContextContext)
-	if (context === null) {
-		throw new Error('useContext must be used within an ContextProvider')
-	}
-	return context
-}
+export const useExpressionContext = createContextHook(ContextContext, {
+	contextName: 'ExpressionContextProvider',
+	hookName: 'useExpressionContext',
+})

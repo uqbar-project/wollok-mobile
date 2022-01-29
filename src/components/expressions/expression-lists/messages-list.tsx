@@ -11,7 +11,7 @@ import {
 	Method,
 	Send,
 } from 'wollok-ts/dist/model'
-import { useContext } from '../../../context/ContextProvider'
+import { useExpressionContext } from '../../../context/ExpressionContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
 import { ExpressionMakerScreenProp } from '../../../pages/ExpressionMaker/ExpressionMaker'
 import { wTranslate } from '../../../utils/translation-helpers'
@@ -28,7 +28,7 @@ type ListMessagesProps = {
 }
 export function ListMessages({ expression, setMessage }: ListMessagesProps) {
 	const { project } = useProject()
-	const { search } = useContext()
+	const { search } = useExpressionContext()
 	const methods = methodsFor(project, expression, search)
 
 	return methods.length ? (
@@ -51,7 +51,7 @@ const MessageList = (props: {
 }) => {
 	const {
 		actions: { filterBySearch },
-	} = useContext()
+	} = useExpressionContext()
 	return (
 		<>
 			{filterBySearch(props.methods).map(m => (
@@ -76,7 +76,7 @@ function MessageItem({
 	onSubmit: (method: Send) => void
 }) {
 	const navigation = useNavigation<ExpressionMakerScreenProp>()
-	const { fqn } = useContext()
+	const { fqn } = useExpressionContext()
 
 	function onPress() {
 		if (m.parameters.length) {

@@ -9,19 +9,20 @@ import {
 } from 'react-native-paper'
 import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation-helpers'
-import { OneOrMany } from '../../../utils/type-helpers'
+import { ParentComponentProp } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 
-function FormModal(props: {
-	visible: boolean
-	setVisible: (value: boolean) => void
-	children: OneOrMany<Element>
-	onSubmit: () => void
-	resetForm?: () => void
-	title?: string
-	valid?: boolean
-	theme: Theme
-}) {
+function FormModal(
+	props: ParentComponentProp<{
+		visible: boolean
+		setVisible: (value: boolean) => void
+		onSubmit: () => void
+		resetForm?: () => void
+		title?: string
+		valid?: boolean
+		theme: Theme
+	}>,
+) {
 	const styles = stylesheet(props.theme)
 
 	const disabledSubmit = props.valid === undefined ? false : !props.valid

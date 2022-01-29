@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import { FAB, Portal, Provider, withTheme } from 'react-native-paper'
 import { Theme } from '../../theme'
-import { OneOrMany } from '../../utils/type-helpers'
+import { ParentComponentProp } from '../../utils/type-helpers'
 
 type Action = React.ComponentProps<typeof FAB.Group>['actions'][number]
 
-function MultiFabScreen(props: {
-	theme: Theme
-	children: OneOrMany<Element>
-	actions: Action[]
-}) {
+function MultiFabScreen(
+	props: ParentComponentProp<{
+		theme: Theme
+		actions: Action[]
+	}>,
+) {
 	const [open, setOpen] = useState(false)
 	const theme = props.theme
 

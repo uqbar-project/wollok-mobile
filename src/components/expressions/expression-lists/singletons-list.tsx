@@ -1,7 +1,7 @@
 import React from 'react'
 import { List } from 'react-native-paper'
 import { Expression, Package, Reference } from 'wollok-ts/dist/model'
-import { useContext } from '../../../context/ContextProvider'
+import { useExpressionContext } from '../../../context/ExpressionContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
 import { isNamedSingleton } from '../../../utils/wollok-helpers'
 
@@ -16,7 +16,7 @@ export function ListSingletons({
 	const { project } = useProject()
 	const {
 		actions: { filterBySearch },
-	} = useContext()
+	} = useExpressionContext()
 	const singletons = project
 		.getNodeByFQN<Package>(packageName)
 		.descendants()
@@ -27,7 +27,7 @@ export function ListSingletons({
 				<List.Item
 					key={id}
 					title={name}
-					onPress={() => setReference(new Reference({ name: name! }))}
+					onPress={() => setReference(new Reference({ name }))}
 				/>
 			))}
 		</>
