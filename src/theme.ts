@@ -7,7 +7,9 @@ import { DarkTheme as PaperDarkTheme } from 'react-native-paper'
 import { Theme as PaperTheme } from 'react-native-paper/lib/typescript/types'
 
 export type Theme = PaperTheme &
-	NavigationTheme & { colors: { card: string; success: string } }
+	NavigationTheme & {
+		colors: { card: string; success: string; failure: string }
+	}
 
 const mergedDefaultThemes = merge(NavigationDarkTheme, PaperDarkTheme)
 
@@ -19,6 +21,7 @@ export const theme: Theme = {
 		background: '#292d3d',
 		primary: '#AF254B',
 		success: 'green',
+		failure: 'yellow',
 		text: '#FFFFFF',
 		notification: '#252939',
 		card: '#0C1A31',
