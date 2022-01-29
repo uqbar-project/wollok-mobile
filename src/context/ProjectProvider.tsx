@@ -21,6 +21,8 @@ import { ParentComponentProp } from '../utils/type-helpers'
 import { createContextHook } from './create-context-hook'
 import { mainDescribe, mainModules } from './initialProject'
 
+export const mainPackageName = 'main'
+
 export const ProjectContext = createContext<{
 	project: Environment
 	actions: Actions
@@ -38,7 +40,11 @@ export function ProjectProvider(props: ParentComponentProp) {
 		buildEnvironment(
 			'tests',
 			[mainDescribe],
-			buildEnvironment('main', mainModules, fromJSON<Environment>(WRE)),
+			buildEnvironment(
+				mainPackageName,
+				mainModules,
+				fromJSON<Environment>(WRE),
+			),
 		),
 	)
 
@@ -48,10 +54,10 @@ export function ProjectProvider(props: ParentComponentProp) {
 		base?: Environment,
 	): Environment {
 		const mainImport =
-			name !== 'main'
+			name !== mainPackageName
 				? [
 						new Import({
-							entity: new Reference({ name: 'main' }),
+							entity: new Reference({ name: mainPackageName }),
 							isGeneric: true,
 						}),
 				  ]
@@ -69,7 +75,7 @@ export function ProjectProvider(props: ParentComponentProp) {
 	}
 
 	function rebuildEnvironment(entity: Entity) {
-		const packageName = entity.is('Describe') ? 'tests' : 'main'
+		const packageName = entity.is('Describe') ? 'tests' : mainPackageName
 		setProject(buildEnvironment(packageName, [entity]))
 		//TODO: Run validations
 	}

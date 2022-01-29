@@ -4,7 +4,7 @@ import { Module, Package } from 'wollok-ts/dist/model'
 import EntityComponent from '../../components/entities/Entity/Entity'
 import NewEntityModal from '../../components/entities/NewEntityModal/NewEntityModal'
 import FabAddScreen from '../../components/FabScreens/FabAddScreen'
-import { useProject } from '../../context/ProjectProvider'
+import { mainPackageName, useProject } from '../../context/ProjectProvider'
 
 export function Entities() {
 	const {
@@ -21,7 +21,7 @@ export function Entities() {
 	return (
 		<FabAddScreen onPress={fabPressed}>
 			<ScrollView>
-				{project.getNodeByFQN<Package>('main').members.map(ent => (
+				{project.getNodeByFQN<Package>(mainPackageName).members.map(ent => (
 					<EntityComponent key={ent.name} entity={ent as Module} />
 				))}
 			</ScrollView>
