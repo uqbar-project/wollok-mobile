@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
+import { IconButton } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { RootStackParamList } from '../App'
 import { wTranslate } from '../utils/translation-helpers'
@@ -20,10 +21,12 @@ export function Home() {
 			<Tab.Screen
 				name={upperCaseFirst(wTranslate('entities.title'))}
 				component={Entities}
+				options={{ tabBarIcon: () => <IconButton icon={'drawing-box'} /> }}
 			/>
 			<Tab.Screen
 				name={upperCaseFirst(wTranslate('tests.title'))}
 				component={Describes}
+				options={{ tabBarIcon: () => <IconButton icon={'flask'} /> }}
 			/>
 		</Tab.Navigator>
 	)

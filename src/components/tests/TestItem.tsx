@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { IconButton, List, Text, withTheme } from 'react-native-paper'
+import { Divider, IconButton, List, Text, withTheme } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
 import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
@@ -20,34 +20,35 @@ function TestItem({ item: test, theme }: TestItemProps) {
 	const [testRun, setTestRun] = useState<Maybe<TestRun>>(undefined)
 	const [showMessage, setShowMessage] = useState<boolean>(false)
 	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
-	const { icon, color } = testRun
+	const color = testRun
 		? styleByTestResult(testRun.result, theme)
-		: { icon: 'test-tube-empty', color: theme.colors.disabled }
+		: theme.colors.disabled
 
 	return (
 		<>
 			<List.Item
 				title={test.name}
-				left={() => (
-					<IconButton
-						color={color}
-						icon={icon}
-						onPress={() => {
-							setTestRun(runTest(test))
-						}}
-					/>
-				)}
-				right={() =>
-					testRun?.exception?.message && (
+				left={() => <IconButton icon={'flask'} />}
+				right={() => (
+					<>
+						{testRun?.exception?.message && (
+							<IconButton
+								color={theme.colors.error}
+								icon={'alert-outline'}
+								onPress={() => {
+									setShowMessage(true)
+								}}
+							/>
+						)}
 						<IconButton
-							color={theme.colors.error}
-							icon={'alert-outline'}
+							color={color}
+							icon={'play-circle'}
 							onPress={() => {
-								setShowMessage(true)
+								setTestRun(runTest(test))
 							}}
 						/>
-					)
-				}
+					</>
+				)}
 				onPress={() =>
 					navigator.navigate('EntityMemberDetails', {
 						entityMember: test,
@@ -55,6 +56,7 @@ function TestItem({ item: test, theme }: TestItemProps) {
 					})
 				}
 			/>
+			<Divider />
 			<FormModal
 				visible={showMessage}
 				title={testRun?.exception?.name}
@@ -69,11 +71,11 @@ function TestItem({ item: test, theme }: TestItemProps) {
 function styleByTestResult(result: TestResult, theme: Theme) {
 	switch (result) {
 		case 'Passed':
-			return { icon: 'test-tube', color: theme.colors.success }
+			return theme.colors.success
 		case 'Failure':
-			return { icon: 'test-tube-off', color: theme.colors.failure }
+			return theme.colors.failure
 		case 'Error':
-			return { icon: 'test-tube-off', color: theme.colors.error }
+			return theme.colors.error
 	}
 }
 

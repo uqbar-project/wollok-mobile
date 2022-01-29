@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
-import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Test } from 'wollok-ts/dist/model'
 import { useEntity } from '../../context/EntityProvider'
@@ -14,22 +13,34 @@ export const Tests = function () {
 	const { entity } = useEntity()
 	const tests = entity.members as Test[]
 
+	// TODO: Add a header button to run all tests
+	// const navigation = useNavigation()
+	// React.useLayoutEffect(() => {
+	// 	navigation.setOptions({
+	// 		headerRight: () => (
+	// 			<SubmitCheckButton
+	// 				onSubmit={() => {
+	// 					props.onSubmit(expression!)
+	// 				}}
+	// 			/>
+	// 		),
+	// 	})
+	// }, [navigation, expression, props])
+
 	return (
 		<MultiFabScreen
 			actions={[
 				{
-					icon: 'test-tube',
+					icon: 'flask',
 					label: upperCaseFirst(wTranslate('tests.newTest')),
 					onPress: () => setTestModalVisible(true),
 				},
 			]}>
-			<List.Section>
-				<ScrollView>
-					{tests.map(test => (
-						<TestItem key={test.id} item={test} />
-					))}
-				</ScrollView>
-			</List.Section>
+			<ScrollView>
+				{tests.map(test => (
+					<TestItem key={test.id} item={test} />
+				))}
+			</ScrollView>
 			<NewTestModal
 				visible={testModalVisible}
 				setVisible={setTestModalVisible}
