@@ -2,28 +2,39 @@ import React from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { Expression } from 'wollok-ts/dist/model'
-import { LiteralSegment } from './expression-segment'
+import {
+	LiteralSegment,
+	MessageSegment,
+	ReferenceSegment,
+} from './expression-segment'
 
 export function ExpressionDisplay(props: {
 	expression?: Expression
 	backgroundColor?: ViewStyle['backgroundColor']
+	withIcon?: boolean
 }) {
-	const { expression } = props
+	const { expression, backgroundColor, withIcon, ...innerProps } = props
+	const showIcon = withIcon === undefined ? true : withIcon
 	return (
-		<View style={[display, { backgroundColor: props?.backgroundColor }]}>
-			<IconButton style={codeIcon} icon="chevron-right" />
-			{expression && getVisualSegment(expression)}
+		<View
+			style={[display, { backgroundColor: backgroundColor }]}
+			{...innerProps}>
+			{showIcon && <IconButton style={codeIcon} icon="chevron-right" />}
+			{expression && getVisualSegment(expression, 0)}
 		</View>
 	)
 }
 
-function getVisualSegment(expression: Expression): JSX.Element {
-	var i = 1
+// TODO: Convert to component
+export function getVisualSegment(
+	expression: Expression,
+	i: number,
+): JSX.Element {
 	switch (expression.kind) {
-		// case 'Singleton':
-		// 	return <ObjectSegment text={segment.name} key={index} index={index} />
-		// case 'Method':
-		// 	return <MethodSegment method={segment.} key={index} index={index} />
+		case 'Reference':
+			return <ReferenceSegment text={expression.name} key={i} index={i} />
+		case 'Send':
+			return <MessageSegment send={expression} key={i} index={i} />
 		case 'Literal':
 			return <LiteralSegment value={expression.value} key={i} index={i} />
 		default:
@@ -31,13 +42,13 @@ function getVisualSegment(expression: Expression): JSX.Element {
 	}
 }
 
-const { display, codeIcon } = StyleSheet.create({
+export const { display, codeIcon } = StyleSheet.create({
 	display: {
-		height: 40,
+		paddingVertical: 4,
+		height: 35,
 		alignItems: 'center',
 		flexDirection: 'row',
 		display: 'flex',
-		paddingVertical: 5,
 	},
 	codeIcon: {
 		marginRight: -9,

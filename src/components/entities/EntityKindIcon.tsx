@@ -1,9 +1,9 @@
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
 import { Kind } from 'wollok-ts/dist/model'
+import IconImage from '../ui/IconImage'
 
 export function EntityKindIcon(props: { kind: Kind }) {
-	return <Image source={getImageFromType(props.kind)} style={styles.icon} />
+	return <IconImage icon={getImageFromType(props.kind)} />
 }
 
 function getImageFromType(aKind: Kind) {
@@ -16,9 +16,3 @@ function getImageFromType(aKind: Kind) {
 			return require('../../assets/mixin.png')
 	}
 }
-
-const styles = StyleSheet.create({
-	icon: {
-		alignSelf: 'center',
-	},
-})

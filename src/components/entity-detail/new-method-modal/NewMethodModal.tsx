@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Text, TextInput, withTheme } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { Method, Parameter } from 'wollok-ts/dist/model'
+import { Body, Method, Parameter } from 'wollok-ts/dist/model'
 import { useEntity } from '../../../context/EntityProvider'
 import { Theme } from '../../../theme'
-import { translate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import ParameterInput from './ParameterInput'
 
@@ -23,18 +23,18 @@ const NewMethodModal = (props: {
 
 	return (
 		<FormModal
-			title={translate('entityDetails.methodModal.newMethod')}
+			title={wTranslate('entityDetails.methodModal.newMethod')}
 			resetForm={reset}
 			onSubmit={newMethod}
 			setVisible={props.setVisible}
 			visible={props.visible}>
 			<TextInput
 				onChangeText={setName}
-				label={translate('entityDetails.methodModal.nameOfMethod')}
+				label={wTranslate('entityDetails.methodModal.nameOfMethod')}
 			/>
 
 			<Text style={styles.subtitle}>
-				{upperCaseFirst(translate('entityDetails.methodModal.parameters'))}
+				{upperCaseFirst(wTranslate('entityDetails.methodModal.parameters'))}
 			</Text>
 			{parameters.map((param, i) => (
 				<ParameterInput
@@ -65,7 +65,10 @@ const NewMethodModal = (props: {
 		addMember(
 			new Method({
 				name,
-				parameters: parameters.map(name => new Parameter({ name })),
+				parameters: parameters.map(
+					paramName => new Parameter({ name: paramName }),
+				),
+				body: new Body({ sentences: [] }),
 			}),
 		)
 	}

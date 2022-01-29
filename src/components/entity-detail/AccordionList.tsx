@@ -7,20 +7,19 @@ import { List } from 'wollok-ts/dist/model'
 type Props<Item> = {
 	title: string
 	items: Item[]
-	getVisualItem: (item: Item) => Element
+	VisualItem: React.FC<{ item: Item }>
 }
 export const AccordionList = function <
 	Item extends { name: Key; parameters?: List<any> },
 >(props: Props<Item>) {
 	const reactNavigationTheme = useTheme()
 	const styles = getStyles(reactNavigationTheme)
-
 	return (
 		<ListComponent.Accordion title={props.title}>
 			{props.items.map(item => {
 				return (
 					<View key={`${item.name}${item.parameters?.length}`}>
-						{props.getVisualItem(item)}
+						<props.VisualItem item={item} />
 						<Divider style={styles.divider} />
 					</View>
 				)

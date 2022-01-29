@@ -1,35 +1,49 @@
-import React, { createContext, useContext } from 'react'
-import { Field, Method, Module } from 'wollok-ts/dist/model'
-import { Mutable, OneOrMany } from '../utils/type-helpers'
-
-type Entity = Mutable<Module>
+import React, { createContext } from 'react'
+import { Module } from 'wollok-ts/dist/model'
+import { ParentComponentProp } from '../utils/type-helpers'
+import { EntityMember } from '../utils/wollok-helpers'
+import { createContextHook } from './create-context-hook'
+import { useProject } from './ProjectProvider'
 
 export const EntityContext = createContext<{
-	entity: Entity
+	entity: Module
 	actions: Actions
 } | null>(null)
 
 type Actions = {
-	addMember: (method: Method | Field) => void
+	addMember: (newMember: EntityMember) => void
+	changeMember: (oldMember: EntityMember, newMember: EntityMember) => void
 }
 
-export function EntityProvider(props: {
-	children: OneOrMany<JSX.Element>
-	entity: Entity
-}) {
+export function EntityProvider(
+	props: ParentComponentProp<{
+		entity: Module
+	}>,
+) {
 	const { children, entity } = props
+	const {
+		actions: { rebuildEnvironment },
+	} = useProject()
 
-	const addMember = (newMember: Method | Field) => {
-		// For method instanciation by property
-		const modifiedEntity = entity.copy({
-			members: [...entity.members, newMember],
-		}) as Entity
-		entity.members = modifiedEntity.members
+	const addMember = (newMember: EntityMember) => {
+		rebuildEnvironment(
+			entity.copy({
+				members: [...entity.members, newMember],
+			}) as Module,
+		)
+	}
+
+	const changeMember = (oldMember: EntityMember, newMember: EntityMember) => {
+		rebuildEnvironment(
+			entity.copy({
+				members: [...entity.members.filter(m => m !== oldMember), newMember],
+			}) as Module,
+		)
 	}
 
 	const initialContext = {
 		entity: entity,
-		actions: { addMember },
+		actions: { addMember, changeMember },
 	}
 	return (
 		<EntityContext.Provider value={initialContext}>
@@ -38,10 +52,7 @@ export function EntityProvider(props: {
 	)
 }
 
-export function useEntity() {
-	const context = useContext(EntityContext)
-	if (context === null) {
-		throw new Error('useEntity must be used within an EntityProvider')
-	}
-	return context
-}
+export const useEntity = createContextHook(EntityContext, {
+	hookName: 'useEntity',
+	contextName: 'EntityProvider',
+})

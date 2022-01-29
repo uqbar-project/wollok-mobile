@@ -1,6 +1,7 @@
 {
 	"ok": "ok",
 	"clear": "clear",
+	"enterValue": "enter value",
 	"entities": {
 		"title": "entities",
 		"kinds": {
@@ -31,14 +32,35 @@
 		}
 	},
 	"expression": {
+		"variables": "Variables",
 		"title": "Create an expression",
-		"objects": "Objects",
+		"mainObjects": "My objects",
+		"wollokObjects": "Wollok objects",
 		"literals": "Literals",
 		"messages": "Messages",
 		"aNumber": "A number",
 		"aString": "A string",
 		"true": "True",
 		"false": "False",
-		"null": "Null"
+		"null": "Null",
+		"notSeggestions": "We don't have suggestions here, use search input",
+		"search": {
+			"message": "Search any message",
+			"entity": "Search any entity"
+		}
+	},
+	"sentence": {
+		"assignment": "Variable assignment",
+		"selectVariable": "Select variable",
+		"messageSend": "Send message"
+	},
+	"tests": {
+		"title": "Groups of tests",
+		"describeName": "New group name",
+		"newTest": "New test",
+		"newTestName": "New test name"
+	},
+	"project": {
+		"title": "My Project"
 	}
 }

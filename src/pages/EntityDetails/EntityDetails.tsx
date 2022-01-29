@@ -1,21 +1,20 @@
-import { RouteProp } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { RootStackParamList } from '../../App'
+import { Field, is, Method } from 'wollok-ts/dist/model'
 import { AccordionList } from '../../components/entity-detail/AccordionList'
-import AttributeItem from '../../components/entity-detail/AttributeItem/AttributeItem'
+import AttributeItemComponent from '../../components/entity-detail/AttributeItem/AttributeItem'
 import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
-import { translate } from '../../utils/translation-helpers'
-import { EntityProvider, useEntity } from '../../context/EntityProvider'
-import { Field, is, Method } from 'wollok-ts/dist/model'
+import { useEntity } from '../../context/EntityProvider'
+import { wTranslate } from '../../utils/translation-helpers'
+import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
+import { EntityMemberScreenNavigationProp } from '../EntityMemberDetail'
 
-type Route = RouteProp<RootStackParamList, 'EntityDetails'>
-
-const EntityDetails = function () {
+export const EntityDetails = function () {
 	const [methodModalVisible, setMethodModalVisible] = useState(false)
 	const [attributeModalVisible, setAttributeModalVisible] = useState(false)
 	const { entity } = useEntity()
@@ -25,26 +24,26 @@ const EntityDetails = function () {
 			actions={[
 				{
 					icon: 'database',
-					label: upperCaseFirst(translate('entityDetails.attribute')),
+					label: upperCaseFirst(wTranslate('entityDetails.attribute')),
 					onPress: () => setAttributeModalVisible(true),
 				},
 				{
 					icon: 'code-braces',
-					label: upperCaseFirst(translate('entityDetails.method')),
+					label: upperCaseFirst(wTranslate('entityDetails.method')),
 					onPress: () => setMethodModalVisible(true),
 				},
 			]}>
 			<List.Section>
 				<ScrollView>
 					<AccordionList<Field>
-						title={translate('entityDetails.attributes').toUpperCase()}
+						title={wTranslate('entityDetails.attributes').toUpperCase()}
 						items={entity.members.filter(is('Field')) as Field[]}
-						getVisualItem={attributeItem}
+						VisualItem={AttributeItem}
 					/>
 					<AccordionList<Method>
-						title={translate('entityDetails.methods').toUpperCase()}
+						title={wTranslate('entityDetails.methods').toUpperCase()}
 						items={entity.members.filter(is('Method')) as Method[]}
-						getVisualItem={methodItem}
+						VisualItem={MethodItem}
 					/>
 				</ScrollView>
 			</List.Section>
@@ -60,23 +59,22 @@ const EntityDetails = function () {
 	)
 }
 
-function attributeItem(attribute: Field): Element {
-	return <AttributeItem key={attribute.name} attribute={attribute} />
+function AttributeItem({ item: attribute }: { item: Field }) {
+	return <AttributeItemComponent key={attribute.name} attribute={attribute} />
 }
 
-function methodItem(method: Method): Element {
+function MethodItem({ item: method }: { item: Method }) {
+	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
 	return (
 		<List.Item
 			key={method.name}
-			title={`${method.name}(${method.parameters.map(_ => _.name)})`}
+			title={methodLabel(method)}
+			onPress={() =>
+				navigator.navigate('EntityMemberDetails', {
+					entityMember: method,
+					fqn: methodFQN(method),
+				})
+			}
 		/>
-	)
-}
-
-export default function (props: { route: Route }) {
-	return (
-		<EntityProvider entity={props.route.params.entity}>
-			<EntityDetails />
-		</EntityProvider>
 	)
 }

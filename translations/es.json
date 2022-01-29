@@ -1,6 +1,7 @@
 {
 	"ok": "ok",
 	"clear": "limpiar",
+	"enterValue": "ingresar valor", 
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -31,14 +32,35 @@
 		}
 	},
 	"expression": {
-		"title": "Crea una expresion",
-		"objects": "Objetos",
+		"variables": "Variables",
+		"title": "Crea una expresión",
+		"mainObjects": "Mis objectos",
+		"wollokObjects": "Objectos en Wollok",
 		"literals": "Literales",
 		"messages": "Mensajes",
-		"aNumber": "Un numero",
+		"aNumber": "Un número",
 		"aString": "Un texto",
 		"true": "Verdadero",
 		"false": "Falso",
-		"null": "Nulo"
+		"null": "Nulo",
+		"notSeggestions": "No tenemos sugerencias aquí, usá el panel de búsqueda",
+		"search": {
+			"message": "Buscá algún mensaje",
+			"entity": "Buscá alguna entidad"
+		}
+	},
+	"sentence": {
+		"assignment": "Asignar variable",
+		"selectVariable": "Seleccionar variable",
+		"messageSend": "Enviar mensaje"
+	},
+	"tests": {
+		"title": "Grupos de tests",
+		"describeName": "Nombre del grupo",
+		"newTest": "Crear test",
+		"newTestName": "Nombre del test"
+	},
+	"project": {
+		"title": "Mi Proyecto"
 	}
 }

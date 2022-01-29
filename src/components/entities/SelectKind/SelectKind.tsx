@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { Text, ToggleButton } from 'react-native-paper'
 import { Kind } from 'wollok-ts/dist/model'
-import { translate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
 import { stylesheet } from './styles'
 
 type VisualKind = { kind: Kind; description: string }
@@ -44,7 +44,7 @@ export function SelectKind(props: {
 function translateDescription(kind: VisualKind): VisualKind {
 	return {
 		...kind,
-		description: translate(kind.description, {
+		description: wTranslate(kind.description, {
 			scope: 'entities.kinds',
 		}).toUpperCase(),
 	}

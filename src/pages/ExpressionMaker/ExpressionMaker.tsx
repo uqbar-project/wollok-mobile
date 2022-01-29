@@ -1,72 +1,141 @@
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigation } from '@react-navigation/native'
+import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
-import { View } from 'react-native'
-import { Button, List } from 'react-native-paper'
-import { Literal } from 'wollok-ts/dist/model'
-import { RootStackParamList } from '../../App'
+import { StyleSheet, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
+import { Button, List, TextInput } from 'react-native-paper'
+import { Expression, Module } from 'wollok-ts/dist/model'
+import { ListLiterals } from '../../components/expressions/expression-lists/literals-list'
+import { ListMessages } from '../../components/expressions/expression-lists/messages-list'
+import { ListSingletons } from '../../components/expressions/expression-lists/singletons-list'
+import { ListVariables } from '../../components/expressions/expression-lists/variables-list'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
+import { SubmitCheckButton } from '../../components/ui/Header'
 import {
-	NumberInputModal,
-	TextInputModal,
-} from '../../components/expressions/LiteralModal/LiteralInputModals'
-import { useExpression } from '../../context/ExpressionProvider'
-import { translate } from '../../utils/translation-helpers'
+	Context,
+	ExpressionContextProvider,
+	useExpressionContext,
+} from '../../context/ExpressionContextProvider'
+import { useProject } from '../../context/ProjectProvider'
+import { wTranslate } from '../../utils/translation-helpers'
+import { isMethodFQN, methodByFQN } from '../../utils/wollok-helpers'
+import { EntityStackParamList } from '../EntityStack'
 
 export type ExpressionMakerProp = RouteProp<
-	RootStackParamList,
+	EntityStackParamList,
 	'ExpressionMaker'
 >
 
-function ExpressionMaker() {
+export type ExpressionMakerScreenProp = StackNavigationProp<
+	EntityStackParamList,
+	'ExpressionMaker'
+>
+
+export type ExpressionOnSubmit = (expression: Expression) => void
+
+function ExpressionMaker(props: {
+	initialExpression?: Expression
+	onSubmit: ExpressionOnSubmit
+}) {
 	const {
-		expression,
-		actions: { reset, setExpression },
-	} = useExpression()
-	const [showNumberModal, setShowNumberModal] = useState(false)
-	const [showTextModal, setShowTextModal] = useState(false)
+		search,
+		actions: { setSearch, clearSearch },
+	} = useExpressionContext()
+	const [expression, setInitialExpression] = useState(props.initialExpression)
+
+	function setExpression(e?: Expression) {
+		clearSearch()
+		setInitialExpression(e)
+	}
+
+	function reset() {
+		setExpression(undefined)
+	}
+
+	const navigation = useNavigation()
+	React.useLayoutEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<SubmitCheckButton
+					disabled={!expression}
+					onSubmit={() => {
+						props.onSubmit(expression!)
+					}}
+				/>
+			),
+		})
+	}, [navigation, expression, props])
 
 	return (
 		<View>
-			<ExpressionDisplay backgroundColor="white" expression={expression} />
-			{expression ? (
-				<List.Section>
-					<List.Subheader>{translate('expression.messages')}</List.Subheader>
-				</List.Section>
-			) : (
-				<List.Section>
-					<List.Subheader>{translate('expression.objects')}</List.Subheader>
-
-					<List.Subheader>{translate('expression.literals')}</List.Subheader>
-					<List.Item
-						title={translate('expression.aNumber')}
-						onPress={() => setShowNumberModal(true)}
-					/>
-					<List.Item
-						title={translate('expression.aString')}
-						onPress={() => setShowTextModal(true)}
-					/>
-					<List.Item
-						title={translate('expression.true')}
-						onPress={() => setExpression(new Literal({ value: true }))}
-					/>
-					<List.Item
-						title={translate('expression.false')}
-						onPress={() => setExpression(new Literal({ value: false }))}
-					/>
-					<List.Item
-						title={translate('expression.null')}
-						onPress={() => setExpression(new Literal({ value: null }))}
-					/>
-				</List.Section>
-			)}
-			<Button onPress={reset}>{translate('clear').toLocaleUpperCase()}</Button>
-			<NumberInputModal
-				visible={showNumberModal}
-				setVisible={setShowNumberModal}
+			<ExpressionDisplay
+				backgroundColor="white"
+				withIcon={false}
+				expression={expression}
 			/>
-			<TextInputModal visible={showTextModal} setVisible={setShowTextModal} />
+			<TextInput
+				label={wTranslate(
+					`expression.search.${expression ? 'message' : 'entity'}`,
+				)}
+				value={search}
+				onChangeText={setSearch}
+			/>
+			<ScrollView style={styles.view}>
+				{expression ? (
+					<List.Section>
+						<List.Subheader>{wTranslate('expression.messages')}</List.Subheader>
+						<ListMessages expression={expression} setMessage={setExpression} />
+					</List.Section>
+				) : (
+					<List.Section>
+						<List.Subheader>
+							{wTranslate('expression.variables')}
+						</List.Subheader>
+						<ListVariables setReference={setExpression} />
+
+						<List.Subheader>
+							{wTranslate('expression.mainObjects')}
+						</List.Subheader>
+						<ListSingletons packageName="main" setReference={setExpression} />
+
+						<List.Subheader>{wTranslate('expression.literals')}</List.Subheader>
+						<ListLiterals setLiteral={setExpression} />
+
+						<List.Subheader>
+							{wTranslate('expression.wollokObjects')}
+						</List.Subheader>
+						<ListSingletons packageName="wollok" setReference={setExpression} />
+					</List.Section>
+				)}
+				<Button onPress={reset}>
+					{wTranslate('clear').toLocaleUpperCase()}
+				</Button>
+			</ScrollView>
 		</View>
 	)
 }
 
-export default ExpressionMaker
+const styles = StyleSheet.create({
+	view: { display: 'flex', maxHeight: '85%' },
+})
+
+export default function ({
+	route: {
+		params: { contextFQN, onSubmit, initialExpression },
+	},
+}: {
+	route: RouteProp<EntityStackParamList, 'ExpressionMaker'>
+}) {
+	const { project } = useProject()
+	const context: Context = isMethodFQN(contextFQN)
+		? methodByFQN(project, contextFQN)
+		: project.getNodeByFQN<Module>(contextFQN)
+	return (
+		<ExpressionContextProvider context={context} fqn={contextFQN}>
+			<ExpressionMaker
+				onSubmit={onSubmit}
+				initialExpression={initialExpression}
+			/>
+		</ExpressionContextProvider>
+	)
+}

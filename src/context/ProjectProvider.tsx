@@ -1,95 +1,101 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useState } from 'react'
+import 'react-native-get-random-values'
+import interpret from 'wollok-ts/dist/interpreter/interpreter'
+import link from 'wollok-ts/dist/linker'
 import {
-	Body,
-	Field,
-	Literal,
-	Method,
+	Describe,
+	Entity,
+	Environment,
+	fromJSON,
+	Import,
 	Module,
+	Name,
 	Package,
-	Parameter,
-	Singleton,
+	Reference,
+	Test,
 } from 'wollok-ts/dist/model'
-import { Mutable, OneOrMany } from '../utils/type-helpers'
+import WRE from 'wollok-ts/dist/wre/wre.json'
+import WRENatives from 'wollok-ts/dist/wre/wre.natives'
+import { log } from '../utils/commons'
+import { ParentComponentProp } from '../utils/type-helpers'
+import { createContextHook } from './create-context-hook'
+import { mainDescribe, mainModules } from './initialProject'
 
-export type Project = Mutable<Package>
+export const mainPackageName = 'main'
 
 export const ProjectContext = createContext<{
-	project: Project
+	project: Environment
 	actions: Actions
 } | null>(null)
 
 type Actions = {
-	addEntity: (entity: Module) => void
+	addEntity: (module: Module) => void
+	addDescribe: (test: Describe) => void
+	rebuildEnvironment: (entity: Entity) => void
+	runTest: (test: Test) => boolean
 }
 
-function testMainPackage() {
-	return new Package({
-		name: 'main',
-		members: [
-			new Singleton({
-				name: 'pepita',
-				members: [
-					new Field({
-						name: 'energia',
-						isConstant: false,
-						isProperty: true,
-						value: new Literal({ value: 100 }),
-					}),
-					new Field({
-						name: 'nombre',
-						isConstant: true,
-						isProperty: true,
-						value: new Literal({ value: 'Pepita' }),
-					}),
-					new Method({
-						name: 'vola',
-						parameters: [
-							new Parameter({
-								name: 'kms',
-							}),
-						],
-						body: new Body(),
-					}),
-				],
-			}),
-			new Singleton({
-				name: 'manolo',
-				members: [
-					new Method({
-						name: 'cambiaDeColor',
-						parameters: [
-							new Parameter({
-								name: 'color',
-							}),
-						],
-						body: new Body(),
-					}),
-					new Method({
-						name: 'moveteA',
-						parameters: [
-							new Parameter({
-								name: 'posX',
-							}),
-							new Parameter({
-								name: 'posY',
-							}),
-						],
-						body: new Body(),
-					}),
-				],
-			}),
-		],
-	})
-}
+export function ProjectProvider(props: ParentComponentProp) {
+	const [project, setProject] = useState<Environment>(
+		buildEnvironment(
+			'tests',
+			[mainDescribe],
+			buildEnvironment(
+				mainPackageName,
+				mainModules,
+				fromJSON<Environment>(WRE),
+			),
+		),
+	)
 
-export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
-	const project: Project = testMainPackage()
-
-	const addEntity = (newEntity: Module) => {
-		project.members = [...project.members, newEntity]
+	function buildEnvironment(
+		name: Name,
+		members: Entity[],
+		base?: Environment,
+	): Environment {
+		const mainImport =
+			name !== mainPackageName
+				? [
+						new Import({
+							entity: new Reference({ name: mainPackageName }),
+							isGeneric: true,
+						}),
+				  ]
+				: undefined
+		const pack = new Package({ name, members, imports: mainImport })
+		return link([pack], base ?? project)
 	}
 
-	const initialContext = { project, actions: { addEntity } }
+	function addEntity(newEntity: Module) {
+		rebuildEnvironment(newEntity)
+	}
+
+	function addDescribe(newDescribe: Describe) {
+		rebuildEnvironment(newDescribe)
+	}
+
+	function rebuildEnvironment(entity: Entity) {
+		const packageName = entity.is('Describe') ? 'tests' : mainPackageName
+		setProject(buildEnvironment(packageName, [entity]))
+		//TODO: Run validations
+	}
+
+	function runTest(test: Test) {
+		try {
+			const interpreter = interpret(project, WRENatives)
+			interpreter.exec(test)
+			return true
+		} catch (e: any) {
+			//TODO: Feedback from error
+			log(e.name)
+			return false
+		}
+	}
+
+	const initialContext = {
+		project,
+		actions: { addEntity, addDescribe, rebuildEnvironment, runTest },
+	}
 	return (
 		<ProjectContext.Provider value={initialContext}>
 			{props.children}
@@ -97,10 +103,7 @@ export function ProjectProvider(props: { children: OneOrMany<JSX.Element> }) {
 	)
 }
 
-export function useProject() {
-	const context = useContext(ProjectContext)
-	if (context === null) {
-		throw new Error('useProject must be used within a ProjectProvider')
-	}
-	return context
-}
+export const useProject = createContextHook(ProjectContext, {
+	hookName: 'useProject',
+	contextName: 'ProjectProvider',
+})

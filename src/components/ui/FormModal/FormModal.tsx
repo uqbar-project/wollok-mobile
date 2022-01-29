@@ -8,20 +8,24 @@ import {
 	withTheme,
 } from 'react-native-paper'
 import { Theme } from '../../../theme'
-import { translate } from '../../../utils/translation-helpers'
-import { OneOrMany } from '../../../utils/type-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
+import { ParentComponentProp } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 
-function FormModal(props: {
-	visible: boolean
-	setVisible: (value: boolean) => void
-	children: OneOrMany<Element>
-	onSubmit: () => void
-	resetForm?: () => void
-	title?: string
-	theme: Theme
-}) {
+function FormModal(
+	props: ParentComponentProp<{
+		visible: boolean
+		setVisible: (value: boolean) => void
+		onSubmit: () => void
+		resetForm?: () => void
+		title?: string
+		valid?: boolean
+		theme: Theme
+	}>,
+) {
 	const styles = stylesheet(props.theme)
+
+	const disabledSubmit = props.valid === undefined ? false : !props.valid
 
 	function closeModal() {
 		props.resetForm?.call(this)
@@ -36,11 +40,12 @@ function FormModal(props: {
 				{props.title ? <Title style={styles.title}>{props.title}</Title> : null}
 				{props.children}
 				<Button
+					disabled={disabledSubmit}
 					onPress={() => {
 						props.onSubmit()
 						closeModal()
 					}}>
-					<Text>{translate('ok').toUpperCase()}</Text>
+					<Text>{wTranslate('ok').toUpperCase()}</Text>
 				</Button>
 			</Modal>
 		</Portal>

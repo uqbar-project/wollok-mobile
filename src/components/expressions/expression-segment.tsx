@@ -1,27 +1,46 @@
 import React from 'react'
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
+import {
+	ColorValue,
+	StyleProp,
+	StyleSheet,
+	View,
+	ViewStyle,
+} from 'react-native'
 import { Text } from 'react-native-paper'
-import { LiteralValue, Method } from 'wollok-ts/dist/model'
-import { OneOrMany } from '../../utils/type-helpers'
+import { Expression, LiteralValue, Send } from 'wollok-ts/dist/model'
+import { useTheme } from '../../theme'
+import { ParentComponentProp } from '../../utils/type-helpers'
+import { getVisualSegment } from './ExpressionDisplay'
 
-export const ObjectSegment = (props: { text: string; index: number }) => {
+export const ReferenceSegment = (props: { text: string; index: number }) => {
+	const theme = useTheme()
 	return (
-		<Bullet color="green" index={props.index}>
+		<Pill index={props.index} color={theme.colors.expression.reference}>
 			<Text>{props.text}</Text>
-		</Bullet>
+		</Pill>
 	)
 }
 
-export const MethodSegment = (props: { method: Method; index: number }) => {
+export const MessageSegment = (props: { send: Send; index: number }) => {
+	const theme = useTheme()
 	return (
-		<Bullet color="red" index={props.index}>
-			<View style={style.row}>
-				<Text>{props.method.name}</Text>
-				{props.method.parameters.map(({ name }) => (
-					<Parameter color="grey" key={name} text={name} />
-				))}
-			</View>
-		</Bullet>
+		<>
+			{getVisualSegment(props.send.receiver, props.index)}
+			<Bullet color={theme.colors.expression.message} index={props.index + 1}>
+				<View style={style.row}>
+					<Text>{props.send.message}(</Text>
+					{props.send.args.map((a, i) => (
+						<Parameter
+							key={i}
+							color={theme.colors.expression.parameter}
+							arg={a}
+							index={props.index - 1}
+						/>
+					))}
+					<Text>)</Text>
+				</View>
+			</Bullet>
+		</>
 	)
 }
 
@@ -29,19 +48,38 @@ export const LiteralSegment = (props: {
 	value: LiteralValue
 	index: number
 }) => {
+	const theme = useTheme()
+	return (
+		<Pill index={props.index} color={theme.colors.expression.literal}>
+			<Text>{JSON.stringify(props.value)}</Text>
+		</Pill>
+	)
+}
+
+export const Pill = (
+	props: ParentComponentProp<{
+		color: ColorValue
+		index: number
+	}>,
+) => {
 	return (
 		<View
-			style={[style.pill, { backgroundColor: 'green', zIndex: -props.index }]}>
-			<Text>{JSON.stringify(props.value)}</Text>
+			style={[
+				style.pill,
+				style.row,
+				{ backgroundColor: props.color, zIndex: -props.index },
+			]}>
+			{props.children}
 		</View>
 	)
 }
 
-const Bullet = (props: {
-	color: string
-	index: number
-	children: OneOrMany<JSX.Element>
-}) => {
+const Bullet = (
+	props: ParentComponentProp<{
+		color: string
+		index: number
+	}>,
+) => {
 	const bulletCurve = 20
 	const curve: StyleProp<ViewStyle> =
 		props.index > 0
@@ -55,6 +93,7 @@ const Bullet = (props: {
 		<View
 			style={[
 				style.bullet,
+				style.row,
 				curve,
 				{
 					backgroundColor: props.color,
@@ -66,18 +105,32 @@ const Bullet = (props: {
 	)
 }
 
-const Parameter = (props: { text: string; color: string }) => (
-	<View style={[style.pill, { backgroundColor: props.color }]}>
-		<Text>{props.text}</Text>
+const Parameter = (props: {
+	color: ColorValue
+	arg: Expression
+	index: number
+}) => (
+	<View
+		style={[
+			style.pill,
+			style.row,
+			{
+				backgroundColor: props.color,
+				shadowOffset: { height: 0, width: 0 },
+				shadowRadius: 3,
+				shadowColor: 'black',
+				shadowOpacity: 50,
+			},
+		]}>
+		{getVisualSegment(props.arg, props.index)}
 	</View>
 )
 
 const style = StyleSheet.create({
 	bullet: {
 		paddingHorizontal: 10,
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
+		paddingLeft: 25,
+		marginLeft: -15,
 		borderTopLeftRadius: 0,
 		borderBottomLeftRadius: 0,
 		borderRadius: 20,
@@ -85,13 +138,11 @@ const style = StyleSheet.create({
 	pill: {
 		marginHorizontal: 5,
 		borderRadius: 20,
-		paddingVertical: 3,
 		paddingHorizontal: 5,
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
 	},
 	row: {
+		fontSize: 25,
+		height: '100%',
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',

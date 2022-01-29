@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper'
 import { Class, Kind, Mixin, Module, Singleton } from 'wollok-ts/dist/model'
-import { translate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import { SelectKind } from '../SelectKind/SelectKind'
 
@@ -24,7 +24,7 @@ function NewEntityModal(props: {
 			visible={props.visible}>
 			<TextInput
 				onChangeText={setName}
-				placeholder={translate('entities.entityName')}
+				placeholder={wTranslate('entities.entityName')}
 			/>
 			<SelectKind kind={kind} setKind={setKind} />
 		</FormModal>
