@@ -1,7 +1,8 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext } from 'react'
 import { Module } from 'wollok-ts/dist/model'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { EntityMember } from '../utils/wollok-helpers'
+import { createContextHook } from './create-context-hook'
 import { useProject } from './ProjectProvider'
 
 export const EntityContext = createContext<{
@@ -51,10 +52,7 @@ export function EntityProvider(
 	)
 }
 
-export function useEntity() {
-	const context = useContext(EntityContext)
-	if (context === null) {
-		throw new Error('useEntity must be used within an EntityProvider')
-	}
-	return context
-}
+export const useEntity = createContextHook(EntityContext, {
+	hookName: 'useEntity',
+	contextName: 'EntityProvider',
+})

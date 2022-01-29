@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { List, Method, Module, Name, Test } from 'wollok-ts/dist/model'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { Named } from '../utils/wollok-helpers'
+import { createContextHook } from './create-context-hook'
 
 export type Context = Module | Method | Test
 
@@ -50,10 +51,7 @@ export function ExpressionContextProvider(
 	)
 }
 
-export function useExpressionContext() {
-	const context = useContext(ContextContext)
-	if (context === null) {
-		throw new Error('useContext must be used within an ContextProvider')
-	}
-	return context
-}
+export const useExpressionContext = createContextHook(ContextContext, {
+	contextName: 'ExpressionContextProvider',
+	hookName: 'useExpressionContext',
+})

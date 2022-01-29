@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import 'react-native-get-random-values'
 import interpret from 'wollok-ts/dist/interpreter/interpreter'
 import link from 'wollok-ts/dist/linker'
@@ -18,6 +18,7 @@ import WRE from 'wollok-ts/dist/wre/wre.json'
 import WRENatives from 'wollok-ts/dist/wre/wre.natives'
 import { log } from '../utils/commons'
 import { ParentComponentProp } from '../utils/type-helpers'
+import { createContextHook } from './create-context-hook'
 import { mainDescribe, mainModules } from './initialProject'
 
 export const ProjectContext = createContext<{
@@ -96,10 +97,7 @@ export function ProjectProvider(props: ParentComponentProp) {
 	)
 }
 
-export function useProject() {
-	const context = useContext(ProjectContext)
-	if (context === null) {
-		throw new Error('useProject must be used within a ProjectProvider')
-	}
-	return context
-}
+export const useProject = createContextHook(ProjectContext, {
+	hookName: 'useProject',
+	contextName: 'ProjectProvider',
+})
