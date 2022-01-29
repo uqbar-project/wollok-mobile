@@ -1,6 +1,8 @@
 // TODO: import form Wollok
 // All these funtions are duplicated from Wollok
 import { upperCaseFirst } from 'upper-case-first'
+import interpret from 'wollok-ts/dist/interpreter/interpreter'
+import { WollokException } from 'wollok-ts/dist/interpreter/runtimeModel'
 import {
 	Environment,
 	Field,
@@ -16,6 +18,7 @@ import {
 	Test,
 	Variable,
 } from 'wollok-ts/dist/model'
+import WRENatives from 'wollok-ts/dist/wre/wre.natives'
 import { last } from './commons'
 
 export type Named = { name: Name }
@@ -86,4 +89,19 @@ export function methodByFQN(environment: Environment, fqn: Name): Method {
 	const entity = environment.getNodeByFQN<Module>(entityFQN)
 
 	return entity.lookupMethod(methodName, Number.parseInt(methodArity))!
+}
+
+export type TestResult = 'Passed' | 'Failure' | 'Error'
+export type TestRun = { result: TestResult; exception?: WollokException }
+export function interpretTest(test: Test, environment: Environment): TestRun {
+	const interpreter = interpret(environment, WRENatives)
+	try {
+		interpreter.exec(test)
+		return { result: 'Passed' }
+	} catch (e: any) {
+		const exception = e as WollokException
+		const result =
+			exception.name === 'wollok.lib.AssertionException' ? 'Failure' : 'Error'
+		return { result, exception }
+	}
 }

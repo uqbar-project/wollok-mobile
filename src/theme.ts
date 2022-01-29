@@ -12,6 +12,7 @@ export type Theme = PaperTheme &
 		colors: {
 			card: string
 			success: string
+			failure: string
 			expression: {
 				parameter: string
 				literal: string
@@ -34,6 +35,7 @@ export const theme: Theme = {
 		background: '#292d3d',
 		primary: '#AF254B',
 		success: 'green',
+		failure: 'yellow',
 		text: '#FFFFFF',
 		notification: '#252939',
 		card: '#0C1A31',

@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react'
 import 'react-native-get-random-values'
-import interpret from 'wollok-ts/dist/interpreter/interpreter'
 import link from 'wollok-ts/dist/linker'
 import {
 	Describe,
@@ -15,9 +14,8 @@ import {
 	Test,
 } from 'wollok-ts/dist/model'
 import WRE from 'wollok-ts/dist/wre/wre.json'
-import WRENatives from 'wollok-ts/dist/wre/wre.natives'
-import { log } from '../utils/commons'
 import { ParentComponentProp } from '../utils/type-helpers'
+import { interpretTest, TestRun } from '../utils/wollok-helpers'
 import { createContextHook } from './create-context-hook'
 import { mainDescribe, mainModules } from './initialProject'
 
@@ -32,7 +30,7 @@ type Actions = {
 	addEntity: (module: Module) => void
 	addDescribe: (test: Describe) => void
 	rebuildEnvironment: (entity: Entity) => void
-	runTest: (test: Test) => boolean
+	runTest: (test: Test) => TestRun
 }
 
 export function ProjectProvider(props: ParentComponentProp) {
@@ -81,15 +79,7 @@ export function ProjectProvider(props: ParentComponentProp) {
 	}
 
 	function runTest(test: Test) {
-		try {
-			const interpreter = interpret(project, WRENatives)
-			interpreter.exec(test)
-			return true
-		} catch (e: any) {
-			//TODO: Feedback from error
-			log(e.name)
-			return false
-		}
+		return interpretTest(test, project)
 	}
 
 	const initialContext = {

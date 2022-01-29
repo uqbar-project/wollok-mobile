@@ -84,13 +84,36 @@ const describe = new Describe({
 	name: 'Main Describe',
 	members: [
 		new Test({
-			name: 'Prueba',
+			name: 'Passed',
 			body: new Body({
 				sentences: [
 					new Send({
 						receiver: new Reference({ name: 'assert' }),
 						message: 'that',
 						args: [new Literal({ value: true })],
+					}),
+				],
+			}),
+		}),
+		new Test({
+			name: 'Failure',
+			body: new Body({
+				sentences: [
+					new Send({
+						receiver: new Reference({ name: 'assert' }),
+						message: 'that',
+						args: [new Literal({ value: false })],
+					}),
+				],
+			}),
+		}),
+		new Test({
+			name: 'Error',
+			body: new Body({
+				sentences: [
+					new Send({
+						receiver: new Reference({ name: 'assert' }),
+						message: 'asd',
 					}),
 				],
 			}),
