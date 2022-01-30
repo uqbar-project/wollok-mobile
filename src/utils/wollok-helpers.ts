@@ -1,8 +1,14 @@
 // TODO: import form Wollok
 // All these funtions are duplicated from Wollok
 import { upperCaseFirst } from 'upper-case-first'
-import interpret from 'wollok-ts/dist/interpreter/interpreter'
-import { WollokException } from 'wollok-ts/dist/interpreter/runtimeModel'
+import interpret, {
+	DirectedInterpreter,
+	ExecutionDirector,
+} from 'wollok-ts/dist/interpreter/interpreter'
+import {
+	Evaluation,
+	WollokException,
+} from 'wollok-ts/dist/interpreter/runtimeModel'
 import {
 	Environment,
 	Field,
@@ -104,4 +110,14 @@ export function interpretTest(test: Test, environment: Environment): TestRun {
 			exception.name === 'wollok.lib.AssertionException' ? 'Failure' : 'Error'
 		return { result, exception }
 	}
+}
+
+export function executionFor(
+	test: Test,
+	environment: Environment,
+): ExecutionDirector<void> {
+	const director = new DirectedInterpreter(
+		Evaluation.build(environment, WRENatives),
+	)
+	return director.exec(test)
 }

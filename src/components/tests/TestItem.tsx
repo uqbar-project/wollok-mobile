@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { InteractionManager } from 'react-native'
 import { Divider, IconButton, List, Text, withTheme } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
@@ -16,9 +15,10 @@ type TestItemProps = {
 }
 function TestItem({ item: test, theme }: TestItemProps) {
 	const {
-		actions: { runTest },
+		actions: { execution },
 	} = useProject()
 	const [testRun, setTestRun] = useState<Maybe<TestRun>>(undefined)
+	const [status, setStatus] = useState('')
 	const [showMessage, setShowMessage] = useState<boolean>(false)
 	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
 	const color = testRun
@@ -28,7 +28,7 @@ function TestItem({ item: test, theme }: TestItemProps) {
 	return (
 		<>
 			<List.Item
-				title={test.name}
+				title={test.name + status}
 				left={() => <IconButton icon={'flask'} />}
 				right={() => (
 					<>
@@ -45,9 +45,19 @@ function TestItem({ item: test, theme }: TestItemProps) {
 							color={color}
 							icon={'play-circle'}
 							onPress={() => {
-								InteractionManager.runAfterInteractions(() =>
-									setTestRun(runTest(test)),
-								)
+								const testExecution = execution(test)
+								testExecution.stepIn()
+								testExecution.stepIn()
+								const interval = setInterval(() => {
+									const result = testExecution.stepOver()
+									console.log(result)
+									if (result.done) {
+										setTestRun({ result: 'Passed' })
+										clearInterval(interval)
+									} else {
+										setStatus('running')
+									}
+								}, 1000)
 							}}
 						/>
 					</>
