@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
+import { InteractionManager } from 'react-native'
 import { Divider, IconButton, List, Text, withTheme } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
@@ -44,7 +45,9 @@ function TestItem({ item: test, theme }: TestItemProps) {
 							color={color}
 							icon={'play-circle'}
 							onPress={() => {
-								setTestRun(runTest(test))
+								InteractionManager.runAfterInteractions(() =>
+									setTestRun(runTest(test)),
+								)
 							}}
 						/>
 					</>
