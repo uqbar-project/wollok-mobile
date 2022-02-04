@@ -44,6 +44,7 @@
 		"false": "Falso",
 		"null": "Nulo",
 		"notSeggestions": "No tenemos sugerencias aquí, usá el panel de búsqueda",
+		"enterValue": "Ingresar un valor",
 		"search": {
 			"message": "Buscá algún mensaje",
 			"entity": "Buscá alguna entidad"
