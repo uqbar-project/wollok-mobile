@@ -1,6 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { Divider, IconButton, List, Text, withTheme } from 'react-native-paper'
+import { StyleSheet } from 'react-native'
+import {
+	ActivityIndicator,
+	Divider,
+	IconButton,
+	List,
+	Text,
+	withTheme,
+} from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
 import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
@@ -15,10 +23,10 @@ type TestItemProps = {
 }
 function TestItem({ item: test, theme }: TestItemProps) {
 	const {
-		actions: { execution },
+		actions: { runTest },
 	} = useProject()
 	const [testRun, setTestRun] = useState<Maybe<TestRun>>(undefined)
-	const [status, setStatus] = useState('')
+	const [running, setRunning] = useState(false)
 	const [showMessage, setShowMessage] = useState<boolean>(false)
 	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
 	const color = testRun
@@ -28,7 +36,7 @@ function TestItem({ item: test, theme }: TestItemProps) {
 	return (
 		<>
 			<List.Item
-				title={test.name + status}
+				title={test.name}
 				left={() => <IconButton icon={'flask'} />}
 				right={() => (
 					<>
@@ -41,25 +49,18 @@ function TestItem({ item: test, theme }: TestItemProps) {
 								}}
 							/>
 						)}
-						<IconButton
-							color={color}
-							icon={'play-circle'}
-							onPress={() => {
-								const testExecution = execution(test)
-								testExecution.stepIn()
-								testExecution.stepIn()
-								const interval = setInterval(() => {
-									const result = testExecution.stepOver()
-									console.log(result)
-									if (result.done) {
-										setTestRun({ result: 'Passed' })
-										clearInterval(interval)
-									} else {
-										setStatus('running')
-									}
-								}, 1000)
-							}}
-						/>
+						{running ? (
+							<ActivityIndicator style={style.spinner} animating={true} />
+						) : (
+							<IconButton
+								color={color}
+								icon={'play-circle'}
+								onPress={() => {
+									setRunning(true)
+									setTestRun(runTest(test))
+								}}
+							/>
+						)}
 					</>
 				)}
 				onPress={() =>
@@ -91,5 +92,11 @@ function styleByTestResult(result: TestResult, theme: Theme) {
 			return theme.colors.error
 	}
 }
+
+const style = StyleSheet.create({
+	spinner: {
+		marginRight: 10,
+	},
+})
 
 export default withTheme(TestItem)

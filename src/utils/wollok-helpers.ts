@@ -119,5 +119,9 @@ export function executionFor(
 	const director = new DirectedInterpreter(
 		Evaluation.build(environment, WRENatives),
 	)
-	return director.exec(test)
+	const executionDirector = director.exec(test)
+	// Enter to test body
+	executionDirector.stepIn()
+	executionDirector.stepIn()
+	return executionDirector
 }
