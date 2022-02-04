@@ -10,6 +10,7 @@ import EntityStack from './pages/EntityStack'
 import { Home } from './pages/Home'
 import { theme } from './theme'
 import { setI18nConfig, wTranslate } from './utils/translation-helpers'
+import './weak-ref/WeakRef'
 
 export type RootStackParamList = {
 	Home: undefined

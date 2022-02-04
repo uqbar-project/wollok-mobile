@@ -94,7 +94,7 @@ export function methodByFQN(environment: Environment, fqn: Name): Method {
 
 	const entity = environment.getNodeByFQN<Module>(entityFQN)
 
-	return entity.lookupMethod(methodName, Number.parseInt(methodArity))!
+	return entity.lookupMethod(methodName, Number.parseInt(methodArity, 10))!
 }
 
 export type TestResult = 'Passed' | 'Failure' | 'Error'
