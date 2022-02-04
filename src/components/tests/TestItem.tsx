@@ -57,7 +57,10 @@ function TestItem({ item: test, theme }: TestItemProps) {
 								icon={'play-circle'}
 								onPress={() => {
 									setRunning(true)
-									setTestRun(runTest(test))
+									setTimeout(() => {
+										setTestRun(runTest(test))
+										setRunning(false)
+									}, 0)
 								}}
 							/>
 						)}
