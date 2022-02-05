@@ -7,7 +7,7 @@
 		"ios": "cd ios/ && pod install && cd ../ && react-native run-ios",
 		"start": "react-native start",
 		"bundle:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-		"publish-release:android": "yarn bundle:android && cd android && ./gradlew clean && ./gradlew assembleRelease -x bundleReleaseJsAndAssets",
+		"publish-release:android": "yarn bundle:android && cd android && ./gradlew clean && ./gradlew bundleRelease -x bundleReleaseJsAndAssets",
 		"publish-debug:android": "yarn bundle:android && cd android  && ./gradlew clean && ./gradlew assembleDebug -x bundleReleaseJsAndAssets",
 		"test": "jest",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
