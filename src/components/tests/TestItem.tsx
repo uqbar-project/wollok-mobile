@@ -1,6 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { Divider, IconButton, List, Text, withTheme } from 'react-native-paper'
+import { StyleSheet } from 'react-native'
+import {
+	ActivityIndicator,
+	Divider,
+	IconButton,
+	List,
+	Text,
+	withTheme,
+} from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
 import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
@@ -18,6 +26,7 @@ function TestItem({ item: test, theme }: TestItemProps) {
 		actions: { runTest },
 	} = useProject()
 	const [testRun, setTestRun] = useState<Maybe<TestRun>>(undefined)
+	const [running, setRunning] = useState(false)
 	const [showMessage, setShowMessage] = useState<boolean>(false)
 	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
 	const color = testRun
@@ -40,13 +49,21 @@ function TestItem({ item: test, theme }: TestItemProps) {
 								}}
 							/>
 						)}
-						<IconButton
-							color={color}
-							icon={'play-circle'}
-							onPress={() => {
-								setTestRun(runTest(test))
-							}}
-						/>
+						{running ? (
+							<ActivityIndicator style={style.spinner} animating={true} />
+						) : (
+							<IconButton
+								color={color}
+								icon={'play-circle'}
+								onPress={() => {
+									setRunning(true)
+									setTimeout(() => {
+										setTestRun(runTest(test))
+										setRunning(false)
+									}, 0)
+								}}
+							/>
+						)}
 					</>
 				)}
 				onPress={() =>
@@ -78,5 +95,11 @@ function styleByTestResult(result: TestResult, theme: Theme) {
 			return theme.colors.error
 	}
 }
+
+const style = StyleSheet.create({
+	spinner: {
+		marginRight: 10,
+	},
+})
 
 export default withTheme(TestItem)
