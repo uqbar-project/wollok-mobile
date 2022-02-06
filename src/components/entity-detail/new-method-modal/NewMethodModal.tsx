@@ -36,15 +36,17 @@ const NewMethodModal = (props: {
 			<Text style={styles.subtitle}>
 				{upperCaseFirst(wTranslate('entityDetails.methodModal.parameters'))}
 			</Text>
-			{parameters.map((param, i) => (
-				<ParameterInput
-					key={param}
-					icon="trash-can-outline"
-					parameter={param}
-					setParameter={newParam => setParameter(newParam, i)}
-					onPress={() => removeParameter(i)}
-				/>
-			))}
+			<>
+				{parameters.map((param, i) => (
+					<ParameterInput
+						key={param}
+						icon="trash-can-outline"
+						parameter={param}
+						setParameter={newParam => setParameter(newParam, i)}
+						onPress={() => removeParameter(i)}
+					/>
+				))}
+			</>
 
 			<ParameterInput
 				icon="plus"
