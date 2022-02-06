@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core'
-import React from 'react'
-import { IconButton } from 'react-native-paper'
+import React, { useState } from 'react'
+import { ActivityIndicator, IconButton } from 'react-native-paper'
+import { runAsync } from '../../utils/commons'
 
 type SubmitCheckButtonProps = {
 	onSubmit: () => void
@@ -10,14 +11,20 @@ export const SubmitCheckButton = ({
 	disabled,
 	onSubmit,
 }: SubmitCheckButtonProps) => {
+	const [processing, setProcessing] = useState(false)
 	const navigation = useNavigation()
-	return (
+	return processing ? (
+		<ActivityIndicator animating={true} style={{ marginRight: 10 }} />
+	) : (
 		<IconButton
 			disabled={disabled}
 			icon="check"
 			onPress={() => {
-				onSubmit()
-				navigation.goBack()
+				setProcessing(true)
+				runAsync(() => {
+					onSubmit()
+					navigation.goBack()
+				})
 			}}
 		/>
 	)
