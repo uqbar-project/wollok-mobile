@@ -3,21 +3,19 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import RNLocalize from 'react-native-localize'
 import { Provider as PaperProvider } from 'react-native-paper'
-import { upperCaseFirst } from 'upper-case-first'
-import { Name } from 'wollok-ts/dist/model'
-import { ProjectProvider } from './context/ProjectProvider'
-import EntityStack from './pages/EntityStack'
-import { Home } from './pages/Home'
+import { Environment } from 'wollok-ts/dist/model'
+import { ProjectNavigator } from './pages/ProjectNavigator'
+import { SelectProject } from './pages/SelectProject'
 import { theme } from './theme'
 import { setI18nConfig, wTranslate } from './utils/translation-helpers'
 import './weak-ref/WeakRef'
 
 export type RootStackParamList = {
-	Home: undefined
-	EntityStack: { entityFQN: Name }
+	SelectProject: undefined
+	ProjectNavigator: { name: string; project: Environment }
 }
 
-export const Stack = createStackNavigator<RootStackParamList>()
+const Stack = createStackNavigator<RootStackParamList>()
 
 const App = () => {
 	setI18nConfig()
@@ -31,29 +29,22 @@ const App = () => {
 
 	return (
 		<PaperProvider theme={theme}>
-			<ProjectProvider>
-				<NavigationContainer theme={theme}>
-					<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
-						<Stack.Screen
-							name="Home"
-							component={Home}
-							options={{
-								title: upperCaseFirst(wTranslate('project.title')),
-								headerTitleAlign: 'center',
-							}}
-						/>
-						<Stack.Screen
-							name="EntityStack"
-							component={EntityStack}
-							options={{ headerShown: false }}
-						/>
-					</Stack.Navigator>
-				</NavigationContainer>
-			</ProjectProvider>
+			<NavigationContainer theme={theme}>
+				<Stack.Navigator>
+					<Stack.Screen
+						name="SelectProject"
+						component={SelectProject}
+						options={{ title: wTranslate('project.selectProject') }}
+					/>
+					<Stack.Screen
+						name="ProjectNavigator"
+						component={ProjectNavigator}
+						options={{ headerShown: false }}
+					/>
+				</Stack.Navigator>
+			</NavigationContainer>
 		</PaperProvider>
 	)
 }
-
-const headerStyle = { elevation: 0, shadowOpacity: 0 }
 
 export default App

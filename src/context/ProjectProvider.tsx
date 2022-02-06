@@ -6,7 +6,6 @@ import {
 	Describe,
 	Entity,
 	Environment,
-	fromJSON,
 	Import,
 	Module,
 	Name,
@@ -14,16 +13,15 @@ import {
 	Reference,
 	Test,
 } from 'wollok-ts/dist/model'
-import WRE from 'wollok-ts/dist/wre/wre.json'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { executionFor, interpretTest, TestRun } from '../utils/wollok-helpers'
 import { createContextHook } from './create-context-hook'
-import { mainDescribe, mainModules } from './initialProject'
 
 export const mainPackageName = 'main'
 
 export const ProjectContext = createContext<{
 	project: Environment
+	name: string
 	actions: Actions
 } | null>(null)
 
@@ -35,17 +33,14 @@ type Actions = {
 	execution: (test: Test) => ExecutionDirector<void>
 }
 
-export function ProjectProvider(props: ParentComponentProp) {
+export function ProjectProvider(
+	props: ParentComponentProp<{
+		projectName: string
+		initialProject: Environment
+	}>,
+) {
 	const [project, setProject] = useState<Environment>(
-		buildEnvironment(
-			'tests',
-			[mainDescribe],
-			buildEnvironment(
-				mainPackageName,
-				mainModules,
-				fromJSON<Environment>(WRE),
-			),
-		),
+		link(props.initialProject.members),
 	)
 
 	function buildEnvironment(
@@ -90,6 +85,7 @@ export function ProjectProvider(props: ParentComponentProp) {
 
 	const initialContext = {
 		project,
+		name: props.projectName,
 		actions: { addEntity, addDescribe, rebuildEnvironment, runTest, execution },
 	}
 	return (
