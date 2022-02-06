@@ -39,11 +39,13 @@ export const EntityDetails = function () {
 						title={wTranslate('entityDetails.attributes').toUpperCase()}
 						items={entity.members.filter(is('Field')) as Field[]}
 						VisualItem={AttributeItem}
+						initialExpanded={true}
 					/>
 					<AccordionList<Method>
 						title={wTranslate('entityDetails.methods').toUpperCase()}
 						items={entity.members.filter(is('Method')) as Method[]}
 						VisualItem={MethodItem}
+						initialExpanded={true}
 					/>
 				</ScrollView>
 			</List.Section>
