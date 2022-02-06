@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useState } from 'react'
 import { ActivityIndicator, IconButton } from 'react-native-paper'
+import { runAsync } from '../../utils/commons'
 
 type SubmitCheckButtonProps = {
 	onSubmit: () => void
@@ -20,10 +21,10 @@ export const SubmitCheckButton = ({
 			icon="check"
 			onPress={() => {
 				setProcessing(true)
-				setTimeout(() => {
+				runAsync(() => {
 					onSubmit()
 					navigation.goBack()
-				}, 0)
+				})
 			}}
 		/>
 	)
