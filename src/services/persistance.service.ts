@@ -10,11 +10,11 @@ export function saveProject(
 	projectName: string,
 	project: Environment,
 ): Promise<void> {
-	return writeFile(projectFile(projectName), projectToJSON(project), 'utf8')
+	return writeFile(projectFilePath(projectName), projectToJSON(project), 'utf8')
 }
 
 export async function loadProject(projectName: string): Promise<Environment> {
-	const content = await readFile(projectFile(projectName))
+	const content = await readFile(projectFilePath(projectName))
 	const fromJson = fromJSON<Environment>(JSON.parse(content))
 	return fromJson
 }
@@ -32,6 +32,6 @@ function projectToJSON(wre: Environment) {
 	)
 }
 
-function projectFile(projectName: string): string {
+function projectFilePath(projectName: string): string {
 	return `${DocumentDirectoryPath}/${projectName}.json`
 }
