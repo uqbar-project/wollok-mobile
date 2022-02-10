@@ -63,6 +63,7 @@
 	},
 	"project": {
 		"selectProject": "Select a project",
+		"newProject": "New project",
 		"saved": "Saved!"
 	}
 }
