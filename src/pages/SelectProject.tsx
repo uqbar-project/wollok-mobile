@@ -26,14 +26,21 @@ export function SelectProject() {
 
 	function navigateToProject(
 		projectName: string,
-		selectedPorject?: Environment,
+		selectedProject?: Environment,
 	) {
-		loadProject(projectName).then(project => {
+		function navigate(targetProject: Environment) {
 			navigation.navigate('ProjectNavigator', {
 				name: projectName,
-				project: selectedPorject ?? project,
+				project: targetProject,
 			})
-		})
+		}
+		if (selectedProject) {
+			navigate(selectedProject)
+		} else {
+			loadProject(projectName).then(project => {
+				navigate(project)
+			})
+		}
 	}
 
 	function newProject(newProjectName: string) {
