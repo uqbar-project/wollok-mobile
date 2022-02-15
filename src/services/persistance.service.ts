@@ -1,6 +1,7 @@
 import {
 	DocumentDirectoryPath,
 	readDir,
+	ReadDirItem,
 	readFile,
 	writeFile,
 } from 'react-native-fs'
@@ -20,8 +21,13 @@ export async function loadProject(projectName: string): Promise<Environment> {
 }
 
 export async function savedProjects(): Promise<string[]> {
+	function getFileDateValue(file: ReadDirItem) {
+		return file.mtime?.valueOf() || 0
+	}
 	const files = await readDir(DocumentDirectoryPath)
-	return files.map(item => item.name.replace('.json', ''))
+	return files
+		.sort((a, b) => getFileDateValue(b) - getFileDateValue(a))
+		.map(item => item.name.replace('.json', ''))
 }
 
 function projectToJSON(wre: Environment) {
