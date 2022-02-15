@@ -62,7 +62,8 @@
 		"newTestName": "Nombre del test"
 	},
 	"project": {
-		"selectProject": "Selecciona un proyecto",
+		"selectProject": "Seleccioná un proyecto",
+		"newProject": "Proyecto nuevo",
 		"saved": "¡Guardado!"
 	}
 }
