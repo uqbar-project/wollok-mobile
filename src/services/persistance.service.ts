@@ -1,23 +1,36 @@
+import RNFetchBlob from 'react-native-fetch-blob'
 import {
 	DocumentDirectoryPath,
 	readDir,
 	ReadDirItem,
-	readFile,
 	writeFile,
 } from 'react-native-fs'
 import { Environment, fromJSON } from 'wollok-ts/dist/model'
+import { projectToJSON } from '../utils/wollok-helpers'
 
-export function saveProject(
-	projectName: string,
-	project: Environment,
-): Promise<void> {
-	return writeFile(projectFilePath(projectName), projectToJSON(project), 'utf8')
+export function saveProject(projectName: string, project: Environment) {
+	return new Promise(async resolve => {
+		const path = projectFilePath(projectName)
+		await writeFile(path, '')
+		RNFetchBlob.fs.writeStream(path, 'utf8').then(stream => {
+			resolve(stream.write(projectToJSON(project)))
+		})
+	})
 }
 
 export async function loadProject(projectName: string): Promise<Environment> {
-	const content = await readFile(projectFilePath(projectName))
-	const fromJson = fromJSON<Environment>(JSON.parse(content))
-	return fromJson
+	return new Promise(resolve => {
+		RNFetchBlob.fs
+			.readStream(projectFilePath(projectName), 'utf8', 4096, -1)
+			.then(stream => {
+				let content = ''
+				stream.open()
+				stream.onData(chunk => {
+					content += chunk
+				})
+				stream.onEnd(() => resolve(fromJSON<Environment>(JSON.parse(content))))
+			})
+	})
 }
 
 export async function savedProjects(): Promise<string[]> {
@@ -28,14 +41,6 @@ export async function savedProjects(): Promise<string[]> {
 	return files
 		.sort((a, b) => getFileDateValue(b) - getFileDateValue(a))
 		.map(item => item.name.replace('.json', ''))
-}
-
-function projectToJSON(wre: Environment) {
-	return JSON.stringify(
-		wre,
-		(key, value) => (key.startsWith('_') ? undefined : value),
-		2,
-	)
 }
 
 function projectFilePath(projectName: string): string {

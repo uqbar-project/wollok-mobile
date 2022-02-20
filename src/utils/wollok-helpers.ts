@@ -125,3 +125,11 @@ export function executionFor(
 	executionDirector.stepIn()
 	return executionDirector
 }
+
+export function projectToJSON(wre: Environment) {
+	return JSON.stringify(
+		wre,
+		(key, value) => (key.startsWith('_') ? undefined : value),
+		2,
+	)
+}
