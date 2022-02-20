@@ -104,7 +104,7 @@ export function interpretTest(test: Test, environment: Environment): TestRun {
 	try {
 		interpreter.exec(test)
 		return { result: 'Passed' }
-	} catch (e: any) {
+	} catch (e) {
 		const exception = e as WollokException
 		const result =
 			exception.name === 'wollok.lib.AssertionException' ? 'Failure' : 'Error'
