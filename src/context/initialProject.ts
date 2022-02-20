@@ -1,15 +1,22 @@
+import link from 'wollok-ts/dist/linker'
 import {
 	Body,
 	Describe,
+	Environment,
 	Field,
+	fromJSON,
+	Import,
 	Literal,
 	Method,
+	Package,
 	Parameter,
 	Reference,
 	Send,
 	Singleton,
 	Test,
 } from 'wollok-ts/dist/model'
+import WRE from 'wollok-ts/dist/wre/wre.json'
+import { mainPackageName } from './ProjectProvider'
 
 const pepita = new Singleton({
 	name: 'pepita',
@@ -121,5 +128,22 @@ const describe = new Describe({
 	],
 })
 
-export const mainModules = [pepita, manolo]
-export const mainDescribe = describe
+const mainModules = [pepita, manolo]
+const mainDescribe = describe
+
+export function templateProject(): Environment {
+	const mainImport = [
+		new Import({
+			entity: new Reference({ name: mainPackageName }),
+			isGeneric: true,
+		}),
+	]
+	const main = new Package({ name: 'main', members: mainModules })
+
+	const tests = new Package({
+		name: 'tests',
+		members: [mainDescribe],
+		imports: mainImport,
+	})
+	return link([main, tests], fromJSON<Environment>(WRE))
+}

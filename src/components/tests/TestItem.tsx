@@ -13,6 +13,7 @@ import { Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
 import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
 import { Theme } from '../../theme'
+import { runAsync } from '../../utils/commons'
 import { Maybe } from '../../utils/type-helpers'
 import { TestResult, TestRun } from '../../utils/wollok-helpers'
 import FormModal from '../ui/FormModal/FormModal'
@@ -57,10 +58,10 @@ function TestItem({ item: test, theme }: TestItemProps) {
 								icon={'play-circle'}
 								onPress={() => {
 									setRunning(true)
-									setTimeout(() => {
+									runAsync(() => {
 										setTestRun(runTest(test))
 										setRunning(false)
-									}, 0)
+									})
 								}}
 							/>
 						)}

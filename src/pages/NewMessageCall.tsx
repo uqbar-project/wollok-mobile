@@ -1,12 +1,11 @@
 import { RouteProp, useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Send } from 'wollok-ts/dist/model'
 import ExpressionInput from '../components/ui/ExpressionInput'
 import { SubmitCheckButton } from '../components/ui/Header'
-import { Row } from '../components/ui/Row'
 import { wTranslate } from '../utils/translation-helpers'
 import { EntityStackParamList } from './EntityStack'
 
@@ -18,7 +17,7 @@ export function NewMessageCall({
 	route: RouteProp<EntityStackParamList, 'NewMessageSend'>
 }) {
 	const [args, setArguments] = useState<(Expression | undefined)[]>(
-		Array(method.parameters.length),
+		method.parameters.map(() => undefined),
 	)
 
 	const navigation = useNavigation()
@@ -51,8 +50,8 @@ export function NewMessageCall({
 	return (
 		<View>
 			{method.parameters.map((_, i) => (
-				<Row key={i}>
-					<Text>{_.name}</Text>
+				<View key={i} style={[styles.parameter]}>
+					<Text style={styles.paramName}>{_.name}</Text>
 					<ExpressionInput
 						fqn={contextFQN}
 						setValue={expression => setParameter(i, expression)}
@@ -61,8 +60,19 @@ export function NewMessageCall({
 							wTranslate('expression.enterValue'),
 						)}
 					/>
-				</Row>
+				</View>
 			))}
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	parameter: {
+		marginVertical: 15,
+		marginHorizontal: 5,
+	},
+	paramName: {
+		fontSize: 22,
+		marginBottom: 4,
+	},
+})

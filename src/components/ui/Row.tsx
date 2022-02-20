@@ -1,8 +1,9 @@
-import React, { ReactPortal } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
+import { ParentComponentProp } from '../../utils/type-helpers'
 
 export function Row(
-	props: Pick<ReactPortal, 'children' | 'key'> & { style?: any },
+	props: ParentComponentProp<{ style?: any; key?: string | number }>,
 ) {
 	const { children, style, ...viewProps } = props
 	return (
