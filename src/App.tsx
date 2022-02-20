@@ -6,6 +6,7 @@ import { Provider as PaperProvider } from 'react-native-paper'
 import { Environment } from 'wollok-ts/dist/model'
 import { ProjectNavigator } from './pages/ProjectNavigator'
 import { SelectProject } from './pages/SelectProject'
+import { createPersistanceFolder } from './services/persistance.service'
 import { theme } from './theme'
 import { setI18nConfig, wTranslate } from './utils/translation-helpers'
 import './weak-ref/WeakRef'
@@ -21,6 +22,8 @@ const App = () => {
 	setI18nConfig()
 	useEffect(() => {
 		RNLocalize.addEventListener('change', setI18nConfig)
+
+		createPersistanceFolder()
 
 		return function cleanup() {
 			RNLocalize.removeEventListener('change', setI18nConfig)

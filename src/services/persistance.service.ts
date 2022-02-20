@@ -1,12 +1,15 @@
-import RNFetchBlob from 'react-native-fetch-blob'
 import {
 	DocumentDirectoryPath,
 	readDir,
 	ReadDirItem,
 	writeFile,
 } from 'react-native-fs'
+import RNFetchBlob from 'rn-fetch-blob-v2'
 import { Environment, fromJSON } from 'wollok-ts/dist/model'
 import { projectToJSON } from '../utils/wollok-helpers'
+
+const projectsFolder = 'projects'
+const projectsFolderPath = `${DocumentDirectoryPath}/${projectsFolder}`
 
 export function saveProject(projectName: string, project: Environment) {
 	return new Promise(async resolve => {
@@ -37,12 +40,19 @@ export async function savedProjects(): Promise<string[]> {
 	function getFileDateValue(file: ReadDirItem) {
 		return file.mtime?.valueOf() || 0
 	}
-	const files = await readDir(DocumentDirectoryPath)
+	const files = await readDir(projectsFolderPath)
 	return files
 		.sort((a, b) => getFileDateValue(b) - getFileDateValue(a))
 		.map(item => item.name.replace('.json', ''))
 }
 
 function projectFilePath(projectName: string): string {
-	return `${DocumentDirectoryPath}/${projectName}.json`
+	return `${projectsFolderPath}/${projectName}.json`
+}
+
+export async function createPersistanceFolder() {
+	const folderExists = await RNFetchBlob.fs.exists(projectsFolderPath)
+	if (!folderExists) {
+		return RNFetchBlob.fs.mkdir(projectsFolderPath)
+	}
 }
