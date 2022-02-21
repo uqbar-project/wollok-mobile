@@ -36,6 +36,8 @@ const localizeMock = {
 };
 
 jest.mock('react-native-localize', () => localizeMock)
+jest.mock('i18n-js', () => ({ t: () => "" /** TODO */ }))
+
 jest.mock('react-native-paper', () => {
     const RealModule = jest.requireActual('react-native-paper');
     return {
@@ -43,6 +45,8 @@ jest.mock('react-native-paper', () => {
         Portal: ({ children }) => children
     };
 });
+jest.mock('react-native-fs', () => ({ readDir: () => Promise.resolve([]) }))
+jest.mock('rn-fetch-blob-v2', () => ({ fs: { exists: () => Promise.resolve(true) } }))
 
 // Stop animations
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');

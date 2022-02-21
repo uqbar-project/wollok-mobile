@@ -23,6 +23,8 @@ module.exports = {
         + "|react-native-iphone-x-helper"
         + "|react-native-paper-dropdown"
         + "|react-native-vector-icons"
+        + "|react-native-fs"
+        + "|rn-fetch-blob-v2"
         + ")/)",
     ],
 }
