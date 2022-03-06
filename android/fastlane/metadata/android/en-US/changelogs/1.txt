@@ -1,0 +1,3 @@
+First beta version:
+- Build entities
+- Build & run tests
