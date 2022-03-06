@@ -68,3 +68,10 @@ jobs:
 
       - name: Distribute app to Google Play's internal track 🚀
         run: bundle exec fastlane deploy
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Chore: update android versions!"
+          commit_user_name: Deploy Action
