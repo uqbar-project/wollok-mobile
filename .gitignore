@@ -70,3 +70,6 @@ buck-out/
 
 # Jest
 .jest/
+
+# Act
+.secrets
