@@ -91,12 +91,14 @@ jobs:
       - name: Distribute app to Google Play's internal track 🚀
         working-directory: ./android/fastlane
         run: bundle exec fastlane deploy
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PAT }}
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+      - name: Commit
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add android/app/build.gradle
-          git commit -m "Automatic release" --no-verify
-          git push
+          git commit -m "chore: version update" --no-verify
+          git push https://$USERNAME:$REPO_KEY@github.com/uqbar-project/wollok-mobile.git
+        env:
+          REPO_KEY: ${{secrets.PAT}}
+          USERNAME: github-actions[bot]
+
