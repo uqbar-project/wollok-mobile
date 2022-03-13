@@ -77,7 +77,7 @@ jobs:
           java-version: '8'
       - name: Distribute app to Google Play's internal track 🚀
         working-directory: ./android/fastlane
-        run: fastlane deploy --debug
+        run: fastlane android deploy
       - name: Commit
         run: |
           git config --local user.name "github-actions[bot]"
