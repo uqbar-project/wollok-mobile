@@ -86,11 +86,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '8'
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
       - name: Distribute app to Google Play's internal track 🚀
         working-directory: ./android/fastlane
-        run: bundle exec fastlane deploy --debug
+        run: bundle exec fastlane deploy
       - name: Commit
         run: |
           git config --local user.name "github-actions[bot]"
