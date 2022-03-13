@@ -86,11 +86,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '8'
-      - name: Create bootsplash directory
-        run: mkdir ./node_modules/react-native-bootsplash/android/build
+      - name: Set sudo path
+        run: alias sudo='sudo env PATH=$PATH'
       - name: Distribute app to Google Play's internal track 🚀
         working-directory: ./android/fastlane
-        run: bundle exec fastlane deploy
+        run: sudo bundle exec fastlane deploy
       - name: Commit
         run: |
           git config --local user.name "github-actions[bot]"
