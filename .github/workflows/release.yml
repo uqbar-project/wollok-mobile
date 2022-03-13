@@ -90,7 +90,7 @@ jobs:
         uses: android-actions/setup-android@v2
       - name: Distribute app to Google Play's internal track 🚀
         working-directory: ./android/fastlane
-        run: bundle exec fastlane deploy
+        run: bundle exec fastlane deploy --debug
       - name: Commit
         run: |
           git config --local user.name "github-actions[bot]"
