@@ -32,7 +32,7 @@ platform :android do
       gradle_file_path: "app/build.gradle"
     )
 
-    gradle(tasks: ["clean", "bundleRelease"])
+    gradle(tasks: ["bundleRelease"])
     upload_to_play_store(track: 'internal')
   end
 end

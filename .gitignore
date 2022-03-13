@@ -73,3 +73,8 @@ buck-out/
 
 # Act
 .secrets
+
+# Release secrets
+play_config.json*
+release.keystore.properties*
+wollok-mobile.keystore.jks*
