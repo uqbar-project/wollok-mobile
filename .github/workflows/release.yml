@@ -40,15 +40,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6 
-          bundler-cache: true
 
-      - name: Cache Ruby - Bundler
-        uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+      - name: Install bundle
+        working-directory: ./android/fastlane
+        run: bundle install
 
       - name: Cache Gradle
         uses: actions/cache@v1
@@ -66,12 +61,6 @@ jobs:
         working-directory: ./android
         run: chmod +x gradlew
 
-      - name: Install bundle
-        working-directory: ./android/fastlane
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
@@ -86,11 +75,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '8'
-      - name: Set sudo path
-        run: alias sudo='sudo env PATH=$PATH'
       - name: Distribute app to Google Play's internal track 🚀
         working-directory: ./android/fastlane
-        run: sudo bundle exec fastlane deploy
+        run: fastlane deploy --debug
       - name: Commit
         run: |
           git config --local user.name "github-actions[bot]"
