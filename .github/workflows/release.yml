@@ -40,27 +40,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.1
-
-      - name: Install bundle
-        working-directory: ./android/fastlane
-        run: bundle install
-
-      - name: Cache Gradle
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches/
-          key: cache-clean-gradle-${{ matrix.os }}-${{ matrix.jdk }}
-
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper/
-          key: cache-clean-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
-
-      - name: Grant Permission to Execute
-        working-directory: ./android
-        run: chmod +x gradlew
-
+          
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
@@ -68,17 +48,21 @@ jobs:
       - name: Install Yarn
         run: npm install -g yarn
 
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: install
-      - uses: actions/setup-java@v2
+      - name: Setup Java
+        uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: '8'
-      - name: Distribute app to Google Play's internal track 🚀
-        working-directory: ./android/fastlane
-        run: fastlane android deploy
-      - name: Commit
+          java-version: '11'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        
+      - name: Deploy using Fastlane 🚀
+        uses: maierj/fastlane-action@v2.2.0
+        with:
+          lane: 'deploy'
+          subdirectory: 'android'     
+     - name: Commit
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"

@@ -18,7 +18,8 @@ default_platform(:android)
 platform :android do
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    
+    sh("yarn")
+
     sh("yarn", "clean-android-assets")
 
     last_tag = last_git_tag()
