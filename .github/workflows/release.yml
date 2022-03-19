@@ -61,8 +61,9 @@ jobs:
         uses: maierj/fastlane-action@v2.2.0
         with:
           lane: 'deploy'
-          subdirectory: 'android'     
-     - name: Commit
+          subdirectory: 'android'
+
+      - name: Commit
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
