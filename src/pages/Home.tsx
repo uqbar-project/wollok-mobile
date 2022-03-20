@@ -4,8 +4,8 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { IconButton, Snackbar } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
+import { ProjectHeader } from '../components/projects/ProjectHeader'
 import { useProject } from '../context/ProjectProvider'
-import { saveProject } from '../services/persistance.service'
 import { wTranslate } from '../utils/translation-helpers'
 import { Describes } from './Describes'
 import { Entities } from './Entities/Entities'
@@ -20,20 +20,21 @@ const Tab = createBottomTabNavigator()
 
 export function Home() {
 	const { name, project } = useProject()
-	const [saved, setSaved] = useState(false)
+	// MOve to another component
+	const [message, setMessage] = useState('')
+	const [showMessage, setShowMessage] = useState(false)
+
+	function pushMessage(tag: string) {
+		setMessage(tag)
+		setShowMessage(true)
+	}
 
 	const navigation = useNavigation()
-
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: name,
 			headerTitleAlign: 'center',
-			headerRight: () => (
-				<IconButton
-					icon="content-save"
-					onPress={() => saveProject(name, project).then(() => setSaved(true))}
-				/>
-			),
+			headerRight: () => <ProjectHeader pushMessage={pushMessage} />,
 		})
 	}, [navigation, project, name])
 
@@ -52,13 +53,13 @@ export function Home() {
 				/>
 			</Tab.Navigator>
 			<Snackbar
-				visible={saved}
+				visible={showMessage}
 				onDismiss={() => {
-					setSaved(false)
+					setShowMessage(false)
 				}}
 				duration={2000}
 				wrapperStyle={{ marginBottom: '20%' }}>
-				{wTranslate('project.saved')}
+				{wTranslate(`project.${message}`)}
 			</Snackbar>
 		</>
 	)

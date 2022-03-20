@@ -13,6 +13,7 @@ import {
 	Reference,
 	Test,
 } from 'wollok-ts/dist/model'
+import { saveProject } from '../services/persistance.service'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { executionFor, interpretTest, TestRun } from '../utils/wollok-helpers'
 import { createContextHook } from './create-context-hook'
@@ -22,6 +23,7 @@ export const mainPackageName = 'main'
 export const ProjectContext = createContext<{
 	project: Environment
 	name: string
+	changed: boolean
 	actions: Actions
 } | null>(null)
 
@@ -31,6 +33,7 @@ type Actions = {
 	rebuildEnvironment: (entity: Entity) => void
 	runTest: (test: Test) => TestRun
 	execution: (test: Test) => ExecutionDirector<void>
+	save: () => Promise<unknown>
 }
 
 export function ProjectProvider(
@@ -42,6 +45,7 @@ export function ProjectProvider(
 	const [project, setProject] = useState<Environment>(
 		link(props.initialProject.members),
 	)
+	const [changed, setChanged] = useState(false)
 
 	function buildEnvironment(
 		name: Name,
@@ -73,6 +77,7 @@ export function ProjectProvider(
 		const packageName = entity.is('Describe') ? 'tests' : mainPackageName
 		setProject(buildEnvironment(packageName, [entity]))
 		//TODO: Run validations
+		setChanged(true)
 	}
 
 	function runTest(test: Test) {
@@ -83,10 +88,23 @@ export function ProjectProvider(
 		return executionFor(test, project)
 	}
 
+	async function save() {
+		await saveProject(props.projectName, project)
+		setChanged(false)
+	}
+
 	const initialContext = {
 		project,
 		name: props.projectName,
-		actions: { addEntity, addDescribe, rebuildEnvironment, runTest, execution },
+		changed,
+		actions: {
+			addEntity,
+			addDescribe,
+			rebuildEnvironment,
+			runTest,
+			execution,
+			save,
+		},
 	}
 	return (
 		<ProjectContext.Provider value={initialContext}>
