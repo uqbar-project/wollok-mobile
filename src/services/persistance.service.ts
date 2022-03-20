@@ -5,7 +5,8 @@ import {
 	writeFile,
 } from 'react-native-fs'
 import RNFetchBlob from 'rn-fetch-blob-v2'
-import { Environment, fromJSON } from 'wollok-ts/dist/model'
+import { Environment } from 'wollok-ts/dist/model'
+import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import { projectToJSON } from '../utils/wollok-helpers'
 
 const projectsFolder = 'projects'

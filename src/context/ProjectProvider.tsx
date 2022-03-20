@@ -10,9 +10,11 @@ import {
 	Module,
 	Name,
 	Package,
+	Problem,
 	Reference,
 	Test,
 } from 'wollok-ts/dist/model'
+import validate from 'wollok-ts/dist/validator'
 import { saveProject } from '../services/persistance.service'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { executionFor, interpretTest, TestRun } from '../utils/wollok-helpers'
@@ -24,6 +26,7 @@ export const ProjectContext = createContext<{
 	project: Environment
 	name: string
 	changed: boolean
+	problems: Problem[]
 	actions: Actions
 } | null>(null)
 
@@ -46,6 +49,7 @@ export function ProjectProvider(
 		link(props.initialProject.members),
 	)
 	const [changed, setChanged] = useState(false)
+	const [problems, setProblems] = useState([] as Problem[])
 
 	function buildEnvironment(
 		name: Name,
@@ -75,8 +79,9 @@ export function ProjectProvider(
 
 	function rebuildEnvironment(entity: Entity) {
 		const packageName = entity.is('Describe') ? 'tests' : mainPackageName
-		setProject(buildEnvironment(packageName, [entity]))
-		//TODO: Run validations
+		const newProject = buildEnvironment(packageName, [entity])
+		setProject(newProject)
+		setProblems(validate(newProject) as Problem[])
 		setChanged(true)
 	}
 
@@ -97,6 +102,7 @@ export function ProjectProvider(
 		project,
 		name: props.projectName,
 		changed,
+		problems,
 		actions: {
 			addEntity,
 			addDescribe,

@@ -4,7 +4,6 @@ import {
 	Describe,
 	Environment,
 	Field,
-	fromJSON,
 	Import,
 	Literal,
 	Method,
@@ -15,6 +14,7 @@ import {
 	Singleton,
 	Test,
 } from 'wollok-ts/dist/model'
+import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import WRE from 'wollok-ts/dist/wre/wre.json'
 import { mainPackageName } from './ProjectProvider'
 

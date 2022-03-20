@@ -13,7 +13,6 @@ import {
 	Environment,
 	Field,
 	is,
-	List,
 	Literal,
 	Method,
 	Module,
@@ -24,6 +23,7 @@ import {
 	Test,
 	Variable,
 } from 'wollok-ts/dist/model'
+import { List } from 'wollok-ts/dist/extensions'
 import WRENatives from 'wollok-ts/dist/wre/wre.natives'
 import { last } from './commons'
 
@@ -66,7 +66,7 @@ export function literalClassFQN(literal: Literal): Name {
 export function allScopedVariables(
 	node: EntityMemberWithBody,
 ): Referenciable[] {
-	const fields = allFields(node.parent())
+	const fields = allFields(node.parent)
 	const params = node.is('Method') ? node.parameters : []
 	const methodVars = allVariables(node)
 
@@ -74,7 +74,7 @@ export function allScopedVariables(
 }
 
 export function methodFQN(method: Method) {
-	return `${method.parent().fullyQualifiedName()}.${method.name}/${
+	return `${method.parent.fullyQualifiedName()}.${method.name}/${
 		method.parameters.length
 	}`
 }

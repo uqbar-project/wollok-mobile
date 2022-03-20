@@ -9544,9 +9544,9 @@ unpipe@~1.0.0:
   resolved "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
 
-unraw@^2.0.0:
+unraw@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/unraw/-/unraw-2.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/unraw/-/unraw-2.0.1.tgz#7b51dcdfb1e43d59d5e52cdb44d349d029edbaba"
   integrity sha512-tdOvLfRzHolwYcHS6HIX860MkK9LQ4+oLuNwFYL7bpgTEO64PZrcQxkisgwJYCfF8sKiWLwwu1c83DvMkbefIQ==
 
 unset-value@^1.0.0:
@@ -9829,14 +9829,14 @@ widest-line@^2.0.0:
   dependencies:
     string-width "^2.1.1"
 
-wollok-ts@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.npmjs.org/wollok-ts/-/wollok-ts-3.0.6.tgz"
-  integrity sha512-2TgwRhu0+lUgCxULz4ZjMlw8zfv1gKFE7v6eh4fNtVWBdlKozqS6QT3YwNPzbgPolTXW9xrMaAf1lxpsD3ye1Q==
+wollok-ts@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/wollok-ts/-/wollok-ts-3.0.8.tgz#dd4bcf5ec2fa323a565e8f8688291b3a61f3765e"
+  integrity sha512-oBVEPL+MwCVsfoBnN3bLvYsr9vM9OmPdReNQq+sYM0h/l2cn2iYfD0xQdVC9u0hhrqpzfk+es63fUKAVLEkLJQ==
   dependencies:
     "@types/parsimmon" "^1.10.6"
     parsimmon "^1.18.0"
-    unraw "^2.0.0"
+    unraw "^2.0.1"
     uuid "8.3.2"
 
 word-wrap@^1.2.3, word-wrap@~1.2.3:
