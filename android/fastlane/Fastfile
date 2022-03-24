@@ -1,0 +1,39 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    sh("yarn")
+
+    sh("yarn", "clean-android-assets")
+
+    last_tag = last_git_tag()
+
+    android_set_version_name(
+      gradle_file: "app/build.gradle",
+      version_name: last_tag
+    )
+
+    increment_version_code(
+      gradle_file_path: "app/build.gradle"
+    )
+
+    gradle(tasks: ["clean", "bundleRelease"])
+    upload_to_play_store(track: 'internal')
+  end
+end

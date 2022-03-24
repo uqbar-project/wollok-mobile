@@ -56,6 +56,9 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
+# java profiling
+*.hprof
+
 # Bundle artifact
 *.jsbundle
 
@@ -67,3 +70,11 @@ buck-out/
 
 # Jest
 .jest/
+
+# Act
+.secrets
+
+# Release secrets
+play_config.json*
+release.keystore.properties*
+wollok-mobile.keystore.jks*

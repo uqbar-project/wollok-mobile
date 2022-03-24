@@ -1,0 +1,5 @@
+Wollok IDE for mobiles
+
+You can:
+- Build Wollok entities: object, classes & mixines
+- Build & run tests
