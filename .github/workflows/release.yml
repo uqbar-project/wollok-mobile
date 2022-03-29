@@ -2,8 +2,8 @@ name: Deploy
 
 on:
   push:
-    tags:        
-      - 'v*'
+    branches:        
+      - 'main'
 jobs:
   deploy:
     runs-on: ubuntu-latest
