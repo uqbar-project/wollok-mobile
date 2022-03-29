@@ -63,7 +63,7 @@ jobs:
           lane: 'deploy'
           subdirectory: 'android'
 
-      - name: Commit
+      - name: Commit version bump
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
