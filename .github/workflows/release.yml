@@ -74,9 +74,9 @@ jobs:
           git add android/app/build.gradle
           git commit -m "chore: version update" --no-verify
           git tag $RELEASE_TAG
-          git remote add origin https://$USERNAME:$REPO_KEY@github.com/uqbar-project/wollok-mobile.git
-          git push
-          git push $RELEASE_TAG
+          git remote add auth https://$USERNAME:$REPO_KEY@github.com/uqbar-project/wollok-mobile.git
+          git push auth
+          git push auth $RELEASE_TAG
         env:
           REPO_KEY: ${{secrets.PAT}}
           USERNAME: github-actions[bot]
