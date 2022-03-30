@@ -57,3 +57,8 @@ yarn publish-release:android
 ```
 
 note: The keystore generation is a one time only process, after that you can reuse the already generated one.
+
+
+## Releases
+
+A release is triggered on **every** push to _main_. A tag will be created based on the _package.json_ version number, said version must be bumped **manually**.
