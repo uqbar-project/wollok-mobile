@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { Expression, Method, Module, Name, Send } from 'wollok-ts/dist/model'
-import { RootStackParamList } from '../App'
+import { Tests } from '../components/tests/Tests'
 import { EntityProvider } from '../context/EntityProvider'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
@@ -16,9 +16,9 @@ import ExpressionMaker, {
 	ExpressionOnSubmit,
 } from './ExpressionMaker/ExpressionMaker'
 import { NewMessageCall } from './NewMessageCall'
-import { Tests } from '../components/tests/Tests'
+import { ProjectStackParamList } from './ProjectNavigator'
 
-export type EntityStackRoute = RouteProp<RootStackParamList, 'EntityStack'>
+export type EntityStackRoute = RouteProp<ProjectStackParamList, 'EntityStack'>
 
 export type EntityStackParamList = {
 	EntityDetails: undefined

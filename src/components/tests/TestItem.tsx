@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import {
@@ -10,28 +9,22 @@ import {
 	withTheme,
 } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
-import { useProject } from '../../context/ProjectProvider'
-import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
 import { Theme } from '../../theme'
+import { runAsync } from '../../utils/commons'
 import { Maybe } from '../../utils/type-helpers'
-import { TestResult, TestRun } from '../../utils/wollok-helpers'
+import { TestRun } from '../../utils/wollok-helpers'
 import FormModal from '../ui/FormModal/FormModal'
 
 type TestItemProps = {
 	item: Test
+	runner: (test: Test) => TestRun
+	onClick: () => void
 	theme: Theme
 }
-function TestItem({ item: test, theme }: TestItemProps) {
-	const {
-		actions: { runTest },
-	} = useProject()
+function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 	const [testRun, setTestRun] = useState<Maybe<TestRun>>(undefined)
 	const [running, setRunning] = useState(false)
 	const [showMessage, setShowMessage] = useState<boolean>(false)
-	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
-	const color = testRun
-		? styleByTestResult(testRun.result, theme)
-		: theme.colors.disabled
 
 	return (
 		<>
@@ -53,25 +46,20 @@ function TestItem({ item: test, theme }: TestItemProps) {
 							<ActivityIndicator style={style.spinner} animating={true} />
 						) : (
 							<IconButton
-								color={color}
+								color={colorForTestRun(testRun, theme)}
 								icon={'play-circle'}
 								onPress={() => {
 									setRunning(true)
-									setTimeout(() => {
-										setTestRun(runTest(test))
+									runAsync(() => {
+										setTestRun(runner(test))
 										setRunning(false)
-									}, 0)
+									})
 								}}
 							/>
 						)}
 					</>
 				)}
-				onPress={() =>
-					navigator.navigate('EntityMemberDetails', {
-						entityMember: test,
-						fqn: test.fullyQualifiedName(),
-					})
-				}
+				onPress={onClick}
 			/>
 			<Divider />
 			<FormModal
@@ -85,8 +73,12 @@ function TestItem({ item: test, theme }: TestItemProps) {
 	)
 }
 
-function styleByTestResult(result: TestResult, theme: Theme) {
-	switch (result) {
+function colorForTestRun(testRun: Maybe<TestRun>, theme: Theme) {
+	if (!testRun) {
+		return theme.colors.disabled
+	}
+
+	switch (testRun.result) {
 		case 'Passed':
 			return theme.colors.success
 		case 'Failure':

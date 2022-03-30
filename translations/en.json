@@ -62,6 +62,8 @@
 		"newTestName": "New test name"
 	},
 	"project": {
-		"title": "My Project"
+		"selectProject": "Select a project",
+		"newProject": "New project",
+		"saved": "Saved!"
 	}
 }
