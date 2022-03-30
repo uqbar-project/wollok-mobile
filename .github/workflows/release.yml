@@ -2,8 +2,8 @@ name: Deploy
 
 on:
   push:
-    tags:        
-      - 'v*'
+    branches:        
+      - 'main'
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -63,14 +63,22 @@ jobs:
           lane: 'deploy'
           subdirectory: 'android'
 
-      - name: Commit
+      - name: Get node package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Commit version bump
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add android/app/build.gradle
           git commit -m "chore: version update" --no-verify
-          git push https://$USERNAME:$REPO_KEY@github.com/uqbar-project/wollok-mobile.git
+          git tag $RELEASE_TAG
+          git remote add origin https://$USERNAME:$REPO_KEY@github.com/uqbar-project/wollok-mobile.git
+          git push
+          git push $RELEASE_TAG
         env:
           REPO_KEY: ${{secrets.PAT}}
           USERNAME: github-actions[bot]
+          RELEASE_TAG: v${{ steps.package-version.outputs.current-version}}
 
