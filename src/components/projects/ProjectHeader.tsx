@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native'
-import { Badge, IconButton, List, Text } from 'react-native-paper'
+import { Badge, IconButton, List } from 'react-native-paper'
 import { Entity, Method, Node } from 'wollok-ts'
 import { useProject } from '../../context/ProjectProvider'
 import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
@@ -91,11 +91,7 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 									<IconButton icon="alert" color="yellow" />
 								)
 							}
-							description={
-								<>
-									<Text>{nodeDescription(problem.node)}</Text>
-								</>
-							}
+							description={nodeDescription(problem.node)}
 						/>
 					))}
 				</ScrollView>

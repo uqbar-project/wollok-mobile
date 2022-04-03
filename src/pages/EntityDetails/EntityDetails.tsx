@@ -10,6 +10,7 @@ import NewAttributeModal from '../../components/entity-detail/new-attribute-moda
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
 import { useEntity } from '../../context/EntityProvider'
+import { useProject } from '../../context/ProjectProvider'
 import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
 import { EntityMemberScreenNavigationProp } from '../EntityMemberDetail'
@@ -62,7 +63,15 @@ export const EntityDetails = function () {
 }
 
 function AttributeItem({ item: attribute }: { item: Field }) {
-	return <AttributeItemComponent key={attribute.name} attribute={attribute} />
+	const { problems } = useProject()
+	const problem = problems.find(p => p.node.id === attribute.id)
+	return (
+		<AttributeItemComponent
+			key={attribute.name}
+			attribute={attribute}
+			problem={problem}
+		/>
+	)
 }
 
 function MethodItem({ item: method }: { item: Method }) {

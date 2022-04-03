@@ -1,14 +1,19 @@
 import React from 'react'
-import { List, withTheme } from 'react-native-paper'
-import { Field } from 'wollok-ts/dist/model'
+import { IconButton, List, withTheme } from 'react-native-paper'
+import { Field, Problem } from 'wollok-ts/dist/model'
 import { Theme } from '../../../theme'
 import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 import styles from './styles'
 
-function AttributeItem(props: { attribute: Field; theme: Theme }) {
+function AttributeItem(props: {
+	attribute: Field
+	problem?: Problem
+	theme: Theme
+}) {
 	const {
 		attribute: { isProperty, isConstant, name, value },
+		problem,
 		theme,
 	} = props
 
@@ -26,6 +31,14 @@ function AttributeItem(props: { attribute: Field; theme: Theme }) {
 	return (
 		<List.Item
 			title={name}
+			left={() =>
+				problem &&
+				(problem.level === 'error' ? (
+					<IconButton icon="alert-circle" color="red" />
+				) : (
+					<IconButton icon="alert" color="yellow" />
+				))
+			}
 			description={() => value && <ExpressionDisplay expression={value} />}
 			right={() =>
 				icons

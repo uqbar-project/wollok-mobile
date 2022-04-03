@@ -2,7 +2,7 @@ import { Theme, useTheme } from '@react-navigation/native'
 import React, { Key, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Divider, List as ListComponent } from 'react-native-paper'
-import { List } from 'wollok-ts/dist/model'
+import { List } from 'wollok-ts/dist/extensions'
 
 type Props<Item> = {
 	title: string
