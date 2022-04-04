@@ -1,17 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Text } from 'react-native'
-import { IconButton } from 'react-native-paper'
+import { ScrollView, StyleSheet } from 'react-native'
 import { upperCaseFirst } from 'upper-case-first'
 import { Body, List, Name, Sentence } from 'wollok-ts/dist/model'
 import { wTranslate } from '../../../utils/translation-helpers'
 import { Referenciable } from '../../../utils/wollok-helpers'
-import { ReferenceSegment } from '../../expressions/expression-segment'
-import { display, ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import MultiFabScreen from '../../FabScreens/MultiFabScreen'
 import { SubmitCheckButton } from '../Header'
-import { Row } from '../Row'
 import { AssignmentFormModal } from './AssignmentFormModal'
+import { getVisualSentence } from './sentences/getVisualSentence'
 
 type BodyMakerProps = {
 	sentences: List<Sentence>
@@ -71,35 +68,7 @@ export function BodyMaker({
 				},
 			]}>
 			<ScrollView style={styles.sentences}>
-				{sentences.map((sentence, i) => {
-					switch (sentence.kind) {
-						case 'Send':
-							return (
-								<ExpressionDisplay
-									key={i}
-									expression={sentence}
-									withIcon={false}
-								/>
-							)
-						case 'Assignment':
-							return (
-								<Row key={i} style={display}>
-									<ReferenceSegment text={sentence.variable.name} index={0} />
-									<IconButton icon="arrow-right" />
-									<ExpressionDisplay
-										expression={sentence.value}
-										withIcon={false}
-									/>
-								</Row>
-							)
-						default:
-							return (
-								<Row key={i}>
-									<Text>{sentence.kind}</Text>
-								</Row>
-							)
-					}
-				})}
+				{sentences.map(getVisualSentence)}
 			</ScrollView>
 
 			<AssignmentFormModal

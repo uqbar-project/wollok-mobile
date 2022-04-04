@@ -53,7 +53,8 @@
 	"sentence": {
 		"assignment": "Asignar variable",
 		"selectVariable": "Seleccionar variable",
-		"messageSend": "Enviar mensaje"
+		"messageSend": "Enviar mensaje",
+		"unsupportedSentence": "Sentencia no soportada"
 	},
 	"tests": {
 		"title": "Grupos de tests",
