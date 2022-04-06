@@ -3,11 +3,13 @@ import {
 	Assignment as AssignmentModel,
 	Literal,
 	Reference,
+	Return as ReturnModel,
 	Send as SendModel,
 	Sentence,
 } from 'wollok-ts/dist/model'
 import { Assignment } from '../Assignment'
 import { getVisualSentence } from '../getVisualSentence'
+import { Return } from '../Return'
 import { Send } from '../Send'
 
 describe('matching sentences with components', () => {
@@ -28,6 +30,15 @@ describe('matching sentences with components', () => {
 				value: new Literal({ value: true }),
 			}),
 			Assignment,
+		)
+	})
+
+	it('should match a return sentence', () => {
+		checkMatch(
+			new ReturnModel({
+				value: new Literal({ value: true }),
+			}),
+			Return,
 		)
 	})
 
