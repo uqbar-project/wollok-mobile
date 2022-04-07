@@ -6,6 +6,7 @@ import { Entity, Method, Node } from 'wollok-ts'
 import { useProject } from '../../context/ProjectProvider'
 import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
 import { HomeScreenNavigationProp } from '../../pages/Home'
+import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN } from '../../utils/wollok-helpers'
 import FormModal from '../ui/FormModal/FormModal'
 import { Row } from '../ui/Row'
@@ -83,7 +84,8 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 					{projectProblems.map(problem => (
 						<List.Item
 							onPress={() => goto(problem.node)}
-							title={problem.code}
+							title={wTranslate(`problem.${problem.code}`)}
+							titleNumberOfLines={2}
 							left={() =>
 								problem.level === 'error' ? (
 									<IconButton icon="alert-circle" color="red" />
