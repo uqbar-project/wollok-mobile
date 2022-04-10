@@ -54,7 +54,8 @@
 		"assignment": "Variable assignment",
 		"selectVariable": "Select variable",
 		"messageSend": "Send message",
-		"unsupportedSentence": "Unsupported sentence"
+		"unsupportedSentence": "Unsupported sentence",
+		"return": "return"
 	},
 	"tests": {
 		"title": "Groups of tests",
