@@ -2,14 +2,16 @@ import { RouteProp, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import Collapsible from 'react-native-collapsible'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Button, List, TextInput } from 'react-native-paper'
+import { Button, IconButton, List, TextInput } from 'react-native-paper'
 import { Expression, Module } from 'wollok-ts/dist/model'
 import { ListLiterals } from '../../components/expressions/expression-lists/literals-list'
 import { ListMessages } from '../../components/expressions/expression-lists/messages-list'
 import { ListSingletons } from '../../components/expressions/expression-lists/singletons-list'
 import { ListVariables } from '../../components/expressions/expression-lists/variables-list'
 import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
+import { getVisualSentence } from '../../components/ui/Body/sentences/getVisualSentence'
 import { SubmitCheckButton } from '../../components/ui/Header'
 import {
 	Context,
@@ -52,7 +54,10 @@ function ExpressionMaker(props: {
 		setExpression(undefined)
 	}
 
+	const [expandedDisplay, setExpandedDisplay] = useState(false)
+
 	const navigation = useNavigation()
+
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
@@ -66,12 +71,41 @@ function ExpressionMaker(props: {
 		})
 	}, [navigation, expression, props])
 
+	const { context } = useExpressionContext()
+
 	return (
 		<View>
-			<ExpressionDisplay
-				backgroundColor="white"
-				withIcon={false}
-				expression={expression}
+			<Collapsible
+				collapsed={expandedDisplay}
+				collapsedHeight={300}
+				renderChildrenCollapsed={true}>
+				<ScrollView
+					style={{
+						backgroundColor: '#fff',
+					}}>
+					{context.kind === 'Method' &&
+						(expandedDisplay
+							? context.sentences()
+							: context
+									.sentences()
+									.slice(
+										context.sentences().length - 3,
+										context.sentences().length - 1,
+									)
+						).map(getVisualSentence)}
+
+					<ExpressionDisplay
+						backgroundColor="grey"
+						withIcon={false}
+						expression={expression}
+					/>
+				</ScrollView>
+			</Collapsible>
+			<IconButton
+				icon={expandedDisplay ? 'chevron-up' : 'chevron-down'}
+				onPress={() => {
+					setExpandedDisplay(!expandedDisplay)
+				}}
 			/>
 			<TextInput
 				label={wTranslate(
