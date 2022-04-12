@@ -3,12 +3,14 @@ import React, { useState } from 'react'
 import { ScrollView, StyleSheet, Text } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { Body, List, Name, Sentence } from 'wollok-ts/dist/model'
+import { List } from 'wollok-ts/dist/extensions'
+import { Body, Name, Sentence } from 'wollok-ts/dist/model'
 import { wTranslate } from '../../../utils/translation-helpers'
 import { Referenciable } from '../../../utils/wollok-helpers'
 import { ReferenceSegment } from '../../expressions/expression-segment'
 import { display, ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import MultiFabScreen from '../../FabScreens/MultiFabScreen'
+import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
 import { SubmitCheckButton } from '../Header'
 import { Row } from '../Row'
 import { AssignmentFormModal } from './AssignmentFormModal'
@@ -84,6 +86,7 @@ export function BodyMaker({
 						case 'Assignment':
 							return (
 								<Row key={i} style={display}>
+									<ProblemReporterButton node={sentence} />
 									<ReferenceSegment text={sentence.variable.name} index={0} />
 									<IconButton icon="arrow-right" />
 									<ExpressionDisplay

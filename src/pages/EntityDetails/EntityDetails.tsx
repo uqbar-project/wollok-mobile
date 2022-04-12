@@ -9,8 +9,8 @@ import AttributeItemComponent from '../../components/entity-detail/AttributeItem
 import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
 import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
 import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
+import { ProblemReporterButton } from '../../components/problems/ProblemReporterButton'
 import { useEntity } from '../../context/EntityProvider'
-import { useProject } from '../../context/ProjectProvider'
 import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
 import { EntityMemberScreenNavigationProp } from '../EntityMemberDetail'
@@ -63,15 +63,7 @@ export const EntityDetails = function () {
 }
 
 function AttributeItem({ item: attribute }: { item: Field }) {
-	const { problems } = useProject()
-	const problem = problems.find(p => p.node.id === attribute.id)
-	return (
-		<AttributeItemComponent
-			key={attribute.name}
-			attribute={attribute}
-			problem={problem}
-		/>
-	)
+	return <AttributeItemComponent key={attribute.name} attribute={attribute} />
 }
 
 function MethodItem({ item: method }: { item: Method }) {
@@ -80,6 +72,7 @@ function MethodItem({ item: method }: { item: Method }) {
 		<List.Item
 			key={method.name}
 			title={methodLabel(method)}
+			left={() => <ProblemReporterButton node={method} />}
 			onPress={() =>
 				navigator.navigate('EntityMemberDetails', {
 					entityMember: method,

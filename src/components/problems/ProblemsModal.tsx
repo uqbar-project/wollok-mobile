@@ -18,11 +18,14 @@ export function ProblemModal({
 	visible,
 	setVisible,
 }: ProblemsModalProp & Pick<FormModalProps, 'visible' | 'setVisible'>) {
-	const nodeDescription = (n: Node) =>
+	const nodeDescription = (n: Node): string | undefined =>
 		n.match({
 			Method: methodFQN,
 			Singleton: s => s.name,
 			Field: f => f.name,
+			Assignment: a => nodeDescription(a.parent),
+			Body: b => nodeDescription(b.parent),
+			Expression: _e => 'HOLA',
 		})
 
 	return (
