@@ -6,11 +6,9 @@ import {
 	Body,
 	Expression,
 	List,
-	Literal,
 	Name,
 	Return,
 	Sentence,
-	Variable,
 } from 'wollok-ts/dist/model'
 import { ExpressionOnSubmit } from '../../../pages/ExpressionMaker/ExpressionMaker'
 import { wTranslate } from '../../../utils/translation-helpers'
@@ -20,6 +18,7 @@ import { SubmitCheckButton } from '../Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
 import { getVisualSentence } from './sentences/getVisualSentence'
 import { returnIcon as returnIconName } from './sentences/Return'
+import { VariableFormModal } from './VariableForm'
 
 type BodyMakerProps = {
 	sentences: List<Sentence>
@@ -34,6 +33,8 @@ export function BodyMaker({
 	contextFQN,
 }: BodyMakerProps) {
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
+	const [variableModalVisible, setVariableModalVisible] = useState(false)
+
 	const [sentences, setSentences] = useState<Sentence[]>(
 		Array.from(initialSentences),
 	)
@@ -68,57 +69,36 @@ export function BodyMaker({
 		}
 	}
 
+	const actions = [
+		{
+			icon: 'message',
+			onPress: goToExpressionMaker(addSentence),
+			label: upperCaseFirst(wTranslate('sentence.messageSend')),
+		},
+		{
+			icon: 'arrow-right',
+			onPress: () => {
+				setAssignmentModalVisible(true)
+			},
+			label: upperCaseFirst(wTranslate('sentence.assignment')),
+		},
+		{
+			icon: returnIconName,
+			onPress: goToExpressionMaker(addReturn),
+			label: upperCaseFirst(wTranslate('sentence.return')),
+		},
+		{
+			icon: 'variable',
+			onPress: () => {
+				setVariableModalVisible(true)
+			},
+
+			label: upperCaseFirst(wTranslate('sentence.variable')),
+		},
+	]
+
 	return (
-		<MultiFabScreen
-			actions={[
-				{
-					icon: 'message',
-					onPress: goToExpressionMaker(addSentence),
-					label: upperCaseFirst(wTranslate('sentence.messageSend')),
-				},
-				{
-					icon: 'arrow-right',
-					onPress: () => {
-						setAssignmentModalVisible(true)
-					},
-					label: upperCaseFirst(wTranslate('sentence.assignment')),
-				},
-				{
-					icon: returnIconName,
-					onPress: goToExpressionMaker(addReturn),
-					label: upperCaseFirst(wTranslate('sentence.return')),
-				},
-				{
-					icon: 'variable',
-					onPress: () => {
-						addSentence(
-							new Variable({
-								name: 'nombre',
-								isConstant: false,
-								value: new Literal({ value: 'holiis' }),
-							}),
-						)
-					},
-
-					label: upperCaseFirst(wTranslate('sentence.variable')),
-				},
-				{
-					icon: 'variable',
-					onPress: () => {
-						addSentence(new Variable({ name: 'nombre', isConstant: true }))
-					},
-
-					label: upperCaseFirst(wTranslate('sentence.variable')),
-				},
-				{
-					icon: 'variable',
-					onPress: () => {
-						addSentence(new Variable({ name: 'nombre', isConstant: false }))
-					},
-
-					label: upperCaseFirst(wTranslate('sentence.variable')),
-				},
-			]}>
+		<MultiFabScreen actions={actions}>
 			<ScrollView style={styles.sentences}>
 				{sentences.map(getVisualSentence)}
 			</ScrollView>
@@ -129,6 +109,13 @@ export function BodyMaker({
 				setVisible={setAssignmentModalVisible}
 				contextFQN={contextFQN}
 				visible={assignmentModalVisible}
+			/>
+
+			<VariableFormModal
+				onSubmit={addSentence}
+				setVisible={setVariableModalVisible}
+				contextFQN={contextFQN}
+				visible={variableModalVisible}
 			/>
 		</MultiFabScreen>
 	)

@@ -56,7 +56,9 @@
 		"messageSend": "Send message",
 		"unsupportedSentence": "Unsupported sentence",
 		"return": "return",
-		"variable": "variable"
+		"variable": "variable",
+		"constant": "Constant",
+		"variableName": "Variable name"
 	},
 	"tests": {
 		"title": "Groups of tests",
