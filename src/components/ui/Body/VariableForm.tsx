@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { Divider, Text, TextInput } from 'react-native-paper'
+import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Name, Variable } from 'wollok-ts/dist/model'
 import { wTranslate } from '../../../utils/translation-helpers'
@@ -47,7 +46,6 @@ export function VariableFormModal({
 				/>
 				<Text>{upperCaseFirst(wTranslate('sentence.constant'))}</Text>
 			</Row>
-			<Divider style={styles.divider} />
 			<ExpressionInput
 				value={value}
 				setValue={setValue}
@@ -57,13 +55,3 @@ export function VariableFormModal({
 		</FormModal>
 	)
 }
-
-const styles = StyleSheet.create({
-	divider: {
-		marginTop: 10,
-		marginBottom: 10,
-	},
-	dropdown: {
-		marginTop: -25,
-	},
-})
