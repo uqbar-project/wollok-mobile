@@ -13,6 +13,7 @@ import { Theme } from '../../theme'
 import { runAsync } from '../../utils/commons'
 import { Maybe } from '../../utils/type-helpers'
 import { TestRun } from '../../utils/wollok-helpers'
+import { ProblemReporterButton } from '../problems/ProblemReporterButton'
 import FormModal from '../ui/FormModal/FormModal'
 
 type TestItemProps = {
@@ -30,7 +31,12 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 		<>
 			<List.Item
 				title={test.name}
-				left={() => <IconButton icon={'flask'} />}
+				left={() => (
+					<>
+						<ProblemReporterButton node={test} />
+						<IconButton icon={'flask'} />
+					</>
+				)}
 				right={() => (
 					<>
 						{testRun?.exception?.message && (

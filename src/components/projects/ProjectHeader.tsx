@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { Badge, IconButton } from 'react-native-paper'
-import { Entity, Method, Problem } from 'wollok-ts'
+import { Entity, Method, Node } from 'wollok-ts'
 import { useProject } from '../../context/ProjectProvider'
 import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
 import { HomeScreenNavigationProp } from '../../pages/Home'
@@ -42,12 +42,14 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 		setShowProblems(false)
 	}
 
-	const projectProblems = problems.filter(p =>
-		p.node.ancestors().includes(project.getNodeByFQN('main')),
+	const projectProblems = problems.filter(
+		p =>
+			p.node.ancestors().includes(project.getNodeByFQN('main')) ||
+			p.node.ancestors().includes(project.getNodeByFQN('tests')),
 	) //TODO: Missing tests
 
-	const goto = (p: Problem): void =>
-		p.node.match({
+	const goto = (n: Node): void =>
+		n.match({
 			Method: goToMethod,
 			Singleton: goToEntityDetails,
 			Field: f => goToEntityDetails(f.parent),
@@ -73,7 +75,7 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 				problems={projectProblems}
 				visible={showProblems}
 				setVisible={setShowProblems}
-				onSelect={goto}
+				onSelect={p => goto(p.node)}
 			/>
 		</Row>
 	)

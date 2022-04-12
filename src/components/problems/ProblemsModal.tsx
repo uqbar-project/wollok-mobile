@@ -25,7 +25,8 @@ export function ProblemModal({
 			Field: f => f.name,
 			Assignment: a => nodeDescription(a.parent),
 			Body: b => nodeDescription(b.parent),
-			Expression: _e => 'HOLA',
+			Expression: e => nodeDescription(e.parent),
+			Test: t => t.fullyQualifiedName(),
 		})
 
 	return (

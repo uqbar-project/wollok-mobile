@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Node, Problem } from 'wollok-ts'
 import { useProject } from '../../context/ProjectProvider'
-import { log } from '../../utils/commons'
 import { ProblemIcon } from './ProblemIcon'
 import { ProblemModal } from './ProblemsModal'
 
@@ -20,10 +19,9 @@ export function ProblemReporterButton({
 	const belongsTo = (problem: Problem): boolean =>
 		node.match({
 			Method: m => problem.node.ancestors().includes(m),
+			Test: t => problem.node.ancestors().includes(t),
 			Node: n => n.id === problem.node.id,
 		})
-
-	log(problems[problems.length - 1].node.ancestors().map(a => a.kind))
 
 	const nodeProblems = problems.filter(belongsTo)
 

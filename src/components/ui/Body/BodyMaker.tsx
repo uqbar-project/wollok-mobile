@@ -77,11 +77,14 @@ export function BodyMaker({
 					switch (sentence.kind) {
 						case 'Send':
 							return (
-								<ExpressionDisplay
-									key={i}
-									expression={sentence}
-									withIcon={false}
-								/>
+								<Row key={i} style={display}>
+									<ProblemReporterButton node={sentence} />
+									<ExpressionDisplay
+										key={i}
+										expression={sentence}
+										withIcon={false}
+									/>
+								</Row>
 							)
 						case 'Assignment':
 							return (
