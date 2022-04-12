@@ -11,6 +11,7 @@ import {
 } from 'wollok-ts/dist/interpreter/runtimeModel'
 import {
 	Environment,
+	Expression,
 	Field,
 	is,
 	List,
@@ -110,6 +111,10 @@ export function interpretTest(test: Test, environment: Environment): TestRun {
 			exception.name === 'wollok.lib.AssertionException' ? 'Failure' : 'Error'
 		return { result, exception }
 	}
+}
+
+export function isNullExpression(expression: Expression): boolean {
+	return expression.is('Literal') && expression.value === null
 }
 
 export function executionFor(

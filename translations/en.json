@@ -55,7 +55,8 @@
 		"selectVariable": "Select variable",
 		"messageSend": "Send message",
 		"unsupportedSentence": "Unsupported sentence",
-		"return": "return"
+		"return": "return",
+		"variable": "variable"
 	},
 	"tests": {
 		"title": "Groups of tests",

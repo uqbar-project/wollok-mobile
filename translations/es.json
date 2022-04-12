@@ -55,7 +55,8 @@
 		"selectVariable": "Seleccionar variable",
 		"messageSend": "Enviar mensaje",
 		"unsupportedSentence": "Sentencia no soportada",
-		"return": "retornar"
+		"return": "retornar",
+		"variable": "variable"
 	},
 	"tests": {
 		"title": "Grupos de tests",

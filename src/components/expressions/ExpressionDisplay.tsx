@@ -11,6 +11,10 @@ import {
 export function ExpressionDisplay(props: {
 	expression?: Expression
 	backgroundColor?: ViewStyle['backgroundColor']
+	/**
+	 * @description Whether to show the code icon on the display.
+	 * @default true
+	 */
 	withIcon?: boolean
 }) {
 	const { expression, backgroundColor, withIcon, ...innerProps } = props

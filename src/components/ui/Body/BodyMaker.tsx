@@ -6,9 +6,11 @@ import {
 	Body,
 	Expression,
 	List,
+	Literal,
 	Name,
 	Return,
 	Sentence,
+	Variable,
 } from 'wollok-ts/dist/model'
 import { ExpressionOnSubmit } from '../../../pages/ExpressionMaker/ExpressionMaker'
 import { wTranslate } from '../../../utils/translation-helpers'
@@ -85,6 +87,36 @@ export function BodyMaker({
 					icon: returnIconName,
 					onPress: goToExpressionMaker(addReturn),
 					label: upperCaseFirst(wTranslate('sentence.return')),
+				},
+				{
+					icon: 'variable',
+					onPress: () => {
+						addSentence(
+							new Variable({
+								name: 'nombre',
+								isConstant: false,
+								value: new Literal({ value: 'holiis' }),
+							}),
+						)
+					},
+
+					label: upperCaseFirst(wTranslate('sentence.variable')),
+				},
+				{
+					icon: 'variable',
+					onPress: () => {
+						addSentence(new Variable({ name: 'nombre', isConstant: true }))
+					},
+
+					label: upperCaseFirst(wTranslate('sentence.variable')),
+				},
+				{
+					icon: 'variable',
+					onPress: () => {
+						addSentence(new Variable({ name: 'nombre', isConstant: false }))
+					},
+
+					label: upperCaseFirst(wTranslate('sentence.variable')),
 				},
 			]}>
 			<ScrollView style={styles.sentences}>
