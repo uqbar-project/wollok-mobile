@@ -12,17 +12,17 @@ import { wTranslate } from '../../../utils/translation-helpers'
 import { ParentComponentProp } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 
-function FormModal(
-	props: ParentComponentProp<{
-		visible: boolean
-		setVisible: (value: boolean) => void
-		onSubmit: () => void
-		resetForm?: () => void
-		title?: string
-		valid?: boolean
-		theme: Theme
-	}>,
-) {
+export type FormModalProps = ParentComponentProp<{
+	visible: boolean
+	setVisible: (value: boolean) => void
+	onSubmit: () => void
+	resetForm?: () => void
+	title?: string
+	valid?: boolean
+	theme: Theme
+}>
+
+function FormModal(props: FormModalProps) {
 	const styles = stylesheet(props.theme)
 
 	const disabledSubmit = props.valid === undefined ? false : !props.valid
