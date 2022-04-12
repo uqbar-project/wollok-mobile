@@ -6,6 +6,7 @@ import { Row } from '../../Row'
 import { Assignment } from './Assignment'
 import { Return } from './Return'
 import { Send } from './Send'
+import { Variable } from './Variable'
 export function getVisualSentence(
 	sentence: Sentence,
 	index: number,
@@ -17,6 +18,8 @@ export function getVisualSentence(
 			return <Assignment assignment={sentence} key={index} />
 		case 'Return':
 			return <Return returnSentence={sentence} key={index} />
+		case 'Variable':
+			return <Variable variable={sentence} key={index} />
 		default:
 			return (
 				<Row key={index}>

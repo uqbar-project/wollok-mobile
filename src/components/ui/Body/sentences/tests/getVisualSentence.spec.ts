@@ -6,11 +6,13 @@ import {
 	Return as ReturnModel,
 	Send as SendModel,
 	Sentence,
+	Variable as VariableModel,
 } from 'wollok-ts/dist/model'
 import { Assignment } from '../Assignment'
 import { getVisualSentence } from '../getVisualSentence'
 import { Return } from '../Return'
 import { Send } from '../Send'
+import { Variable } from '../Variable'
 
 describe('matching sentences with components', () => {
 	it('should match a send sentence', () => {
@@ -40,6 +42,10 @@ describe('matching sentences with components', () => {
 			}),
 			Return,
 		)
+	})
+
+	it('should match a variable sentence', () => {
+		checkMatch(new VariableModel({ name: 'name', isConstant: false }), Variable)
 	})
 
 	it('should match any unknown sentences with the unsupported sentence component', async () => {
