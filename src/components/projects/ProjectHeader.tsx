@@ -46,13 +46,18 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 		p =>
 			p.node.ancestors().includes(project.getNodeByFQN('main')) ||
 			p.node.ancestors().includes(project.getNodeByFQN('tests')),
-	) //TODO: Missing tests
+	) //TODO: Move to project provider
 
 	const goto = (n: Node): void =>
 		n.match({
 			Method: goToMethod,
 			Singleton: goToEntityDetails,
 			Field: f => goToEntityDetails(f.parent),
+			Assignment: a => goto(a.parent),
+			Body: b => goto(b.parent),
+			Expression: e => goto(e.parent),
+			Test: t => goto(t.parent),
+			Describe: t => goToEntityDetails(t),
 		})
 
 	return (
