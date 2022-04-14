@@ -2,12 +2,12 @@ import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { List as ListComponent, Text } from 'react-native-paper'
+import { List } from 'wollok-ts/dist/extensions'
 import {
 	Class,
 	Environment,
 	Expression,
 	is,
-	List,
 	Method,
 	Send,
 } from 'wollok-ts/dist/model'
