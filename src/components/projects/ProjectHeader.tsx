@@ -16,7 +16,6 @@ interface ProjectHeaderProp {
 export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 	const [showProblems, setShowProblems] = useState(false)
 	const {
-		project,
 		changed,
 		problems,
 		actions: { save },
@@ -42,12 +41,6 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 		setShowProblems(false)
 	}
 
-	const projectProblems = problems.filter(
-		p =>
-			p.node.ancestors().includes(project.getNodeByFQN('main')) ||
-			p.node.ancestors().includes(project.getNodeByFQN('tests')),
-	) //TODO: Move to project provider
-
 	const goto = (n: Node): void =>
 		n.match({
 			Method: goToMethod,
@@ -63,13 +56,13 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 	return (
 		<Row>
 			<IconButton
-				disabled={!projectProblems.length}
+				disabled={!problems.length}
 				icon="alert-circle"
 				onPress={() => {
 					setShowProblems(true)
 				}}
 			/>
-			<Badge>{projectProblems.length}</Badge>
+			<Badge>{problems.length}</Badge>
 			<IconButton
 				disabled={!changed}
 				icon="content-save"
@@ -77,7 +70,7 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 			/>
 
 			<ProblemModal
-				problems={projectProblems}
+				problems={problems}
 				visible={showProblems}
 				setVisible={setShowProblems}
 				onSelect={p => goto(p.node)}
