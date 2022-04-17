@@ -7,7 +7,7 @@ import { Body, Test } from 'wollok-ts/dist/model'
 import TestItem from '../components/tests/TestItem'
 import { theme } from '../theme'
 import { TestRun } from '../utils/wollok-helpers'
-import TestProjectProvider from './mocks/TestProjectProvider'
+import ProjectProviderMock from './mocks/ProjectProviderMock'
 
 const testMock = new Test({
 	name: 'TEST',
@@ -49,14 +49,14 @@ const renderTest = (runner: () => TestRun = jest.fn()) => {
 		UNSAFE_queryByProps,
 		queryByText,
 	} = render(
-		<TestProjectProvider>
+		<ProjectProviderMock>
 			<TestItem
 				item={testMock}
 				runner={runner}
 				onClick={jest.fn()}
 				theme={theme}
 			/>
-		</TestProjectProvider>,
+		</ProjectProviderMock>,
 	)
 	return {
 		runIcon: () => UNSAFE_getByProps({ icon: 'play-circle' }),

@@ -20,13 +20,12 @@ export function ProblemModal({
 }: ProblemsModalProp & Pick<FormModalProps, 'visible' | 'setVisible'>) {
 	const nodeDescription = (n: Node): string | undefined =>
 		n.match({
-			Method: methodFQN,
-			Singleton: s => s.name,
+			Entity: s => s.name,
 			Field: f => f.name,
-			Assignment: a => nodeDescription(a.parent),
+			Method: methodFQN,
+			Test: t => t.name,
 			Body: b => nodeDescription(b.parent),
-			Expression: e => nodeDescription(e.parent),
-			Test: t => t.fullyQualifiedName(),
+			Sentence: a => nodeDescription(a.parent),
 		})
 
 	return (
@@ -35,8 +34,9 @@ export function ProblemModal({
 			setVisible={setVisible}
 			onSubmit={() => setVisible(false)}>
 			<ScrollView>
-				{problems.map(problem => (
+				{problems.map((problem, i) => (
 					<List.Item
+						key={i}
 						onPress={() => onSelect && onSelect(problem)}
 						title={wTranslate(`problem.${problem.code}`)}
 						titleNumberOfLines={2}
