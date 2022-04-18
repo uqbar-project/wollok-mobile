@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { TextInput } from 'react-native-paper'
 import { Literal, LiteralValue } from 'wollok-ts/dist/model'
-import { ExpressionOnSubmit } from '../../../pages/ExpressionMaker/ExpressionMaker'
+import { ExpressionOnSubmit } from '../../../pages/ExpressionMaker'
 import FormModal from '../../ui/FormModal/FormModal'
 
 type LiteralValueModalProps = {

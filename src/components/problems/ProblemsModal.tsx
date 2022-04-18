@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView } from 'react-native'
 import { List } from 'react-native-paper'
-import { Node, Problem } from 'wollok-ts'
+import { Node, Problem } from 'wollok-ts/dist/model'
 import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN } from '../../utils/wollok-helpers'
 import FormModal, { FormModalProps } from '../ui/FormModal/FormModal'

@@ -56,14 +56,6 @@ export function methodLabel(method: Method): string {
 	return `${method.name}(${method.parameters.map(_ => _.name).join(',')})`
 }
 
-export function entityMemberLabel(node: EntityMemberWithBody): string {
-	return node.is('Method') ? methodLabel(node) : node.name
-}
-
-export function entityMemberFQN(node: EntityMemberWithBody): string {
-	return node.is('Method') ? methodFQN(node) : node.fullyQualifiedName()
-}
-
 export function literalClassFQN(literal: Literal): Name {
 	return `wollok.lang.${upperCaseFirst(typeof literal.value)}`
 }
@@ -77,6 +69,8 @@ export function allScopedVariables(
 
 	return [...fields, ...params, ...methodVars]
 }
+
+// METHODS
 
 export function methodFQN(method: Method) {
 	return `${method.parent.fullyQualifiedName()}.${method.name}/${
@@ -102,9 +96,30 @@ export function methodByFQN(environment: Environment, fqn: Name): Method {
 	return entity.lookupMethod(methodName, Number.parseInt(methodArity, 10))!
 }
 
+export function entityMemberLabel(node: EntityMemberWithBody): string {
+	return node.is('Method') ? methodLabel(node) : node.name
+}
+
+export function entityMemberFQN(node: EntityMemberWithBody): string {
+	return node.is('Method') ? methodFQN(node) : node.fullyQualifiedName()
+}
+
+export function entityMemberByFQN(
+	environment: Environment,
+	fqn: Name,
+): EntityMemberWithBody {
+	return isMethodFQN(fqn)
+		? methodByFQN(environment, fqn)
+		: environment.getNodeByFQN<Test>(fqn)
+}
+
+// PROBLEMS
+
 export function isError(problem: Problem): boolean {
 	return problem.level === 'error'
 }
+
+// TESTS
 
 export type TestResult = 'Passed' | 'Failure' | 'Error'
 export type TestRun = { result: TestResult; exception?: WollokException }

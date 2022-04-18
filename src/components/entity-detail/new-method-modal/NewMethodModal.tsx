@@ -1,22 +1,20 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { Text, TextInput, withTheme } from 'react-native-paper'
+import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Body, Method, Parameter } from 'wollok-ts/dist/model'
-import { useEntity } from '../../../context/EntityProvider'
-import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation-helpers'
+import { Visible } from '../../../utils/type-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import ParameterInput from './ParameterInput'
 
-const NewMethodModal = (props: {
-	visible: boolean
-	setVisible: (value: boolean) => void
-	theme: Theme
-}) => {
-	const {
-		actions: { addMember },
-	} = useEntity()
+type NewMethodModalProps = Visible & { addNewMethod: (m: Method) => void }
+
+const NewMethodModal = ({
+	visible,
+	setVisible,
+	addNewMethod,
+}: NewMethodModalProps) => {
 	const [name, setName] = useState('')
 	const [parameters, setParameters] = useState<string[]>([])
 	const [nextParameter, setNextParameter] = useState('')
@@ -26,8 +24,8 @@ const NewMethodModal = (props: {
 			title={wTranslate('entityDetails.methodModal.newMethod')}
 			resetForm={reset}
 			onSubmit={newMethod}
-			setVisible={props.setVisible}
-			visible={props.visible}>
+			setVisible={setVisible}
+			visible={visible}>
 			<TextInput
 				onChangeText={setName}
 				label={wTranslate('entityDetails.methodModal.nameOfMethod')}
@@ -64,7 +62,7 @@ const NewMethodModal = (props: {
 	}
 
 	function newMethod() {
-		addMember(
+		addNewMethod(
 			new Method({
 				name,
 				parameters: parameters.map(
@@ -95,4 +93,4 @@ const styles = StyleSheet.create({
 	subtitle: { fontSize: 16, marginTop: 15 },
 })
 
-export default withTheme(NewMethodModal)
+export default NewMethodModal
