@@ -1,6 +1,7 @@
 // TODO: import form Wollok
 // All these funtions are duplicated from Wollok
 import { upperCaseFirst } from 'upper-case-first'
+import { List } from 'wollok-ts/dist/extensions'
 import interpret, {
 	DirectedInterpreter,
 	ExecutionDirector,
@@ -19,11 +20,11 @@ import {
 	Name,
 	Node,
 	Parameter,
+	Problem,
 	Singleton,
 	Test,
 	Variable,
 } from 'wollok-ts/dist/model'
-import { List } from 'wollok-ts/dist/extensions'
 import WRENatives from 'wollok-ts/dist/wre/wre.natives'
 import { last } from './commons'
 
@@ -57,6 +58,10 @@ export function methodLabel(method: Method): string {
 
 export function entityMemberLabel(node: EntityMemberWithBody): string {
 	return node.is('Method') ? methodLabel(node) : node.name
+}
+
+export function entityMemberFQN(node: EntityMemberWithBody): string {
+	return node.is('Method') ? methodFQN(node) : node.fullyQualifiedName()
 }
 
 export function literalClassFQN(literal: Literal): Name {
@@ -95,6 +100,10 @@ export function methodByFQN(environment: Environment, fqn: Name): Method {
 	const entity = environment.getNodeByFQN<Module>(entityFQN)
 
 	return entity.lookupMethod(methodName, Number.parseInt(methodArity, 10))!
+}
+
+export function isError(problem: Problem): boolean {
+	return problem.level === 'error'
 }
 
 export type TestResult = 'Passed' | 'Failure' | 'Error'

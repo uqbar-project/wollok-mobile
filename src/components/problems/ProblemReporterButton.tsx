@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Node, Problem } from 'wollok-ts'
 import { useProject } from '../../context/ProjectProvider'
+import { isError } from '../../utils/wollok-helpers'
 import { ProblemIcon } from './ProblemIcon'
 import { ProblemModal } from './ProblemsModal'
 
@@ -29,11 +30,13 @@ export function ProblemReporterButton({
 		return null
 	}
 
+	const maybeError = nodeProblems.find(isError)
+
 	return (
 		<>
 			{icon || (
 				<ProblemIcon
-					problem={nodeProblems[0]}
+					problem={maybeError || nodeProblems[0]}
 					onPress={() => setShowProblems(true)}
 				/>
 			)}

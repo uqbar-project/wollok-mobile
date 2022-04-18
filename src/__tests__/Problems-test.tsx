@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react-native'
+import { render, RenderAPI } from '@testing-library/react-native'
 import React from 'react'
 import { Node, Problem } from 'wollok-ts'
 import { ProblemIcon } from '../components/problems/ProblemIcon'
@@ -20,15 +20,13 @@ import {
 
 describe('ProblemIcon', () => {
 	it('is red on error', () => {
-		const { UNSAFE_getByProps } = render(<ProblemIcon problem={error} />)
-		expect(
-			UNSAFE_getByProps({ icon: 'alert-circle', color: 'red' }),
-		).toBeDefined()
+		const rendered = render(<ProblemIcon problem={error} />)
+		expectErrorIcon(rendered)
 	})
 
 	it('is yellow on warning', () => {
-		const { UNSAFE_getByProps } = render(<ProblemIcon problem={warning} />)
-		expect(UNSAFE_getByProps({ icon: 'alert', color: 'yellow' })).toBeDefined()
+		const rendered = render(<ProblemIcon problem={warning} />)
+		expectWarningIcon(rendered)
 	})
 })
 
@@ -44,6 +42,15 @@ describe('ProblemReporterButton', () => {
 	it('should not be shown if there is no related problems', () => {
 		const rendered = renderProblemReporterButton(singleton)
 		expect(rendered.toJSON()).toBeNull()
+	})
+
+	it('should show error if there is related warnings and problems', () => {
+		const rendered = renderProblemReporterButton(
+			singleton,
+			warning,
+			problem(singleton),
+		)
+		expectErrorIcon(rendered)
 	})
 
 	describe('should render if there is any problem', () => {
@@ -93,3 +100,13 @@ describe('ProblemModal', () => {
 		problemDescriptionTest('sentence', methodFQN(method), problem(sentence))
 	})
 })
+
+function expectErrorIcon({ UNSAFE_getByProps }: RenderAPI) {
+	expect(
+		UNSAFE_getByProps({ icon: 'alert-circle', color: 'red' }),
+	).toBeDefined()
+}
+
+function expectWarningIcon({ UNSAFE_getByProps }: RenderAPI) {
+	expect(UNSAFE_getByProps({ icon: 'alert', color: 'yellow' })).toBeDefined()
+}
