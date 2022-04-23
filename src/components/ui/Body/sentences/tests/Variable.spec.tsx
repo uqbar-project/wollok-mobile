@@ -1,15 +1,11 @@
-import { NavigationContainer } from '@react-navigation/native'
-import { render } from '@testing-library/react-native'
 import React from 'react'
 import { Literal, Variable as VariableModel } from 'wollok-ts/dist/model'
-import { theme } from '../../../../../theme'
+import { renderWithTheme } from '../../../../../utils/test-helpers'
 import { Variable } from '../Variable'
 
 function renderVariable(variable: VariableModel) {
-	const { UNSAFE_queryByProps, getByText } = render(
-		<NavigationContainer theme={theme}>
-			<Variable variable={variable} />
-		</NavigationContainer>,
+	const { UNSAFE_queryByProps, getByText } = renderWithTheme(
+		<Variable variable={variable} />,
 	)
 
 	return {

@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react-native'
+import React from 'react'
 import {
 	Assignment as AssignmentModel,
 	Literal,
@@ -8,11 +9,12 @@ import {
 	Sentence,
 	Variable as VariableModel,
 } from 'wollok-ts/dist/model'
+import { renderWithTheme } from '../../../../../utils/test-helpers'
 import { Assignment } from '../Assignment'
-import { getVisualSentence } from '../getVisualSentence'
 import { Return } from '../Return'
 import { Send } from '../Send'
 import { Variable } from '../Variable'
+import { VisualSentence } from '../VisualSentence'
 
 describe('matching sentences with components', () => {
 	it('should match a send sentence', () => {
@@ -52,7 +54,7 @@ describe('matching sentences with components', () => {
 		const unsupportedKind = 'Crazy'
 		const crazySentence = { kind: unsupportedKind } as unknown as Sentence
 
-		const { getByText } = render(getVisualSentence(crazySentence, 0))
+		const { getByText } = render(<VisualSentence sentence={crazySentence} />)
 		expect(getByText(unsupportedKind, { exact: false })).toBeTruthy()
 	})
 })
@@ -61,5 +63,8 @@ function checkMatch(
 	sentence: Sentence,
 	component: (props: any) => JSX.Element,
 ) {
-	expect(getVisualSentence(sentence, 0).type).toBe(component)
+	const { UNSAFE_queryByType } = renderWithTheme(
+		<VisualSentence sentence={sentence} />,
+	)
+	expect(UNSAFE_queryByType(component)).toBeTruthy()
 }

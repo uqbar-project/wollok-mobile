@@ -16,8 +16,8 @@ import { Referenciable } from '../../../utils/wollok-helpers'
 import MultiFabScreen from '../../FabScreens/MultiFabScreen'
 import { SubmitCheckButton } from '../Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
-import { getVisualSentence } from './sentences/getVisualSentence'
 import { returnIcon as returnIconName } from './sentences/Return'
+import { VisualSentence } from './sentences/VisualSentence'
 import { VariableFormModal } from './VariableForm'
 
 type BodyMakerProps = {
@@ -100,7 +100,9 @@ export function BodyMaker({
 	return (
 		<MultiFabScreen actions={actions}>
 			<ScrollView style={styles.sentences}>
-				{sentences.map(getVisualSentence)}
+				{sentences.map((sentence, i) => (
+					<VisualSentence sentence={sentence} key={i} />
+				))}
 			</ScrollView>
 
 			<AssignmentFormModal

@@ -7,22 +7,19 @@ import { Assignment } from './Assignment'
 import { Return } from './Return'
 import { Send } from './Send'
 import { Variable } from './Variable'
-export function getVisualSentence(
-	sentence: Sentence,
-	index: number,
-): JSX.Element {
+export function VisualSentence({ sentence }: { sentence: Sentence }) {
 	switch (sentence.kind) {
 		case 'Send':
-			return <Send send={sentence} key={index} />
+			return <Send send={sentence} />
 		case 'Assignment':
-			return <Assignment assignment={sentence} key={index} />
+			return <Assignment assignment={sentence} />
 		case 'Return':
-			return <Return returnSentence={sentence} key={index} />
+			return <Return returnSentence={sentence} />
 		case 'Variable':
-			return <Variable variable={sentence} key={index} />
+			return <Variable variable={sentence} />
 		default:
 			return (
-				<Row key={index}>
+				<Row>
 					<Text>{`${wTranslate('sentence.unsupportedSentence')}: ${
 						sentence.kind
 					}`}</Text>
