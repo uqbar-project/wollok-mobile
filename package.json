@@ -1,6 +1,6 @@
 {
 	"name": "wollokmobile",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
@@ -23,8 +23,7 @@
 	"lint-staged": {
 		"*.{ts,tsx}": [
 			"prettier --write",
-			"eslint --fix",
-			"git add"
+			"eslint --fix"
 		]
 	},
 	"dependencies": {
@@ -51,7 +50,7 @@
 		"react-native-vector-icons": "^8.1.0",
 		"rn-fetch-blob-v2": "^0.14.1",
 		"upper-case-first": "^2.0.2",
-		"wollok-ts": "^3.0.6"
+		"wollok-ts": "^3.0.8"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.9",

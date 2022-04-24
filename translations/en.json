@@ -53,7 +53,12 @@
 	"sentence": {
 		"assignment": "Variable assignment",
 		"selectVariable": "Select variable",
-		"messageSend": "Send message"
+		"messageSend": "Send message",
+		"unsupportedSentence": "Unsupported sentence",
+		"return": "return",
+		"variable": "variable",
+		"constant": "Constant",
+		"variableName": "Variable name"
 	},
 	"tests": {
 		"title": "Groups of tests",
@@ -65,5 +70,10 @@
 		"selectProject": "Select a project",
 		"newProject": "New project",
 		"saved": "Saved!"
+	},
+	"problem": {
+		"shouldInitializeAllAttributes": "All object attributes should be initialized",
+		"nameShouldBeginWithLowercase": "This name should start with lowercase",
+		"shouldNotDefineUnusedVariables": "This variable is never used"
 	}
 }

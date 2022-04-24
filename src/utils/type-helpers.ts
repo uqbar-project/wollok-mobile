@@ -9,3 +9,8 @@ export type Maybe<T> = T | undefined
 export type ParentComponentProp<T = {}> = T & {
 	children: OneOrMany<JSX.Element>
 }
+
+export type Visible = {
+	visible: boolean
+	setVisible: (value: boolean) => void
+}

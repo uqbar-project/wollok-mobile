@@ -1,10 +1,10 @@
 import link from 'wollok-ts/dist/linker'
 import {
+	Assignment,
 	Body,
 	Describe,
 	Environment,
 	Field,
-	fromJSON,
 	Import,
 	Literal,
 	Method,
@@ -15,6 +15,7 @@ import {
 	Singleton,
 	Test,
 } from 'wollok-ts/dist/model'
+import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import WRE from 'wollok-ts/dist/wre/wre.json'
 import { mainPackageName } from './ProjectProvider'
 
@@ -50,9 +51,18 @@ const pepita = new Singleton({
 			],
 			body: new Body({
 				sentences: [
-					new Send({
-						receiver: new Reference({ name: 'comida' }),
-						message: 'energiaQueAporta',
+					new Assignment({
+						variable: new Reference({ name: 'energia' }),
+						value: new Send({
+							receiver: new Reference({ name: 'energia' }),
+							message: '+',
+							args: [
+								new Send({
+									receiver: new Reference({ name: 'comida' }),
+									message: 'energia',
+								}),
+							],
+						}),
 					}),
 				],
 			}),
@@ -91,7 +101,7 @@ const describe = new Describe({
 	name: 'Main Describe',
 	members: [
 		new Test({
-			name: 'Passed',
+			name: 'Test que pasa',
 			body: new Body({
 				sentences: [
 					new Send({
@@ -103,7 +113,7 @@ const describe = new Describe({
 			}),
 		}),
 		new Test({
-			name: 'Failure',
+			name: 'Test que falla',
 			body: new Body({
 				sentences: [
 					new Send({
@@ -115,7 +125,7 @@ const describe = new Describe({
 			}),
 		}),
 		new Test({
-			name: 'Error',
+			name: 'Test que tira error',
 			body: new Body({
 				sentences: [
 					new Send({

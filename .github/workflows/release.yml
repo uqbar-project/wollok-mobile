@@ -72,7 +72,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add android/app/build.gradle
-          git commit -m "chore: version update" --no-verify
+          git commit -m "[skip actions] chore: version update" --no-verify
           git tag $RELEASE_TAG
           git remote add auth https://$USERNAME:$REPO_KEY@github.com/uqbar-project/wollok-mobile.git
           git push auth

@@ -4,30 +4,25 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Button, List, TextInput } from 'react-native-paper'
-import { Expression, Module } from 'wollok-ts/dist/model'
-import { ListLiterals } from '../../components/expressions/expression-lists/literals-list'
-import { ListMessages } from '../../components/expressions/expression-lists/messages-list'
-import { ListSingletons } from '../../components/expressions/expression-lists/singletons-list'
-import { ListVariables } from '../../components/expressions/expression-lists/variables-list'
-import { ExpressionDisplay } from '../../components/expressions/ExpressionDisplay'
-import { SubmitCheckButton } from '../../components/ui/Header'
+import { Expression } from 'wollok-ts/dist/model'
+import { ListLiterals } from '../components/expressions/expression-lists/literals-list'
+import { ListMessages } from '../components/expressions/expression-lists/messages-list'
+import { ListSingletons } from '../components/expressions/expression-lists/singletons-list'
+import { ListVariables } from '../components/expressions/expression-lists/variables-list'
+import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
+import { SubmitCheckButton } from '../components/ui/Header'
 import {
 	Context,
 	ExpressionContextProvider,
 	useExpressionContext,
-} from '../../context/ExpressionContextProvider'
-import { useProject } from '../../context/ProjectProvider'
-import { wTranslate } from '../../utils/translation-helpers'
-import { isMethodFQN, methodByFQN } from '../../utils/wollok-helpers'
-import { EntityStackParamList } from '../EntityStack'
-
-export type ExpressionMakerProp = RouteProp<
-	EntityStackParamList,
-	'ExpressionMaker'
->
+} from '../context/ExpressionContextProvider'
+import { useProject } from '../context/ProjectProvider'
+import { wTranslate } from '../utils/translation-helpers'
+import { entityMemberByFQN } from '../utils/wollok-helpers'
+import { ProjectStackParamList } from './ProjectNavigator'
 
 export type ExpressionMakerScreenProp = StackNavigationProp<
-	EntityStackParamList,
+	ProjectStackParamList,
 	'ExpressionMaker'
 >
 
@@ -55,6 +50,9 @@ function ExpressionMaker(props: {
 	const navigation = useNavigation()
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
+			title: wTranslate('expression.title'),
+			headerTitleAlign: 'center',
+			animationEnabled: false,
 			headerRight: () => (
 				<SubmitCheckButton
 					disabled={!expression}
@@ -115,6 +113,11 @@ function ExpressionMaker(props: {
 	)
 }
 
+type ExpressionMakerRouteProp = RouteProp<
+	ProjectStackParamList,
+	'ExpressionMaker'
+>
+
 const styles = StyleSheet.create({
 	view: { display: 'flex', maxHeight: '85%' },
 })
@@ -124,12 +127,11 @@ export default function ({
 		params: { contextFQN, onSubmit, initialExpression },
 	},
 }: {
-	route: RouteProp<EntityStackParamList, 'ExpressionMaker'>
+	route: ExpressionMakerRouteProp
 }) {
 	const { project } = useProject()
-	const context: Context = isMethodFQN(contextFQN)
-		? methodByFQN(project, contextFQN)
-		: project.getNodeByFQN<Module>(contextFQN)
+	const context: Context = entityMemberByFQN(project, contextFQN)
+
 	return (
 		<ExpressionContextProvider context={context} fqn={contextFQN}>
 			<ExpressionMaker
