@@ -1,8 +1,12 @@
 import { RouteProp } from '@react-navigation/core'
-import { createStackNavigator } from '@react-navigation/stack'
+import {
+	createStackNavigator,
+	StackNavigationProp,
+} from '@react-navigation/stack'
 import React from 'react'
 import { Expression, Method, Name, Send } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
+import { NodeNavigationProvider } from '../context/NodeNavigation'
 import { ProjectProvider } from '../context/ProjectProvider'
 import { ArgumentsMaker } from './ArgumentsMaker'
 import { Editor } from './Editor'
@@ -36,19 +40,26 @@ export type ProjectStackRoute = RouteProp<
 	'ProjectNavigator'
 >
 
+export type ProjectScreenNavigationProp = StackNavigationProp<
+	RootStackParamList,
+	'ProjectNavigator'
+>
+
 export function ProjectNavigator({ route }: { route: ProjectStackRoute }) {
 	return (
-		<ProjectProvider
-			projectName={route.params.name}
-			initialProject={route.params.project}>
-			<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
-				<Stack.Screen name="Home" component={Home} />
-				<Stack.Screen name="EntityDetails" component={EntityDetails} />
-				<Stack.Screen name="Editor" component={Editor} />
-				<Stack.Screen name="ExpressionMaker" component={ExpressionMaker} />
-				<Stack.Screen name="ArgumentsMaker" component={ArgumentsMaker} />
-			</Stack.Navigator>
-		</ProjectProvider>
+		<NodeNavigationProvider>
+			<ProjectProvider
+				projectName={route.params.name}
+				initialProject={route.params.project}>
+				<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
+					<Stack.Screen name="Home" component={Home} />
+					<Stack.Screen name="EntityDetails" component={EntityDetails} />
+					<Stack.Screen name="Editor" component={Editor} />
+					<Stack.Screen name="ExpressionMaker" component={ExpressionMaker} />
+					<Stack.Screen name="ArgumentsMaker" component={ArgumentsMaker} />
+				</Stack.Navigator>
+			</ProjectProvider>
+		</NodeNavigationProvider>
 	)
 }
 

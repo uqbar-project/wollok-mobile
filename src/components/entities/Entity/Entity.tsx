@@ -1,8 +1,7 @@
-import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { List, withTheme } from 'react-native-paper'
 import { Module } from 'wollok-ts/dist/model'
-import { HomeScreenNavigationProp } from '../../../pages/Home'
+import { useNodeNavigation } from '../../../context/NodeNavigation'
 import { Theme } from '../../../theme'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
 import { EntityKindIcon } from '../EntityKindIcon'
@@ -15,12 +14,8 @@ type EntityComponentProps = {
 
 function EntityComponent({ entity, theme }: EntityComponentProps) {
 	const styles = stylesheet(theme)
-	const navigation = useNavigation<HomeScreenNavigationProp>()
-	const goToEntityDetails = () => {
-		navigation.navigate('EntityDetails', {
-			entityFQN: entity.fullyQualifiedName(),
-		})
-	}
+	const { goToNode } = useNodeNavigation()
+	const goToEntityDetails = () => goToNode(entity)
 
 	return (
 		<List.Item
