@@ -6,9 +6,12 @@ import { Tests } from '../components/tests/Tests'
 import { useProject } from '../context/ProjectProvider'
 import { ProjectStackParamList } from './ProjectNavigator'
 
-export type EntityStackRoute = RouteProp<ProjectStackParamList, 'EntityStack'>
+export type EntityDetailsRoute = RouteProp<
+	ProjectStackParamList,
+	'EntityDetails'
+>
 
-function EntityStack(props: { route: EntityStackRoute }) {
+function EntityDetails(props: { route: EntityDetailsRoute }) {
 	const { project } = useProject()
 	const entity = project.getNodeByFQN<Module>(props.route.params.entityFQN)
 
@@ -27,4 +30,4 @@ function EntityStack(props: { route: EntityStackRoute }) {
 	)
 }
 
-export default EntityStack
+export default EntityDetails

@@ -6,13 +6,13 @@ import { RootStackParamList } from '../App'
 import { ProjectProvider } from '../context/ProjectProvider'
 import { ArgumentsMaker } from './ArgumentsMaker'
 import { Editor } from './Editor'
-import EntityStack from './EntityStack'
+import EntityDetails from './EntityDetails'
 import ExpressionMaker, { ExpressionOnSubmit } from './ExpressionMaker'
 import { Home } from './Home'
 
 export type ProjectStackParamList = {
 	Home: undefined
-	EntityStack: { entityFQN: Name }
+	EntityDetails: { entityFQN: Name }
 	Editor: {
 		fqn: Name
 	}
@@ -43,7 +43,7 @@ export function ProjectNavigator({ route }: { route: ProjectStackRoute }) {
 			initialProject={route.params.project}>
 			<Stack.Navigator screenOptions={{ headerStyle }} mode="modal">
 				<Stack.Screen name="Home" component={Home} />
-				<Stack.Screen name="EntityStack" component={EntityStack} />
+				<Stack.Screen name="EntityDetails" component={EntityDetails} />
 				<Stack.Screen name="Editor" component={Editor} />
 				<Stack.Screen name="ExpressionMaker" component={ExpressionMaker} />
 				<Stack.Screen name="ArgumentsMaker" component={ArgumentsMaker} />

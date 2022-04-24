@@ -17,7 +17,7 @@ function DescribeItem({ describe, theme }: Props) {
 	const styles = stylesheet(theme)
 	const navigation = useNavigation()
 	const goToEntityDetails = () => {
-		navigation.navigate('EntityStack', {
+		navigation.navigate('EntityDetails', {
 			entityFQN: describe.fullyQualifiedName(),
 		})
 	}

@@ -27,7 +27,7 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 	const navigation = useNavigation<HomeScreenNavigationProp>()
 
 	const goToEntityDetails = (entity: Entity) => {
-		navigation.navigate('EntityStack', {
+		navigation.navigate('EntityDetails', {
 			entityFQN: entity.fullyQualifiedName(),
 		})
 	}

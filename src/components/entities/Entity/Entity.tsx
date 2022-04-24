@@ -17,7 +17,7 @@ function EntityComponent({ entity, theme }: EntityComponentProps) {
 	const styles = stylesheet(theme)
 	const navigation = useNavigation<HomeScreenNavigationProp>()
 	const goToEntityDetails = () => {
-		navigation.navigate('EntityStack', {
+		navigation.navigate('EntityDetails', {
 			entityFQN: entity.fullyQualifiedName(),
 		})
 	}
