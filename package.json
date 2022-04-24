@@ -1,6 +1,6 @@
 {
 	"name": "wollokmobile",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
@@ -11,6 +11,7 @@
 		"publish-debug:android": "yarn bundle:android && cd android  && ./gradlew clean && ./gradlew assembleRelease -x bundleReleaseJsAndAssets",
 		"test": "jest",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+		"clean-android-assets": "rm -rf android/app/src/main/res/drawable-* && rm -rf android/app/src/main/res/raw/*",
 		"debug": "react-devtools",
 		"prepare": "husky install"
 	},
@@ -22,8 +23,7 @@
 	"lint-staged": {
 		"*.{ts,tsx}": [
 			"prettier --write",
-			"eslint --fix",
-			"git add"
+			"eslint --fix"
 		]
 	},
 	"dependencies": {

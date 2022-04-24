@@ -1,7 +1,7 @@
 {
 	"ok": "ok",
 	"clear": "limpiar",
-	"enterValue": "ingresar valor", 
+	"enterValue": "ingresar valor",
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -53,7 +53,13 @@
 	"sentence": {
 		"assignment": "Asignar variable",
 		"selectVariable": "Seleccionar variable",
-		"messageSend": "Enviar mensaje"
+		"messageSend": "Enviar mensaje",
+		"unsupportedSentence": "Sentencia no soportada",
+		"return": "retornar",
+		"variable": "variable",
+		"constant": "Constante",
+		"variableName": "Nombre de la variable"
+
 	},
 	"tests": {
 		"title": "Grupos de tests",

@@ -1,19 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Text } from 'react-native'
-import { IconButton } from 'react-native-paper'
+import { ScrollView, StyleSheet } from 'react-native'
 import { upperCaseFirst } from 'upper-case-first'
+import { Body, Expression, Name, Return, Sentence } from 'wollok-ts/dist/model'
 import { List } from 'wollok-ts/dist/extensions'
-import { Body, Name, Sentence } from 'wollok-ts/dist/model'
+import { ExpressionOnSubmit } from '../../../pages/ExpressionMaker'
 import { wTranslate } from '../../../utils/translation-helpers'
 import { Referenciable } from '../../../utils/wollok-helpers'
-import { ReferenceSegment } from '../../expressions/expression-segment'
-import { display, ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import MultiFabScreen from '../../FabScreens/MultiFabScreen'
-import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
 import { SubmitCheckButton } from '../Header'
-import { Row } from '../Row'
 import { AssignmentFormModal } from './AssignmentFormModal'
+import { returnIcon as returnIconName } from './sentences/Return'
+import { VisualSentence } from './sentences/VisualSentence'
+import { VariableFormModal } from './VariableForm'
 
 type BodyMakerProps = {
 	sentences: List<Sentence>
@@ -28,12 +27,18 @@ export function BodyMaker({
 	contextFQN,
 }: BodyMakerProps) {
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
+	const [variableModalVisible, setVariableModalVisible] = useState(false)
+
 	const [sentences, setSentences] = useState<Sentence[]>(
 		Array.from(initialSentences),
 	)
 
-	function addSentence(assignment: Sentence) {
-		setSentences([...sentences, assignment])
+	function addSentence(sentence: Sentence) {
+		setSentences([...sentences, sentence])
+	}
+
+	function addReturn(expression: Expression) {
+		addSentence(new Return({ value: expression }))
 	}
 
 	const navigation = useNavigation()
@@ -49,63 +54,49 @@ export function BodyMaker({
 		})
 	}, [navigation, sentences, setBody])
 
-	function goToExpressionMaker() {
-		navigation.navigate('ExpressionMaker', {
-			onSubmit: addSentence,
-			contextFQN,
-		})
+	function goToExpressionMaker(onSubmit: ExpressionOnSubmit) {
+		return () => {
+			navigation.navigate('ExpressionMaker', {
+				onSubmit,
+				contextFQN,
+			})
+		}
 	}
 
+	const actions = [
+		{
+			icon: 'message',
+			onPress: goToExpressionMaker(addSentence),
+			label: upperCaseFirst(wTranslate('sentence.messageSend')),
+		},
+		{
+			icon: 'arrow-right',
+			onPress: () => {
+				setAssignmentModalVisible(true)
+			},
+			label: upperCaseFirst(wTranslate('sentence.assignment')),
+		},
+		{
+			icon: returnIconName,
+			onPress: goToExpressionMaker(addReturn),
+			label: upperCaseFirst(wTranslate('sentence.return')),
+		},
+		{
+			icon: 'variable',
+			onPress: () => {
+				setVariableModalVisible(true)
+			},
+
+			label: upperCaseFirst(wTranslate('sentence.variable')),
+		},
+	]
+
 	return (
-		<MultiFabScreen
-			actions={[
-				{
-					icon: 'message',
-					onPress: goToExpressionMaker,
-					label: upperCaseFirst(wTranslate('sentence.messageSend')),
-				},
-				{
-					icon: 'arrow-right',
-					onPress: () => {
-						setAssignmentModalVisible(true)
-					},
-					label: upperCaseFirst(wTranslate('sentence.assignment')),
-				},
-			]}>
+		<MultiFabScreen actions={actions}>
 			<ScrollView style={styles.sentences}>
-				{sentences.map((sentence, i) => {
-					switch (sentence.kind) {
-						case 'Send':
-							return (
-								<Row key={i} style={display}>
-									<ProblemReporterButton node={sentence} />
-									<ExpressionDisplay
-										key={i}
-										expression={sentence}
-										withIcon={false}
-									/>
-								</Row>
-							)
-						case 'Assignment':
-							return (
-								<Row key={i} style={display}>
-									<ProblemReporterButton node={sentence} />
-									<ReferenceSegment text={sentence.variable.name} index={0} />
-									<IconButton icon="arrow-right" />
-									<ExpressionDisplay
-										expression={sentence.value}
-										withIcon={false}
-									/>
-								</Row>
-							)
-						default:
-							return (
-								<Row key={i}>
-									<Text>{sentence.kind}</Text>
-								</Row>
-							)
-					}
-				})}
+				{sentences.map((sentence, i) => (
+					<VisualSentence sentence={sentence} key={i} />
+				))}
 			</ScrollView>
 
 			<AssignmentFormModal
@@ -114,6 +105,13 @@ export function BodyMaker({
 				setVisible={setAssignmentModalVisible}
 				contextFQN={contextFQN}
 				visible={assignmentModalVisible}
+			/>
+
+			<VariableFormModal
+				onSubmit={addSentence}
+				setVisible={setVariableModalVisible}
+				contextFQN={contextFQN}
+				visible={variableModalVisible}
 			/>
 		</MultiFabScreen>
 	)

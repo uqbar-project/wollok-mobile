@@ -1,0 +1,84 @@
+name: Deploy
+
+on:
+  push:
+    branches:        
+      - 'main'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Configure Keystore
+        working-directory: android
+        run: |
+          echo "$ANDROID_KEYSTORE_FILE" > keystore.jks.b64
+          base64 -d -i keystore.jks.b64 > app/wollok-mobile.keystore
+          mkdir keystores
+          echo "MYAPP_RELEASE_STORE_FILE=wollok-mobile.keystore" >> keystores/release.keystore.properties
+          echo "MYAPP_RELEASE_KEY_ALIAS=$KEYSTORE_KEY_ALIAS" >> keystores/release.keystore.properties
+          echo "MYAPP_RELEASE_STORE_PASSWORD=$KEYSTORE_STORE_PASSWORD" >> keystores/release.keystore.properties
+          echo "MYAPP_RELEASE_KEY_PASSWORD=$KEYSTORE_KEY_PASSWORD" >> keystores/release.keystore.properties
+        env:
+          ANDROID_KEYSTORE_FILE: ${{ secrets.KEYSTORE_STORE_FILE }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
+          KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+
+      - name: Create Google Play Config file
+        working-directory: ./android
+        run : |
+          echo "$PLAY_CONFIG_JSON" > play_config.json.b64
+          base64 -d -i play_config.json.b64 > play_config.json
+        env:
+          PLAY_CONFIG_JSON: ${{ secrets.GOOGLE_CONFIG_JSON }}
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        
+      - name: Deploy using Fastlane 🚀
+        uses: maierj/fastlane-action@v2.2.0
+        with:
+          lane: 'deploy'
+          subdirectory: 'android'
+
+      - name: Get node package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Commit version bump
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add android/app/build.gradle
+          git commit -m "[skip actions] chore: version update" --no-verify
+          git tag $RELEASE_TAG
+          git remote add auth https://$USERNAME:$REPO_KEY@github.com/uqbar-project/wollok-mobile.git
+          git push auth
+          git push auth $RELEASE_TAG
+        env:
+          REPO_KEY: ${{secrets.PAT}}
+          USERNAME: github-actions[bot]
+          RELEASE_TAG: v${{ steps.package-version.outputs.current-version}}
+

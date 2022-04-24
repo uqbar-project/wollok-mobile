@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { createContext } from 'react'
-import { Entity, Method, Module, Node, Test } from 'wollok-ts'
+import { Entity, Method, Module, Node, Test } from 'wollok-ts/dist/model'
 import { HomeScreenNavigationProp } from '../pages/Home'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { entityMemberFQN, EntityMemberWithBody } from '../utils/wollok-helpers'
