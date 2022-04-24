@@ -5,7 +5,7 @@ import { List } from 'react-native-paper'
 import { Environment } from 'wollok-ts/dist/model'
 import { stylesheet } from '../components/entities/Entity/styles'
 import FabAddScreen from '../components/FabScreens/FabAddScreen'
-import { NewProjectModal } from '../components/select-project/NewProjectModal'
+import { NewProjectModal } from '../components/projects/NewProjectModal'
 import { templateProject } from '../context/initialProject'
 import {
 	loadProject,
@@ -13,12 +13,13 @@ import {
 	saveProject,
 } from '../services/persistance.service'
 import { useTheme } from '../theme'
+import { ProjectScreenNavigationProp } from './ProjectNavigator'
 
 export function SelectProject() {
 	const [projects, setProjects] = useState<string[]>([])
 	const [showNewProjectModal, setShowNewProjectModal] = useState(false)
 	const focused = useIsFocused()
-	const navigation = useNavigation()
+	const navigation = useNavigation<ProjectScreenNavigationProp>()
 
 	const theme = useTheme()
 

@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Name, Variable } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
-import CheckIcon from '../CheckIcon'
-import ExpressionInput from '../ExpressionInput'
-import FormModal from '../FormModal/FormModal'
-import { Row } from '../Row'
+import { wTranslate } from '../../utils/translation-helpers'
+import CheckIcon from '../ui/CheckIcon'
+import ExpressionInput from '../ui/ExpressionInput'
+import FormModal from '../ui/FormModal/FormModal'
+import { Row } from '../ui/Row'
 
 type VariableFormModalProps = {
 	onSubmit: (assignment: Variable) => void
@@ -49,7 +49,7 @@ export function VariableFormModal({
 			<ExpressionInput
 				value={value}
 				setValue={setValue}
-				fqn={contextFQN}
+				contextFQN={contextFQN}
 				inputPlaceholder={wTranslate('expression.enterValue')}
 			/>
 		</FormModal>

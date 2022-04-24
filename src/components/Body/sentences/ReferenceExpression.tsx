@@ -1,8 +1,8 @@
 import React from 'react'
 import { IconButton } from 'react-native-paper'
-import { Expression } from 'wollok-ts'
-import { ExpressionDisplay } from '../../../expressions/ExpressionDisplay'
-import { Row } from '../../Row'
+import { Expression } from 'wollok-ts/dist/model'
+import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
+import { Row } from '../../ui/Row'
 
 export const ReferenceExpression = (props: { expression: Expression }) => {
 	return (

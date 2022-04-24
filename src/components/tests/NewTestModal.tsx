@@ -1,27 +1,24 @@
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper'
 import { Body, Test } from 'wollok-ts/dist/model'
-import { useEntity } from '../../context/EntityProvider'
 import { wTranslate } from '../../utils/translation-helpers'
-import FormModal from '../ui/FormModal/FormModal'
+import FormModal, { FormModalProps } from '../ui/FormModal/FormModal'
 
 const initialName: string = ''
 
-function NewTestModal(props: {
-	visible: boolean
-	setVisible: (value: boolean) => void
-}) {
-	const {
-		actions: { addMember },
-	} = useEntity()
+type NewTestModalProps = Pick<FormModalProps, 'visible' | 'setVisible'> & {
+	addNewTest: (t: Test) => void
+}
+
+function NewTestModal({ visible, setVisible, addNewTest }: NewTestModalProps) {
 	const [name, setName] = useState<string>(initialName)
 
 	return (
 		<FormModal
 			onSubmit={addDescribe}
 			resetForm={resetForm}
-			setVisible={props.setVisible}
-			visible={props.visible}>
+			setVisible={setVisible}
+			visible={visible}>
 			<TextInput
 				onChangeText={setName}
 				placeholder={wTranslate('tests.newTestName')}
@@ -30,7 +27,7 @@ function NewTestModal(props: {
 	)
 
 	function addDescribe() {
-		addMember(new Test({ name, body: new Body() }))
+		addNewTest(new Test({ name, body: new Body() }))
 	}
 
 	function resetForm() {

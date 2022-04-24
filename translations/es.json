@@ -71,5 +71,10 @@
 		"selectProject": "Seleccioná un proyecto",
 		"newProject": "Proyecto nuevo",
 		"saved": "¡Guardado!"
+	},
+	"problem": {
+		"shouldInitializeAllAttributes": "Todos los atributos del objeto deben estar inicializados",
+		"nameShouldBeginWithLowercase": "Este nombre debería empezar con minúscula",
+		"shouldNotDefineUnusedVariables": "Esta variable no se está usando"
 	}
 }

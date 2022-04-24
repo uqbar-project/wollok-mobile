@@ -3,7 +3,7 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, withTheme } from 'react-native-paper'
 import { Expression, Name } from 'wollok-ts/dist/model'
-import { ExpressionMakerScreenProp } from '../../pages/ExpressionMaker/ExpressionMaker'
+import { ExpressionMakerScreenProp } from '../../pages/ExpressionMaker'
 import { Theme } from '../../theme'
 import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
 
@@ -11,7 +11,7 @@ type Props = {
 	value?: Expression
 	setValue: (expression?: Expression) => void
 	theme: Theme
-	fqn: Name
+	contextFQN: Name
 	inputPlaceholder: string
 }
 
@@ -21,7 +21,7 @@ const ExpressionInput = (props: Props) => {
 	const goToExpressionMaker = () => {
 		navigation.push('ExpressionMaker', {
 			onSubmit: setValue,
-			contextFQN: props.fqn,
+			contextFQN: props.contextFQN,
 			initialExpression: value,
 		})
 	}

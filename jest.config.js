@@ -12,6 +12,7 @@ module.exports = {
         '^.+\\.ts?$': 'ts-jest',
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+    modulePathIgnorePatterns: ['utils'],
     setupFilesAfterEnv: [
         "@testing-library/jest-native/extend-expect",
         "./setup-tests.js"

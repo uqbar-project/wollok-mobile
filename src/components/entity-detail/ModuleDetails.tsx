@@ -3,21 +3,28 @@ import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { Field, is, Method } from 'wollok-ts/dist/model'
-import { AccordionList } from '../../components/entity-detail/AccordionList'
-import AttributeItemComponent from '../../components/entity-detail/AttributeItem/AttributeItem'
-import NewAttributeModal from '../../components/entity-detail/new-attribute-modal/NewAttributeModal'
-import NewMethodModal from '../../components/entity-detail/new-method-modal/NewMethodModal'
-import MultiFabScreen from '../../components/FabScreens/MultiFabScreen'
-import { useEntity } from '../../context/EntityProvider'
+import { Describe, Field, is, Method, Module } from 'wollok-ts/dist/model'
+import { AccordionList } from './AccordionList'
+import AttributeItemComponent from './AttributeItem/AttributeItem'
+import NewAttributeModal from './new-attribute-modal/NewAttributeModal'
+import NewMethodModal from './new-method-modal/NewMethodModal'
+import MultiFabScreen from '../FabScreens/MultiFabScreen'
+import { ProblemReporterButton } from '../problems/ProblemReporterButton'
+import { useProject } from '../../context/ProjectProvider'
 import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
-import { EntityMemberScreenNavigationProp } from '../EntityMemberDetail'
+import { EditorScreenNavigationProp } from '../../pages/Editor'
 
-export const EntityDetails = function () {
+export type ModuleDetailsProps = {
+	module: Exclude<Module, Describe>
+}
+
+export const ModuleDetails = function ({ module }: ModuleDetailsProps) {
 	const [methodModalVisible, setMethodModalVisible] = useState(false)
 	const [attributeModalVisible, setAttributeModalVisible] = useState(false)
-	const { entity } = useEntity()
+	const {
+		actions: { addMember },
+	} = useProject()
 
 	return (
 		<MultiFabScreen
@@ -37,13 +44,13 @@ export const EntityDetails = function () {
 				<ScrollView>
 					<AccordionList<Field>
 						title={wTranslate('entityDetails.attributes').toUpperCase()}
-						items={entity.members.filter(is('Field')) as Field[]}
+						items={module.members.filter(is('Field')) as Field[]}
 						VisualItem={AttributeItem}
 						initialExpanded={true}
 					/>
 					<AccordionList<Method>
 						title={wTranslate('entityDetails.methods').toUpperCase()}
-						items={entity.members.filter(is('Method')) as Method[]}
+						items={module.members.filter(is('Method')) as Method[]}
 						VisualItem={MethodItem}
 						initialExpanded={true}
 					/>
@@ -52,10 +59,13 @@ export const EntityDetails = function () {
 			<NewMethodModal
 				visible={methodModalVisible}
 				setVisible={setMethodModalVisible}
+				addNewMethod={addMember(module)}
 			/>
 			<NewAttributeModal
 				setVisible={setAttributeModalVisible}
 				visible={attributeModalVisible}
+				addNewField={addMember(module)}
+				contextFQN={module.fullyQualifiedName()}
 			/>
 		</MultiFabScreen>
 	)
@@ -66,17 +76,18 @@ function AttributeItem({ item: attribute }: { item: Field }) {
 }
 
 function MethodItem({ item: method }: { item: Method }) {
-	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
+	const navigator = useNavigation<EditorScreenNavigationProp>()
+	function gotoMethod() {
+		navigator.navigate('Editor', {
+			fqn: methodFQN(method),
+		})
+	}
 	return (
 		<List.Item
 			key={method.name}
 			title={methodLabel(method)}
-			onPress={() =>
-				navigator.navigate('EntityMemberDetails', {
-					entityMember: method,
-					fqn: methodFQN(method),
-				})
-			}
+			left={() => <ProblemReporterButton node={method} />}
+			onPress={gotoMethod}
 		/>
 	)
 }

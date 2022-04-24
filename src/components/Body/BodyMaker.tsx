@@ -2,19 +2,13 @@ import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { upperCaseFirst } from 'upper-case-first'
-import {
-	Body,
-	Expression,
-	List,
-	Name,
-	Return,
-	Sentence,
-} from 'wollok-ts/dist/model'
-import { ExpressionOnSubmit } from '../../../pages/ExpressionMaker/ExpressionMaker'
-import { wTranslate } from '../../../utils/translation-helpers'
-import { Referenciable } from '../../../utils/wollok-helpers'
-import MultiFabScreen from '../../FabScreens/MultiFabScreen'
-import { SubmitCheckButton } from '../Header'
+import { Body, Expression, Name, Return, Sentence } from 'wollok-ts/dist/model'
+import { List } from 'wollok-ts/dist/extensions'
+import { ExpressionOnSubmit } from '../../pages/ExpressionMaker'
+import { wTranslate } from '../../utils/translation-helpers'
+import { Referenciable } from '../../utils/wollok-helpers'
+import MultiFabScreen from '../FabScreens/MultiFabScreen'
+import { SubmitCheckButton } from '../ui/Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
 import { returnIcon as returnIconName } from './sentences/Return'
 import { VisualSentence } from './sentences/VisualSentence'
