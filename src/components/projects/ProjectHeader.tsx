@@ -1,11 +1,8 @@
-import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { Badge, IconButton } from 'react-native-paper'
-import { Entity, Method, Node } from 'wollok-ts'
+import { Node } from 'wollok-ts/dist/model'
+import { useNodeNavigation } from '../../context/NodeNavigation'
 import { useProject } from '../../context/ProjectProvider'
-import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
-import { HomeScreenNavigationProp } from '../../pages/Home'
-import { methodFQN } from '../../utils/wollok-helpers'
 import { ProblemModal } from '../problems/ProblemsModal'
 import { Row } from '../ui/Row'
 
@@ -21,37 +18,12 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 		actions: { save },
 	} = useProject()
 
-	// Duplicated code
-	const navigation = useNavigation<
-		HomeScreenNavigationProp & EntityMemberScreenNavigationProp
-	>()
-	const goToEntityDetails = (entity: Entity) => {
-		navigation.navigate('EntityStack', {
-			entityFQN: entity.fullyQualifiedName(),
-		})
+	const { goToNode } = useNodeNavigation()
 
+	const goto = (n: Node): void => {
+		goToNode(n)
 		setShowProblems(false)
 	}
-	const goToMethod = (method: Method) => {
-		navigation.navigate('EntityMemberDetails', {
-			entityMember: method,
-			fqn: methodFQN(method),
-		})
-
-		setShowProblems(false)
-	}
-
-	const goto = (n: Node): void =>
-		n.match({
-			Method: goToMethod,
-			Singleton: goToEntityDetails,
-			Field: f => goToEntityDetails(f.parent),
-			Assignment: a => goto(a.parent),
-			Body: b => goto(b.parent),
-			Expression: e => goto(e.parent),
-			Test: t => goto(t.parent),
-			Describe: t => goToEntityDetails(t),
-		})
 
 	return (
 		<Row>

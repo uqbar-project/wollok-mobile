@@ -7,9 +7,9 @@ import { upperCaseFirst } from 'upper-case-first'
 import { ProjectHeader } from '../components/projects/ProjectHeader'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
-import { Describes } from './Describes'
-import { Entities } from './Entities/Entities'
 import { ProjectStackParamList } from './ProjectNavigator'
+import { Describes } from './tabs/Describes'
+import { Modules } from './tabs/Modules'
 
 export type HomeScreenNavigationProp = StackNavigationProp<
 	ProjectStackParamList,
@@ -43,7 +43,7 @@ export function Home() {
 			<Tab.Navigator>
 				<Tab.Screen
 					name={upperCaseFirst(wTranslate('entities.title'))}
-					component={Entities}
+					component={Modules}
 					options={{ tabBarIcon: () => <IconButton icon={'drawing-box'} /> }}
 				/>
 				<Tab.Screen

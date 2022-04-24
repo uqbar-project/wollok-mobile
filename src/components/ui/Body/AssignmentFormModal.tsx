@@ -62,7 +62,7 @@ export function AssignmentFormModal({
 			<ExpressionInput
 				value={value}
 				setValue={setValue}
-				fqn={contextFQN}
+				contextFQN={contextFQN}
 				inputPlaceholder={wTranslate('expression.enterValue')}
 			/>
 		</FormModal>

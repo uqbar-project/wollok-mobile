@@ -13,7 +13,7 @@ import {
 } from 'wollok-ts/dist/model'
 import { useExpressionContext } from '../../../context/ExpressionContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
-import { ExpressionMakerScreenProp } from '../../../pages/ExpressionMaker/ExpressionMaker'
+import { ExpressionMakerScreenProp } from '../../../pages/ExpressionMaker'
 import { wTranslate } from '../../../utils/translation-helpers'
 import {
 	allMethods,
@@ -80,7 +80,7 @@ function MessageItem({
 
 	function onPress() {
 		if (m.parameters.length) {
-			navigation.push('NewMessageSend', {
+			navigation.push('ArgumentsMaker', {
 				method: m,
 				receiver,
 				onSubmit,

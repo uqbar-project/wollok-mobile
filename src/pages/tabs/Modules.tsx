@@ -6,7 +6,7 @@ import NewEntityModal from '../../components/entities/NewEntityModal/NewEntityMo
 import FabAddScreen from '../../components/FabScreens/FabAddScreen'
 import { mainPackageName, useProject } from '../../context/ProjectProvider'
 
-export function Entities() {
+export function Modules() {
 	const {
 		project,
 		actions: { addEntity },

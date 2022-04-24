@@ -1,34 +1,30 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Text, TextInput, withTheme } from 'react-native-paper'
+import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Field } from 'wollok-ts/dist/model'
-import { useEntity } from '../../../context/EntityProvider'
-import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation-helpers'
+import { Visible } from '../../../utils/type-helpers'
 import CheckIcon from '../../ui/CheckIcon'
 import ExpressionInput from '../../ui/ExpressionInput'
 import FormModal from '../../ui/FormModal/FormModal'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 
-type Props = {
-	visible: boolean
-	setVisible: (visible: boolean) => void
-	theme: Theme
+type AttributeFormModalProps = Visible & {
+	addNewField: (f: Field) => void
+	contextFQN: string
 }
 
-const AttributeFormModal = (props: Props) => {
-	const {
-		actions: { addMember },
-		entity,
-	} = useEntity()
+const AttributeFormModal = ({
+	visible,
+	setVisible,
+	addNewField,
+	contextFQN,
+}: AttributeFormModalProps) => {
 	const [name, setName] = useState('')
 	const [isConstant, setConstant] = useState(false)
 	const [isProperty, setProperty] = useState(false)
 	const [initialValue, setInitialValue] = useState<Expression>()
-	const { visible, setVisible } = props
-
-	const styles = getStyles(props.theme)
 
 	const checkboxes = [
 		{
@@ -68,7 +64,7 @@ const AttributeFormModal = (props: Props) => {
 			<ExpressionInput
 				value={initialValue}
 				setValue={setInitialValue}
-				fqn={entity.fullyQualifiedName()}
+				contextFQN={contextFQN}
 				inputPlaceholder={wTranslate(
 					'entityDetails.attributeModal.addAnInitialValue',
 				)}
@@ -84,14 +80,15 @@ const AttributeFormModal = (props: Props) => {
 	}
 
 	function newAttribute() {
-		addMember(new Field({ name, isConstant, isProperty, value: initialValue }))
+		addNewField(
+			new Field({ name, isConstant, isProperty, value: initialValue }),
+		)
 	}
 }
 
-const getStyles = (_theme: Theme) =>
-	StyleSheet.create({
-		checkbox: { flexDirection: 'row', alignItems: 'center', marginVertical: 5 },
-		constName: { fontSize: 16 },
-	})
+const styles = StyleSheet.create({
+	checkbox: { flexDirection: 'row', alignItems: 'center', marginVertical: 5 },
+	constName: { fontSize: 16 },
+})
 
-export default withTheme(AttributeFormModal)
+export default AttributeFormModal

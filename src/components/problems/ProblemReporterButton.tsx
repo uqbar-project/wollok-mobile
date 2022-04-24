@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Node, Problem } from 'wollok-ts'
+import { Node, Problem } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
 import { isError } from '../../utils/wollok-helpers'
 import { ProblemIcon } from './ProblemIcon'

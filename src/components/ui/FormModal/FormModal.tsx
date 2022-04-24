@@ -9,18 +9,18 @@ import {
 } from 'react-native-paper'
 import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation-helpers'
-import { ParentComponentProp } from '../../../utils/type-helpers'
+import { ParentComponentProp, Visible } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 
-export type FormModalProps = ParentComponentProp<{
-	visible: boolean
-	setVisible: (value: boolean) => void
-	onSubmit: () => void
-	resetForm?: () => void
-	title?: string
-	valid?: boolean
-	theme: Theme
-}>
+export type FormModalProps = ParentComponentProp<
+	Visible & {
+		onSubmit: () => void
+		resetForm?: () => void
+		title?: string
+		valid?: boolean
+		theme: Theme
+	}
+>
 
 function FormModal(props: FormModalProps) {
 	const styles = stylesheet(props.theme)

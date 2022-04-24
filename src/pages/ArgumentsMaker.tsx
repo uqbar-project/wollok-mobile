@@ -7,14 +7,15 @@ import { Expression, Send } from 'wollok-ts/dist/model'
 import ExpressionInput from '../components/ui/ExpressionInput'
 import { SubmitCheckButton } from '../components/ui/Header'
 import { wTranslate } from '../utils/translation-helpers'
-import { EntityStackParamList } from './EntityStack'
+import { methodLabel } from '../utils/wollok-helpers'
+import { ProjectStackParamList } from './ProjectNavigator'
 
-export function NewMessageCall({
+export function ArgumentsMaker({
 	route: {
 		params: { method, receiver, contextFQN, onSubmit },
 	},
 }: {
-	route: RouteProp<EntityStackParamList, 'NewMessageSend'>
+	route: RouteProp<ProjectStackParamList, 'ArgumentsMaker'>
 }) {
 	const [args, setArguments] = useState<(Expression | undefined)[]>(
 		method.parameters.map(() => undefined),
@@ -24,6 +25,7 @@ export function NewMessageCall({
 
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
+			title: methodLabel(method), //TODO: Show receiver?
 			headerRight: () => (
 				<SubmitCheckButton
 					disabled={args.some(a => a === undefined)}
@@ -53,7 +55,7 @@ export function NewMessageCall({
 				<View key={i} style={[styles.parameter]}>
 					<Text style={styles.paramName}>{_.name}</Text>
 					<ExpressionInput
-						fqn={contextFQN}
+						contextFQN={contextFQN}
 						setValue={expression => setParameter(i, expression)}
 						value={args[i]}
 						inputPlaceholder={upperCaseFirst(

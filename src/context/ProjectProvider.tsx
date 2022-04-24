@@ -17,7 +17,12 @@ import {
 import validate from 'wollok-ts/dist/validator'
 import { saveProject } from '../services/persistance.service'
 import { ParentComponentProp } from '../utils/type-helpers'
-import { executionFor, interpretTest, TestRun } from '../utils/wollok-helpers'
+import {
+	EntityMember,
+	executionFor,
+	interpretTest,
+	TestRun,
+} from '../utils/wollok-helpers'
 import { createContextHook } from './create-context-hook'
 
 export const mainPackageName = 'main'
@@ -32,9 +37,13 @@ export const ProjectContext = createContext<{
 } | null>(null)
 
 type Actions = {
+	rebuildEnvironment: (entity: Entity) => void
 	addEntity: (module: Module) => void
 	addDescribe: (test: Describe) => void
-	rebuildEnvironment: (entity: Entity) => void
+	addMember: (parent: Module) => (newMember: EntityMember) => void
+	changeMember: (
+		parent: Module,
+	) => (oldMember: EntityMember, newMember: EntityMember) => void
 	runTest: (test: Test) => TestRun
 	execution: (test: Test) => ExecutionDirector<void>
 	save: () => Promise<unknown>
@@ -74,28 +83,20 @@ export function ProjectProvider(
 		return link([pack], base ?? project)
 	}
 
-	function addEntity(newEntity: Module) {
-		rebuildEnvironment(newEntity)
-	}
-
-	function addDescribe(newDescribe: Describe) {
-		rebuildEnvironment(newDescribe)
-	}
-
 	function rebuildEnvironment(entity: Entity) {
 		const packageName = entity.is('Describe')
 			? testsPackageName
 			: mainPackageName
 		const newProject = buildEnvironment(packageName, [entity])
 		setProject(newProject)
-		setProblems(validateProject(newProject) as Problem[])
 		setChanged(true)
+		setProblems(validateProject(newProject) as Problem[])
 	}
 
 	function validateProject(_project: Environment) {
 		const targetPackages = [
-			project.getNodeByFQN(mainPackageName),
-			project.getNodeByFQN(testsPackageName),
+			_project.getNodeByFQN(mainPackageName),
+			_project.getNodeByFQN(testsPackageName),
 		]
 		const belongsToTargetProject = (p: Problem) =>
 			targetPackages.some(target => p.node.ancestors().includes(target))
@@ -104,6 +105,35 @@ export function ProjectProvider(
 	}
 
 	/////////////////////////////////// BUILD //////////////////////////////////
+
+	/////////////////////////////////// ENTITIES //////////////////////////////////
+
+	function addEntity(newEntity: Module) {
+		rebuildEnvironment(newEntity)
+	}
+
+	function addDescribe(newDescribe: Describe) {
+		rebuildEnvironment(newDescribe)
+	}
+
+	const addMember = (entity: Module) => (newMember: EntityMember) => {
+		rebuildEnvironment(
+			entity.copy({
+				members: [...entity.members, newMember],
+			}) as Module,
+		)
+	}
+
+	const changeMember =
+		(entity: Module) => (oldMember: EntityMember, newMember: EntityMember) => {
+			rebuildEnvironment(
+				entity.copy({
+					members: [...entity.members.filter(m => m !== oldMember), newMember],
+				}) as Module,
+			)
+		}
+
+	/////////////////////////////////// ENTITIES //////////////////////////////////
 
 	/////////////////////////////////// EXECUTION //////////////////////////////////
 
@@ -130,6 +160,8 @@ export function ProjectProvider(
 		actions: {
 			addEntity,
 			addDescribe,
+			addMember,
+			changeMember,
 			rebuildEnvironment,
 			runTest,
 			execution,

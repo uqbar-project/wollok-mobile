@@ -1,6 +1,6 @@
 import { render, RenderAPI } from '@testing-library/react-native'
 import React from 'react'
-import { Node, Problem } from 'wollok-ts'
+import { Node, Problem } from 'wollok-ts/dist/model'
 import { ProblemIcon } from '../components/problems/ProblemIcon'
 import { ProblemReporterButton } from '../components/problems/ProblemReporterButton'
 import { ProblemModal } from '../components/problems/ProblemsModal'

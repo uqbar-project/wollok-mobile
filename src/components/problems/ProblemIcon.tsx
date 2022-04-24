@@ -1,6 +1,6 @@
 import React from 'react'
 import { IconButton } from 'react-native-paper'
-import { Problem } from 'wollok-ts'
+import { Problem } from 'wollok-ts/dist/model'
 
 interface ProblemIconProps {
 	problem: Problem
