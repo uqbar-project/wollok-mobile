@@ -5,7 +5,7 @@ import { ProblemIcon } from '../components/problems/ProblemIcon'
 import { ProblemReporterButton } from '../components/problems/ProblemReporterButton'
 import { ProblemModal } from '../components/problems/ProblemsModal'
 import { methodFQN } from '../utils/wollok-helpers'
-import ProjectProviderMock from './mocks/ProjectProviderMock'
+import ProjectProviderMock from './utils/ProjectProviderMock'
 import {
 	clazz,
 	error,
@@ -16,7 +16,8 @@ import {
 	singleton,
 	test,
 	warning,
-} from './mocks/wollokProject'
+	wReturn,
+} from './utils/wollokProject'
 
 describe('ProblemIcon', () => {
 	it('is red on error', () => {
@@ -66,6 +67,8 @@ describe('ProblemReporterButton', () => {
 		iconExistTest('inside method body', method, error)
 
 		iconExistTest('inside test body', test, problem(test.sentences()[0]))
+
+		iconExistTest('inside return expression', wReturn, problem(wReturn.value!))
 	})
 })
 

@@ -9,12 +9,12 @@ import {
 	Sentence,
 	Variable as VariableModel,
 } from 'wollok-ts/dist/model'
-import { renderWithTheme } from '../../../../../utils/test-helpers'
-import { Assignment } from '../Assignment'
-import { Return } from '../Return'
-import { Send } from '../Send'
-import { Variable } from '../Variable'
-import { VisualSentence } from '../VisualSentence'
+import { Assignment } from '../components/Body/sentences/Assignment'
+import { Return } from '../components/Body/sentences/Return'
+import { Send } from '../components/Body/sentences/Send'
+import { Variable } from '../components/Body/sentences/Variable'
+import { VisualSentence } from '../components/Body/sentences/VisualSentence'
+import { renderWithTheme } from './utils/test-helpers'
 
 describe('matching sentences with components', () => {
 	it('should match a send sentence', () => {

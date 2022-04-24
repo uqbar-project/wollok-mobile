@@ -1,11 +1,11 @@
 import React from 'react'
 import { IconButton, Text } from 'react-native-paper'
 import { Variable as VariableModel } from 'wollok-ts/dist/model'
-import { useTheme } from '../../../../theme'
-import { isNullExpression } from '../../../../utils/wollok-helpers'
-import { ProblemReporterButton } from '../../../problems/ProblemReporterButton'
-import { ConstantVariableIcon } from '../../ConstantVariableIcon'
-import { Row } from '../../Row'
+import { useTheme } from '../../../theme'
+import { isNullExpression } from '../../../utils/wollok-helpers'
+import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
+import { ConstantVariableIcon } from '../../ui/ConstantVariableIcon'
+import { Row } from '../../ui/Row'
 import { ReferenceExpression } from './ReferenceExpression'
 
 export const Variable = (props: { variable: VariableModel }) => {

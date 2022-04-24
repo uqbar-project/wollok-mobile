@@ -1,10 +1,10 @@
 import React from 'react'
 import { IconButton } from 'react-native-paper'
 import { Return as ReturnModel } from 'wollok-ts/dist/model'
-import { useTheme } from '../../../../theme'
-import { ExpressionDisplay } from '../../../expressions/ExpressionDisplay'
-import { ProblemReporterButton } from '../../../problems/ProblemReporterButton'
-import { Row } from '../../Row'
+import { useTheme } from '../../../theme'
+import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
+import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
+import { Row } from '../../ui/Row'
 
 export const returnIcon = 'arrow-expand-up'
 

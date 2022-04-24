@@ -10,10 +10,10 @@ import {
 	Reference,
 	Variable,
 } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
-import { Referenciable } from '../../../utils/wollok-helpers'
-import ExpressionInput from '../ExpressionInput'
-import FormModal from '../FormModal/FormModal'
+import { wTranslate } from '../../utils/translation-helpers'
+import { Referenciable } from '../../utils/wollok-helpers'
+import ExpressionInput from '../ui/ExpressionInput'
+import FormModal from '../ui/FormModal/FormModal'
 
 type AssignmentFormModalProps = {
 	variables: Referenciable[]

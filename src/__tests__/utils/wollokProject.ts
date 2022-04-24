@@ -3,6 +3,7 @@ import {
 	Class,
 	Describe,
 	Environment,
+	Expression,
 	Field,
 	Import,
 	link,
@@ -13,6 +14,7 @@ import {
 	Parameter,
 	Problem,
 	Reference,
+	Return,
 	Send,
 	Singleton,
 	Test,
@@ -101,6 +103,8 @@ export const method = singleton.members[1] as Method
 export const test = describe.members[0] as Test
 
 export const sentence = method.sentences()[0]
+
+export const wReturn = new Return({ value: sentence as Expression })
 
 // PROBLEMS
 

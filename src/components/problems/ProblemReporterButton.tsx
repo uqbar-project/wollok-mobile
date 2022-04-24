@@ -21,6 +21,7 @@ export function ProblemReporterButton({
 		node.match({
 			Method: m => problem.node.ancestors().includes(m),
 			Test: t => problem.node.ancestors().includes(t),
+			Return: r => r.id === problem.node.id || r.value?.id === problem.node.id,
 			Node: n => n.id === problem.node.id,
 		})
 

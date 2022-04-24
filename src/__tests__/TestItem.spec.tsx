@@ -6,7 +6,7 @@ import { Body, Test, WollokException } from 'wollok-ts'
 import TestItem from '../components/tests/TestItem'
 import { theme } from '../theme'
 import { TestRun } from '../utils/wollok-helpers'
-import ProjectProviderMock from './mocks/ProjectProviderMock'
+import ProjectProviderMock from './utils/ProjectProviderMock'
 
 const testMock = new Test({
 	name: 'TEST',

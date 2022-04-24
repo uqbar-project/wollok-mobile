@@ -2,7 +2,7 @@ import { RouteProp, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 import { Body } from 'wollok-ts/dist/model'
-import { BodyMaker } from '../components/ui/Body/BodyMaker'
+import { BodyMaker } from '../components/Body/BodyMaker'
 import { useProject } from '../context/ProjectProvider'
 import {
 	allScopedVariables,
