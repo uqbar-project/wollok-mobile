@@ -49,6 +49,7 @@
 		"react-native-screens": "^3.2.0",
 		"react-native-vector-icons": "^8.1.0",
 		"rn-fetch-blob-v2": "^0.14.1",
+		"string.prototype.replaceall": "^1.0.6",
 		"upper-case-first": "^2.0.2",
 		"wollok-ts": "^3.0.8"
 	},
