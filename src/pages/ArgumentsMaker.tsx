@@ -4,18 +4,18 @@ import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Send } from 'wollok-ts/dist/model'
+import { RootStackParamList } from '../App'
 import ExpressionInput from '../components/ui/ExpressionInput'
 import { SubmitCheckButton } from '../components/ui/Header'
 import { wTranslate } from '../utils/translation-helpers'
 import { methodLabel } from '../utils/wollok-helpers'
-import { ProjectStackParamList } from './ProjectNavigator'
 
 export function ArgumentsMaker({
 	route: {
 		params: { method, receiver, contextFQN, onSubmit },
 	},
 }: {
-	route: RouteProp<ProjectStackParamList, 'ArgumentsMaker'>
+	route: RouteProp<RootStackParamList, 'ArgumentsMaker'>
 }) {
 	const [args, setArguments] = useState<(Expression | undefined)[]>(
 		method.parameters.map(() => undefined),

@@ -37,6 +37,7 @@ export const ProjectContext = createContext<{
 } | null>(null)
 
 type Actions = {
+	setNewProject: (name: Name, project: Environment) => void
 	rebuildEnvironment: (entity: Entity) => void
 	addEntity: (module: Module) => void
 	addDescribe: (test: Describe) => void
@@ -55,6 +56,7 @@ export function ProjectProvider(
 		initialProject: Environment
 	}>,
 ) {
+	const [name, setName] = useState(props.projectName)
 	const [project, setProject] = useState<Environment>(
 		link(props.initialProject.members),
 	)
@@ -90,7 +92,7 @@ export function ProjectProvider(
 		const newProject = buildEnvironment(packageName, [entity])
 		setProject(newProject)
 		setChanged(true)
-		setProblems(validateProject(newProject) as Problem[])
+		setProblems(validateProject(newProject))
 	}
 
 	function validateProject(_project: Environment) {
@@ -107,6 +109,13 @@ export function ProjectProvider(
 	/////////////////////////////////// BUILD //////////////////////////////////
 
 	/////////////////////////////////// ENTITIES //////////////////////////////////
+	function setNewProject(newName: Name, _newProject: Environment) {
+		const newProject = link(_newProject.members)
+		setName(newName)
+		setProject(newProject)
+		setProblems(validateProject(newProject))
+		setChanged(false)
+	}
 
 	function addEntity(newEntity: Module) {
 		rebuildEnvironment(newEntity)
@@ -154,10 +163,11 @@ export function ProjectProvider(
 
 	const initialContext = {
 		project,
-		name: props.projectName,
+		name,
 		changed,
 		problems,
 		actions: {
+			setNewProject,
 			addEntity,
 			addDescribe,
 			addMember,

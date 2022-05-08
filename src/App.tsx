@@ -3,8 +3,20 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import RNLocalize from 'react-native-localize'
 import { Provider as PaperProvider } from 'react-native-paper'
-import { Environment } from 'wollok-ts/dist/model'
-import { ProjectNavigator } from './pages/ProjectNavigator'
+import {
+	Environment,
+	Expression,
+	Method,
+	Name,
+	Send,
+} from 'wollok-ts/dist/model'
+import { templateProject } from './context/initialProject'
+import { ProjectProvider } from './context/ProjectProvider'
+import { ArgumentsMaker } from './pages/ArgumentsMaker'
+import { Editor } from './pages/Editor'
+import EntityDetails from './pages/EntityDetails'
+import ExpressionMaker, { ExpressionOnSubmit } from './pages/ExpressionMaker'
+import { Home } from './pages/Home'
 import { SelectProject } from './pages/SelectProject'
 import { createPersistanceFolder } from './services/persistance.service'
 import { theme } from './theme'
@@ -13,7 +25,24 @@ import './weak-ref/WeakRef'
 
 export type RootStackParamList = {
 	SelectProject: undefined
+	OtraPantalla: undefined
 	ProjectNavigator: { name: string; project: Environment }
+	Home: undefined
+	EntityDetails: { entityFQN: Name }
+	Editor: {
+		fqn: Name
+	}
+	ExpressionMaker: {
+		onSubmit: ExpressionOnSubmit
+		contextFQN: Name
+		initialExpression?: Expression
+	}
+	ArgumentsMaker: {
+		receiver: Expression
+		method: Method
+		contextFQN: Name
+		onSubmit: (s: Send) => void
+	}
 }
 
 const Stack = createStackNavigator<RootStackParamList>()
@@ -33,18 +62,22 @@ const App = () => {
 	return (
 		<PaperProvider theme={theme}>
 			<NavigationContainer theme={theme}>
-				<Stack.Navigator>
-					<Stack.Screen
-						name="SelectProject"
-						component={SelectProject}
-						options={{ title: wTranslate('project.selectProject') }}
-					/>
-					<Stack.Screen
-						name="ProjectNavigator"
-						component={ProjectNavigator}
-						options={{ headerShown: false }}
-					/>
-				</Stack.Navigator>
+				<ProjectProvider // Starts with a DummyProject until project selection
+					projectName={''}
+					initialProject={templateProject()}>
+					<Stack.Navigator>
+						<Stack.Screen
+							name="SelectProject"
+							component={SelectProject}
+							options={{ title: wTranslate('project.selectProject') }}
+						/>
+						<Stack.Screen name="Home" component={Home} />
+						<Stack.Screen name="EntityDetails" component={EntityDetails} />
+						<Stack.Screen name="Editor" component={Editor} />
+						<Stack.Screen name="ExpressionMaker" component={ExpressionMaker} />
+						<Stack.Screen name="ArgumentsMaker" component={ArgumentsMaker} />
+					</Stack.Navigator>
+				</ProjectProvider>
 			</NavigationContainer>
 		</PaperProvider>
 	)
