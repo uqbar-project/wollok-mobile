@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { Badge, IconButton } from 'react-native-paper'
 import { Node } from 'wollok-ts/dist/model'
-import { useNodeNavigation } from '../../context/NodeNavigation'
+import {
+	useNodeNavigation,
+	withNodeNavigation,
+} from '../../context/NodeNavigation'
 import { useProject } from '../../context/ProjectProvider'
 import { ProblemModal } from '../problems/ProblemsModal'
 import { Row } from '../ui/Row'
@@ -10,7 +13,7 @@ interface ProjectHeaderProp {
 	pushMessage: (tag: string) => void
 }
 
-export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
+function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 	const [showProblems, setShowProblems] = useState(false)
 	const {
 		changed,
@@ -50,3 +53,5 @@ export function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 		</Row>
 	)
 }
+
+export default withNodeNavigation(ProjectHeader)

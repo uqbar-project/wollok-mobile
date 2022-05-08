@@ -1,7 +1,10 @@
 import React from 'react'
 import { List, withTheme } from 'react-native-paper'
 import { Describe } from 'wollok-ts/dist/model'
-import { useNodeNavigation } from '../../context/NodeNavigation'
+import {
+	useNodeNavigation,
+	withNodeNavigation,
+} from '../../context/NodeNavigation'
 import { Theme } from '../../theme'
 import { stylesheet } from '../entities/Entity/styles'
 import IconImage from '../ui/IconImage'
@@ -30,4 +33,4 @@ function DescribeItem({ describe, theme }: Props) {
 	)
 }
 
-export default withTheme(DescribeItem)
+export default withTheme(withNodeNavigation(DescribeItem))
