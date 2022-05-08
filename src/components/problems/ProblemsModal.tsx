@@ -2,6 +2,10 @@ import React from 'react'
 import { ScrollView } from 'react-native'
 import { List } from 'react-native-paper'
 import { Node, Problem } from 'wollok-ts/dist/model'
+import {
+	useNodeNavigation,
+	withNodeNavigation,
+} from '../../context/NodeNavigation'
 import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN } from '../../utils/wollok-helpers'
 import FormModal, { FormModalProps } from '../ui/FormModal/FormModal'
@@ -12,12 +16,14 @@ interface ProblemsModalProp {
 	onSelect?: (p: Problem) => void
 }
 
-export function ProblemModal({
+function ProblemModal({
 	problems,
 	onSelect,
 	visible,
 	setVisible,
 }: ProblemsModalProp & Pick<FormModalProps, 'visible' | 'setVisible'>) {
+	const { goToNode } = useNodeNavigation()
+
 	const nodeDescription = (n: Node): string | undefined =>
 		n.match({
 			Entity: s => s.name,
@@ -37,7 +43,10 @@ export function ProblemModal({
 				{problems.map((problem, i) => (
 					<List.Item
 						key={i}
-						onPress={() => onSelect && onSelect(problem)}
+						onPress={() => {
+							onSelect && onSelect(problem)
+							goToNode(problem.node)
+						}}
 						title={wTranslate(`problem.${problem.code}`)}
 						titleNumberOfLines={2}
 						left={() => <ProblemIcon problem={problem} />}
@@ -48,3 +57,5 @@ export function ProblemModal({
 		</FormModal>
 	)
 }
+
+export default withNodeNavigation(ProblemModal)

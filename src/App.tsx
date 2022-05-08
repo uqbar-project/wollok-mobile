@@ -25,7 +25,6 @@ import './weak-ref/WeakRef'
 
 export type RootStackParamList = {
 	SelectProject: undefined
-	OtraPantalla: undefined
 	ProjectNavigator: { name: string; project: Environment }
 	Home: undefined
 	EntityDetails: { entityFQN: Name }

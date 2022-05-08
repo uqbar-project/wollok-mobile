@@ -45,6 +45,15 @@ jest.mock('react-native-paper', () => {
         Portal: ({ children }) => children
     };
 });
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native');
+    return {
+      ...actualNav,
+      useNavigation: () => ({
+        navigate: jest.fn(),
+      }),
+    };
+  });
 jest.mock('react-native-fs', () => ({ readDir: () => Promise.resolve([]) }))
 jest.mock('rn-fetch-blob-v2', () => ({ fs: { exists: () => Promise.resolve(true) } }))
 
