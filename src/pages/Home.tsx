@@ -6,7 +6,7 @@ import { IconButton, Snackbar } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { RootStackParamList } from '../App'
 import { ProjectHeader } from '../components/projects/ProjectHeader'
-import { NodeNavigationProvider } from '../context/NodeNavigation'
+import { withNodeNavigation } from '../context/NodeNavigation'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
 import { Describes } from './tabs/Describes'
@@ -36,11 +36,9 @@ export function Home() {
 		navigation.setOptions({
 			title: name,
 			headerTitleAlign: 'center',
-			headerRight: () => (
-				<NodeNavigationProvider>
-					<ProjectHeader pushMessage={pushMessage} />
-				</NodeNavigationProvider>
-			),
+			headerRight: withNodeNavigation(() => (
+				<ProjectHeader pushMessage={pushMessage} />
+			)),
 		})
 	}, [navigation, project, name])
 

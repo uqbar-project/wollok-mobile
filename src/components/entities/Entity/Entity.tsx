@@ -2,8 +2,8 @@ import React from 'react'
 import { List, withTheme } from 'react-native-paper'
 import { Module } from 'wollok-ts/dist/model'
 import {
-	NodeNavigationProvider,
 	useNodeNavigation,
+	withNodeNavigation,
 } from '../../../context/NodeNavigation'
 import { Theme } from '../../../theme'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
@@ -33,12 +33,4 @@ function EntityComponent({ entity, theme }: EntityComponentProps) {
 	)
 }
 
-function Wrapper(props: EntityComponentProps) {
-	return (
-		<NodeNavigationProvider>
-			<EntityComponent {...props} />
-		</NodeNavigationProvider>
-	)
-}
-
-export default withTheme(Wrapper)
+export default withTheme(withNodeNavigation(EntityComponent))

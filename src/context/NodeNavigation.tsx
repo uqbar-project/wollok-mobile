@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { createContext } from 'react'
+import React, { ComponentType, createContext } from 'react'
 import { Entity, Method, Module, Node, Test } from 'wollok-ts/dist/model'
 import { HomeScreenNavigationProp } from '../pages/Home'
 import { ParentComponentProp } from '../utils/type-helpers'
@@ -50,3 +50,11 @@ export const useNodeNavigation = createContextHook(ContextContext, {
 	contextName: 'NodeNavigationProvider',
 	hookName: 'useNodeNavigation',
 })
+
+export function withNodeNavigation<Props>(Component: ComponentType<Props>) {
+	return (props: Props) => (
+		<NodeNavigationProvider>
+			<Component {...props} />
+		</NodeNavigationProvider>
+	)
+}
