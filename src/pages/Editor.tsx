@@ -2,6 +2,7 @@ import { RouteProp, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 import { Body } from 'wollok-ts/dist/model'
+import { RootStackParamList } from '../App'
 import { BodyMaker } from '../components/Body/BodyMaker'
 import { useProject } from '../context/ProjectProvider'
 import {
@@ -9,14 +10,13 @@ import {
 	entityMemberByFQN,
 	EntityMemberWithBody,
 } from '../utils/wollok-helpers'
-import { ProjectStackParamList } from './ProjectNavigator'
 
 export type EditorScreenNavigationProp = StackNavigationProp<
-	ProjectStackParamList,
+	RootStackParamList,
 	'Editor'
 >
 
-type Route = RouteProp<ProjectStackParamList, 'Editor'>
+type Route = RouteProp<RootStackParamList, 'Editor'>
 
 export const Editor = ({
 	route: {

@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Button, List, TextInput } from 'react-native-paper'
 import { Expression } from 'wollok-ts/dist/model'
+import { RootStackParamList } from '../App'
 import { ListLiterals } from '../components/expressions/expression-lists/literals-list'
 import { ListMessages } from '../components/expressions/expression-lists/messages-list'
 import { ListSingletons } from '../components/expressions/expression-lists/singletons-list'
@@ -19,10 +20,9 @@ import {
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
 import { entityMemberByFQN } from '../utils/wollok-helpers'
-import { ProjectStackParamList } from './ProjectNavigator'
 
 export type ExpressionMakerScreenProp = StackNavigationProp<
-	ProjectStackParamList,
+	RootStackParamList,
 	'ExpressionMaker'
 >
 
@@ -113,10 +113,7 @@ function ExpressionMaker(props: {
 	)
 }
 
-type ExpressionMakerRouteProp = RouteProp<
-	ProjectStackParamList,
-	'ExpressionMaker'
->
+type ExpressionMakerRouteProp = RouteProp<RootStackParamList, 'ExpressionMaker'>
 
 const styles = StyleSheet.create({
 	view: { display: 'flex', maxHeight: '85%' },

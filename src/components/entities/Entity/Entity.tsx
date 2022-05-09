@@ -1,7 +1,10 @@
 import React from 'react'
 import { List, withTheme } from 'react-native-paper'
 import { Module } from 'wollok-ts/dist/model'
-import { useNodeNavigation } from '../../../context/NodeNavigation'
+import {
+	useNodeNavigation,
+	withNodeNavigation,
+} from '../../../context/NodeNavigation'
 import { Theme } from '../../../theme'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
 import { EntityKindIcon } from '../EntityKindIcon'
@@ -30,4 +33,4 @@ function EntityComponent({ entity, theme }: EntityComponentProps) {
 	)
 }
 
-export default withTheme(EntityComponent)
+export default withTheme(withNodeNavigation(EntityComponent))

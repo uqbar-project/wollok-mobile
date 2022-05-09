@@ -4,15 +4,15 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { IconButton, Snackbar } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
-import { ProjectHeader } from '../components/projects/ProjectHeader'
+import { RootStackParamList } from '../App'
+import ProjectHeader from '../components/projects/ProjectHeader'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
-import { ProjectStackParamList } from './ProjectNavigator'
 import { Describes } from './tabs/Describes'
 import { Modules } from './tabs/Modules'
 
 export type HomeScreenNavigationProp = StackNavigationProp<
-	ProjectStackParamList,
+	RootStackParamList,
 	'Home'
 >
 
@@ -20,6 +20,7 @@ const Tab = createBottomTabNavigator()
 
 export function Home() {
 	const { name, project } = useProject()
+
 	// MOve to another component
 	const [message, setMessage] = useState('')
 	const [showMessage, setShowMessage] = useState(false)
