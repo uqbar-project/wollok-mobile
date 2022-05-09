@@ -3,7 +3,7 @@ import React from 'react'
 import { Node, Problem } from 'wollok-ts/dist/model'
 import { ProblemIcon } from '../components/problems/ProblemIcon'
 import { ProblemReporterButton } from '../components/problems/ProblemReporterButton'
-import { ProblemModal } from '../components/problems/ProblemsModal'
+import ProblemModal from '../components/problems/ProblemsModal'
 import { methodFQN } from '../utils/wollok-helpers'
 import ProjectProviderMock from './utils/ProjectProviderMock'
 import {
@@ -63,6 +63,8 @@ describe('ProblemReporterButton', () => {
 		}
 
 		iconExistTest('with problem node', singleton, warning)
+
+		iconExistTest('inside module node', singleton, problem(field))
 
 		iconExistTest('inside method body', method, error)
 

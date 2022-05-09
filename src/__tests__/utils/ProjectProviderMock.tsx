@@ -9,6 +9,7 @@ export const initialContext = {
 	changed: false,
 	problems: [] as Problem[],
 	actions: {
+		setNewProject: jest.fn(),
 		addEntity: jest.fn(),
 		addDescribe: jest.fn(),
 		addMember: jest.fn(),

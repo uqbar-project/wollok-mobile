@@ -7,19 +7,23 @@ import { stylesheet } from '../components/entities/Entity/styles'
 import FabAddScreen from '../components/FabScreens/FabAddScreen'
 import { NewProjectModal } from '../components/projects/NewProjectModal'
 import { templateProject } from '../context/initialProject'
+import { useProject } from '../context/ProjectProvider'
 import {
 	loadProject,
 	savedProjects,
 	saveProject,
 } from '../services/persistance.service'
 import { useTheme } from '../theme'
-import { ProjectScreenNavigationProp } from './ProjectNavigator'
+import { HomeScreenNavigationProp } from './Home'
 
 export function SelectProject() {
+	const {
+		actions: { setNewProject },
+	} = useProject()
 	const [projects, setProjects] = useState<string[]>([])
 	const [showNewProjectModal, setShowNewProjectModal] = useState(false)
 	const focused = useIsFocused()
-	const navigation = useNavigation<ProjectScreenNavigationProp>()
+	const navigation = useNavigation<HomeScreenNavigationProp>()
 
 	const theme = useTheme()
 
@@ -30,10 +34,8 @@ export function SelectProject() {
 		selectedProject?: Environment,
 	) {
 		function navigate(targetProject: Environment) {
-			navigation.navigate('ProjectNavigator', {
-				name: projectName,
-				project: targetProject,
-			})
+			setNewProject(projectName, targetProject)
+			navigation.navigate('Home')
 		}
 		if (selectedProject) {
 			navigate(selectedProject)
