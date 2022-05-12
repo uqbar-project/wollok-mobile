@@ -33,7 +33,12 @@ const errorTest: () => TestRun = () => ({
 
 const finishTestRunning = () =>
 	act(async () => {
-		jest.runAllTimers()
+		/**
+		 *  Faster tests at the cost of possible future bug:
+		 *  "If any of the currently pending macro-tasks schedule new macro-tasks,
+		 *  those new tasks will not be executed by this call."
+		 * */
+		jest.runOnlyPendingTimers()
 	})
 
 const runTest = async (button: () => ReactTestInstance) => {
