@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import {
@@ -9,6 +10,7 @@ import {
 	withTheme,
 } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
+import { HomeScreenNavigationProp } from '../../pages/Home'
 import { Theme } from '../../theme'
 import { runAsync } from '../../utils/commons'
 import { Maybe } from '../../utils/type-helpers'
@@ -26,6 +28,7 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 	const [testRun, setTestRun] = useState<Maybe<TestRun>>(undefined)
 	const [running, setRunning] = useState(false)
 	const [showMessage, setShowMessage] = useState<boolean>(false)
+	const navigation = useNavigation<HomeScreenNavigationProp>()
 
 	return (
 		<>
@@ -59,6 +62,18 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 									runAsync(() => {
 										setTestRun(runner(test))
 										setRunning(false)
+									})
+								}}
+							/>
+						)}
+						{running ? (
+							<ActivityIndicator style={style.spinner} animating={true} />
+						) : (
+							<IconButton
+								icon={'bug'}
+								onPress={() => {
+									navigation.navigate('Debugger', {
+										fqn: test.fullyQualifiedName(),
 									})
 								}}
 							/>

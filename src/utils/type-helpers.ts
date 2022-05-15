@@ -6,9 +6,7 @@ export type Mutable<T> = {
 
 export type Maybe<T> = T | undefined
 
-export type ParentComponentProp<T = {}> = T & {
-	children: OneOrMany<JSX.Element>
-}
+export type ParentComponentProp<T = {}> = T & JSX.ElementChildrenAttribute
 
 export type Visible = {
 	visible: boolean

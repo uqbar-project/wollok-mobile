@@ -1,4 +1,3 @@
-import { render } from '@testing-library/react-native'
 import React from 'react'
 import {
 	Assignment as AssignmentModel,
@@ -9,11 +8,12 @@ import {
 	Sentence,
 	Variable as VariableModel,
 } from 'wollok-ts/dist/model'
-import { Assignment } from '../components/Body/sentences/Assignment'
-import { Return } from '../components/Body/sentences/Return'
-import { Send } from '../components/Body/sentences/Send'
-import { Variable } from '../components/Body/sentences/Variable'
-import { VisualSentence } from '../components/Body/sentences/VisualSentence'
+import VisualSentence, {
+	AssignmentComponent,
+	ReturnComponent,
+	VariableComponent,
+} from '../components/Body/VisualSentence'
+import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
 import { renderWithTheme } from './utils/test-helpers'
 
 describe('matching sentences with components', () => {
@@ -23,7 +23,7 @@ describe('matching sentences with components', () => {
 				receiver: new Reference({ name: 'assert' }),
 				message: 'that',
 			}),
-			Send,
+			ExpressionDisplay,
 		)
 	})
 
@@ -33,7 +33,7 @@ describe('matching sentences with components', () => {
 				variable: new Reference({ name: 'assert' }),
 				value: new Literal({ value: true }),
 			}),
-			Assignment,
+			AssignmentComponent,
 		)
 	})
 
@@ -42,19 +42,24 @@ describe('matching sentences with components', () => {
 			new ReturnModel({
 				value: new Literal({ value: true }),
 			}),
-			Return,
+			ReturnComponent,
 		)
 	})
 
 	it('should match a variable sentence', () => {
-		checkMatch(new VariableModel({ name: 'name', isConstant: false }), Variable)
+		checkMatch(
+			new VariableModel({ name: 'name', isConstant: false }),
+			VariableComponent,
+		)
 	})
 
 	it('should match any unknown sentences with the unsupported sentence component', async () => {
 		const unsupportedKind = 'Crazy'
 		const crazySentence = { kind: unsupportedKind } as unknown as Sentence
 
-		const { getByText } = render(<VisualSentence sentence={crazySentence} />)
+		const { getByText } = renderWithTheme(
+			<VisualSentence sentence={crazySentence} />,
+		)
 		expect(getByText(unsupportedKind, { exact: false })).toBeTruthy()
 	})
 })

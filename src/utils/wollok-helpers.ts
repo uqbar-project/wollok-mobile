@@ -149,9 +149,7 @@ export function executionFor(
 		Evaluation.build(environment, WRENatives),
 	)
 	const executionDirector = director.exec(test)
-	// Enter to test body
-	executionDirector.stepIn()
-	executionDirector.stepIn()
+	executionDirector.resume(n => n === test.body)
 	return executionDirector
 }
 
