@@ -2,35 +2,37 @@ import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { upperCaseFirst } from 'upper-case-first'
-import { List } from 'wollok-ts/dist/extensions'
-import { Body, Expression, Name, Return, Sentence } from 'wollok-ts/dist/model'
+import { Body, Expression, Node, Return, Sentence } from 'wollok-ts/dist/model'
 import { ExpressionOnSubmit } from '../../pages/ExpressionMaker'
 import { wTranslate } from '../../utils/translation-helpers'
-import { Referenciable } from '../../utils/wollok-helpers'
+import {
+	allScopedVariables,
+	CodeContainer,
+	entityMemberFQN,
+} from '../../utils/wollok-helpers'
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
 import { SubmitCheckButton } from '../ui/Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
-import VisualSentence, { returnIconName } from './VisualSentence'
 import { VariableFormModal } from './VariableForm'
+import VisualSentence, { returnIconName } from './VisualSentence'
 
 type BodyMakerProps = {
-	sentences: List<Sentence>
-	variables: Referenciable[]
-	contextFQN: Name
+	codeContainer: CodeContainer
 	setBody: (newSentence: Body) => void
+	highlightedNode?: Node
 }
 export function BodyMaker({
-	sentences: initialSentences,
+	codeContainer,
 	setBody,
-	variables,
-	contextFQN,
+	highlightedNode,
 }: BodyMakerProps) {
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
 
 	const [sentences, setSentences] = useState<Sentence[]>(
-		Array.from(initialSentences),
+		Array.from(codeContainer.sentences()),
 	)
+	const contextFQN = entityMemberFQN(codeContainer)
 
 	function addSentence(sentence: Sentence) {
 		setSentences([...sentences, sentence])
@@ -94,12 +96,16 @@ export function BodyMaker({
 		<MultiFabScreen actions={actions}>
 			<ScrollView style={styles.sentences}>
 				{sentences.map((sentence, i) => (
-					<VisualSentence sentence={sentence} key={i} />
+					<VisualSentence
+						key={i}
+						sentence={sentence}
+						highlightedNode={highlightedNode}
+					/>
 				))}
 			</ScrollView>
 
 			<AssignmentFormModal
-				variables={variables}
+				variables={allScopedVariables(codeContainer)}
 				onSubmit={addSentence}
 				setVisible={setAssignmentModalVisible}
 				contextFQN={contextFQN}

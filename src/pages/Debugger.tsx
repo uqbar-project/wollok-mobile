@@ -8,12 +8,7 @@ import { BodyMaker } from '../components/Body/BodyMaker'
 import { Row } from '../components/ui/Row'
 import { useProject } from '../context/ProjectProvider'
 import { log } from '../utils/commons'
-import {
-	allScopedVariables,
-	entityMemberByFQN,
-	entityMemberFQN,
-	EntityMemberWithBody,
-} from '../utils/wollok-helpers'
+import { CodeContainer, entityMemberByFQN } from '../utils/wollok-helpers'
 
 export type EditorScreenNavigationProp = StackNavigationProp<
 	RootStackParamList,
@@ -60,13 +55,12 @@ const Debugger = ({
 		if (!body) {
 			throw 'BODY NOT FOUND'
 		}
-		const entity = body.parent as EntityMemberWithBody
+		const entity = body.parent as CodeContainer
 		return (
 			<>
 				<BodyMaker
-					sentences={entity.sentences()}
-					variables={allScopedVariables(entity)}
-					contextFQN={entityMemberFQN(entity)}
+					codeContainer={entity}
+					highlightedNode={state.next}
 					setBody={log}
 				/>
 				<Row>

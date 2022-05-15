@@ -33,9 +33,9 @@ export type Named = { name: Name }
 
 export type Referenciable = Variable | Field | Parameter
 
-export type EntityMemberWithBody = Method | Test
+export type CodeContainer = Method | Test
 
-export type EntityMember = EntityMemberWithBody | Field
+export type EntityMember = CodeContainer | Field
 
 export function allFields(module: Module): List<Field> {
 	return module.hierarchy().flatMap(parent => parent.fields())
@@ -61,9 +61,7 @@ export function literalClassFQN(literal: Literal): Name {
 	return `wollok.lang.${upperCaseFirst(typeof literal.value)}`
 }
 
-export function allScopedVariables(
-	node: EntityMemberWithBody,
-): Referenciable[] {
+export function allScopedVariables(node: CodeContainer): Referenciable[] {
 	const fields = allFields(node.parent)
 	const params = node.is('Method') ? node.parameters : []
 	const methodVars = allVariables(node)
@@ -97,18 +95,18 @@ export function methodByFQN(environment: Environment, fqn: Name): Method {
 	return entity.lookupMethod(methodName, Number.parseInt(methodArity, 10))!
 }
 
-export function entityMemberLabel(node: EntityMemberWithBody): string {
+export function entityMemberLabel(node: CodeContainer): string {
 	return node.is('Method') ? methodLabel(node) : node.name
 }
 
-export function entityMemberFQN(node: EntityMemberWithBody): string {
+export function entityMemberFQN(node: CodeContainer): string {
 	return node.is('Method') ? methodFQN(node) : node.fullyQualifiedName()
 }
 
 export function entityMemberByFQN(
 	environment: Environment,
 	fqn: Name,
-): EntityMemberWithBody {
+): CodeContainer {
 	return isMethodFQN(fqn)
 		? methodByFQN(environment, fqn)
 		: environment.getNodeByFQN<Test>(fqn)

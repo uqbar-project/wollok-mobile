@@ -5,11 +5,7 @@ import { Body } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import { BodyMaker } from '../components/Body/BodyMaker'
 import { useProject } from '../context/ProjectProvider'
-import {
-	allScopedVariables,
-	entityMemberByFQN,
-	EntityMemberWithBody,
-} from '../utils/wollok-helpers'
+import { CodeContainer, entityMemberByFQN } from '../utils/wollok-helpers'
 
 export type EditorScreenNavigationProp = StackNavigationProp<
 	RootStackParamList,
@@ -42,15 +38,8 @@ export const Editor = ({
 	}, [navigation, entity])
 
 	function setBody(body: Body) {
-		changeMember(parent)(entity, entity.copy({ body }) as EntityMemberWithBody)
+		changeMember(parent)(entity, entity.copy({ body }) as CodeContainer)
 	}
 
-	return (
-		<BodyMaker
-			sentences={entity.sentences()}
-			variables={allScopedVariables(entity)}
-			contextFQN={fqn}
-			setBody={setBody}
-		/>
-	)
+	return <BodyMaker codeContainer={entity} setBody={setBody} />
 }

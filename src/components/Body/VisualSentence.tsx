@@ -10,25 +10,47 @@ import { ConstantVariableIcon } from '../ui/ConstantVariableIcon'
 import { Row } from '../ui/Row'
 import { Assignment } from 'wollok-ts/dist/model'
 
-function VisualSentence({ sentence }: { sentence: Sentence }) {
+type VisualSentenceProps = {
+	sentence: Sentence
+	highlightedNode?: Node
+}
+function VisualSentence({ sentence, highlightedNode }: VisualSentenceProps) {
 	return (
 		<Row>
 			<ProblemReporterButton node={sentence} />
-			<NodeComponent node={sentence} />
+			<NodeComponent node={sentence} highlightedNode={highlightedNode} />
 		</Row>
 	)
 }
 
-function NodeComponent({ node }: { node: Node }) {
+type NodeComponentProps = {
+	node: Node
+	highlightedNode?: Node
+}
+function NodeComponent({ node, highlightedNode }: NodeComponentProps) {
 	switch (node.kind) {
 		case 'Send':
-			return <ExpressionDisplay expression={node} withIcon={false} />
+			return (
+				<ExpressionDisplay
+					expression={node}
+					withIcon={false}
+					highlightedNode={highlightedNode}
+				/>
+			)
 		case 'Assignment':
-			return <AssignmentComponent node={node} showNull={true} />
+			return (
+				<AssignmentComponent
+					node={node}
+					showNull={true}
+					highlightedNode={highlightedNode}
+				/>
+			)
 		case 'Variable':
-			return <VariableComponent variable={node} />
+			return (
+				<VariableComponent variable={node} highlightedNode={highlightedNode} />
+			)
 		case 'Return':
-			return <ReturnComponent return={node} />
+			return <ReturnComponent return={node} highlightedNode={highlightedNode} />
 		default:
 			return (
 				<Text>{`${wTranslate('sentence.unsupportedSentence')}: ${
@@ -41,16 +63,22 @@ function NodeComponent({ node }: { node: Node }) {
 type AssignmentComponentProps = {
 	node: Assignment | Variable
 	showNull?: boolean
+	highlightedNode?: Node
 }
 export function AssignmentComponent({
 	node,
 	showNull,
+	highlightedNode,
 }: AssignmentComponentProps) {
 	const ignoreValue = showNull === false && isNullExpression(node.value)
 	const name = node.is('Assignment') ? node.variable.name : node.name
 	return (
 		<Row>
-			<ReferenceSegment text={name} index={0} />
+			<ReferenceSegment
+				text={name}
+				index={0}
+				highlighted={highlightedNode === node}
+			/>
 			{!ignoreValue && <IconButton icon="arrow-right" />}
 			{!ignoreValue && (
 				<ExpressionDisplay expression={node.value} withIcon={false} />
@@ -59,22 +87,42 @@ export function AssignmentComponent({
 	)
 }
 
-export function VariableComponent({ variable }: { variable: Variable }) {
+export function VariableComponent({
+	variable,
+	highlightedNode,
+}: {
+	variable: Variable
+	highlightedNode?: Node
+}) {
 	return (
 		<Row>
 			<IconButton icon="variable" /*olor={theme.colors.primary}*/ />
 			<ConstantVariableIcon variable={variable} />
-			<AssignmentComponent node={variable} showNull={false} />
+			<AssignmentComponent
+				node={variable}
+				showNull={false}
+				highlightedNode={highlightedNode}
+			/>
 		</Row>
 	)
 }
 
 export const returnIconName = 'arrow-expand-up'
-export function ReturnComponent({ return: wReturn }: { return: Return }) {
+export function ReturnComponent({
+	return: wReturn,
+	highlightedNode,
+}: {
+	return: Return
+	highlightedNode?: Node
+}) {
 	return (
 		<Row>
 			<IconButton icon={returnIconName} /*color={theme.colors.primary}*/ />
-			<ExpressionDisplay expression={wReturn.value} withIcon={false} />
+			<ExpressionDisplay
+				expression={wReturn.value}
+				withIcon={false}
+				highlightedNode={highlightedNode}
+			/>
 		</Row>
 	)
 }

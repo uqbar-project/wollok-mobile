@@ -7,26 +7,55 @@ import {
 	ViewStyle,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-import { Expression, LiteralValue, Send } from 'wollok-ts/dist/model'
+import { Expression, LiteralValue, Node, Send } from 'wollok-ts/dist/model'
 import { useTheme } from '../../theme'
 import { ParentComponentProp } from '../../utils/type-helpers'
 import { getVisualSegment } from './ExpressionDisplay'
 
-export const ReferenceSegment = (props: { text: string; index: number }) => {
+type NodeSegment<T> = T & {
+	index: number
+	highlighted?: boolean
+}
+
+export const ReferenceSegment = (props: NodeSegment<{ text: string }>) => {
 	const theme = useTheme()
 	return (
-		<Pill index={props.index} color={theme.colors.expression.reference}>
+		<Pill
+			index={props.index}
+			color={theme.colors.expression.reference}
+			highlighted={props.highlighted}>
 			<Text>{props.text}</Text>
 		</Pill>
 	)
 }
 
-export const MessageSegment = (props: { send: Send; index: number }) => {
+export const LiteralSegment = (props: NodeSegment<{ value: LiteralValue }>) => {
+	const theme = useTheme()
+	return (
+		<Pill
+			index={props.index}
+			color={theme.colors.expression.literal}
+			highlighted={props.highlighted}>
+			<Text>{JSON.stringify(props.value)}</Text>
+		</Pill>
+	)
+}
+
+export const MessageSegment = (
+	props: NodeSegment<{ send: Send; highlightedNode?: Node }>,
+) => {
 	const theme = useTheme()
 	return (
 		<>
-			{getVisualSegment(props.send.receiver, props.index)}
-			<Bullet color={theme.colors.expression.message} index={props.index + 1}>
+			{getVisualSegment(
+				props.send.receiver,
+				props.index,
+				props.highlightedNode,
+			)}
+			<Bullet
+				color={theme.colors.expression.message}
+				index={props.index + 1}
+				highlighted={props.highlighted}>
 				<View style={style.row}>
 					<Text>{props.send.message}(</Text>
 					{props.send.args.map((a, i) => (
@@ -35,6 +64,7 @@ export const MessageSegment = (props: { send: Send; index: number }) => {
 							color={theme.colors.expression.parameter}
 							arg={a}
 							index={props.index - 1}
+							highlightedNode={props.highlightedNode}
 						/>
 					))}
 					<Text>)</Text>
@@ -44,72 +74,13 @@ export const MessageSegment = (props: { send: Send; index: number }) => {
 	)
 }
 
-export const LiteralSegment = (props: {
-	value: LiteralValue
-	index: number
-}) => {
-	const theme = useTheme()
-	return (
-		<Pill index={props.index} color={theme.colors.expression.literal}>
-			<Text>{JSON.stringify(props.value)}</Text>
-		</Pill>
-	)
-}
-
-export const Pill = (
-	props: ParentComponentProp<{
+const Parameter = (
+	props: NodeSegment<{
 		color: ColorValue
-		index: number
+		arg: Expression
+		highlightedNode?: Node
 	}>,
-) => {
-	return (
-		<View
-			style={[
-				style.pill,
-				style.row,
-				{ backgroundColor: props.color, zIndex: -props.index },
-			]}>
-			{props.children}
-		</View>
-	)
-}
-
-const Bullet = (
-	props: ParentComponentProp<{
-		color: string
-		index: number
-	}>,
-) => {
-	const bulletCurve = 20
-	const curve: StyleProp<ViewStyle> =
-		props.index > 0
-			? {
-					marginLeft: -bulletCurve,
-					paddingLeft: bulletCurve + 3,
-			  }
-			: {}
-
-	return (
-		<View
-			style={[
-				style.bullet,
-				style.row,
-				curve,
-				{
-					backgroundColor: props.color,
-					zIndex: -props.index,
-				},
-			]}>
-			{props.children}
-		</View>
-	)
-}
-
-const Parameter = (props: {
-	color: ColorValue
-	arg: Expression
-	index: number
-}) => (
+) => (
 	<View
 		style={[
 			style.pill,
@@ -122,9 +93,51 @@ const Parameter = (props: {
 				shadowOpacity: 50,
 			},
 		]}>
-		{getVisualSegment(props.arg, props.index)}
+		{getVisualSegment(props.arg, props.index, props.highlightedNode)}
 	</View>
 )
+
+////////////////////////////////////////////////////////////////
+
+const Pill = (
+	props: ParentComponentProp<NodeSegment<{ color: ColorValue }>>,
+) => {
+	return (
+		<View style={[style.pill, style.row, highlight(props)]}>
+			{props.children}
+		</View>
+	)
+}
+
+const Bullet = (
+	props: ParentComponentProp<NodeSegment<{ color: ColorValue }>>,
+) => {
+	const bulletCurve = 20
+	const curve: StyleProp<ViewStyle> =
+		props.index > 0
+			? {
+					marginLeft: -bulletCurve,
+					paddingLeft: bulletCurve + 3,
+			  }
+			: {}
+
+	return (
+		<View style={[style.bullet, style.row, curve, highlight(props)]}>
+			{props.children}
+		</View>
+	)
+}
+
+const highlight = ({
+	color,
+	index,
+	highlighted,
+}: NodeSegment<{ color: ColorValue }>) => ({
+	backgroundColor: color,
+	zIndex: -index,
+	borderColor: 'yellow',
+	borderWidth: highlighted ? 3 : 0,
+})
 
 const style = StyleSheet.create({
 	bullet: {
