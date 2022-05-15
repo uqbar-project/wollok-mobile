@@ -4,16 +4,16 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Describe, Field, is, Method, Module } from 'wollok-ts/dist/model'
-import { AccordionList } from './AccordionList'
-import AttributeItemComponent from './AttributeItem/AttributeItem'
-import NewAttributeModal from './new-attribute-modal/NewAttributeModal'
-import NewMethodModal from './new-method-modal/NewMethodModal'
-import MultiFabScreen from '../FabScreens/MultiFabScreen'
-import { ProblemReporterButton } from '../problems/ProblemReporterButton'
 import { useProject } from '../../context/ProjectProvider'
+import { EditorScreenNavigationProp } from '../../pages/Editor'
 import { wTranslate } from '../../utils/translation-helpers'
 import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
-import { EditorScreenNavigationProp } from '../../pages/Editor'
+import MultiFabScreen from '../FabScreens/MultiFabScreen'
+import { ProblemReporterButton } from '../problems/ProblemReporterButton'
+import { AccordionList } from './AccordionList'
+import AttributeItemComponent from './AttributeItem/AttributeItem'
+import AttributeFormModal from './new-attribute-modal/AttributeFormModal'
+import NewMethodModal from './new-method-modal/NewMethodModal'
 
 export type ModuleDetailsProps = {
 	module: Exclude<Module, Describe>
@@ -61,10 +61,11 @@ export const ModuleDetails = function ({ module }: ModuleDetailsProps) {
 				setVisible={setMethodModalVisible}
 				addNewMethod={addMember(module)}
 			/>
-			<NewAttributeModal
+			<AttributeFormModal
+				title={wTranslate('entityDetails.attributeModal.newAttribute')}
 				setVisible={setAttributeModalVisible}
 				visible={attributeModalVisible}
-				addNewField={addMember(module)}
+				onSubmit={addMember(module)}
 				contextFQN={module.fullyQualifiedName()}
 			/>
 		</MultiFabScreen>

@@ -25,6 +25,7 @@ const NewMethodModal = ({
 			resetForm={reset}
 			onSubmit={newMethod}
 			setVisible={setVisible}
+			valid={name.length > 0}
 			visible={visible}>
 			<TextInput
 				onChangeText={setName}
