@@ -9,6 +9,7 @@ import { useProject } from '../../../context/ProjectProvider'
 import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation-helpers'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
+import { TextFormModal } from '../../ui/FormModal/TextFormModal'
 import { OptionsDialog } from '../../ui/OptionsDialog'
 import { EntityKindIcon } from '../EntityKindIcon'
 import { stylesheet } from './styles'
@@ -21,14 +22,18 @@ type EntityComponentProps = {
 function EntityComponent({ entity, theme }: EntityComponentProps) {
 	const styles = stylesheet(theme)
 	const {
-		actions: { deleteEntity },
+		actions: { deleteEntity, editEntity },
 	} = useProject()
 	const [isOptionsVisible, setOptionsDialogVisible] = useState(false)
 	const { goToNode } = useNodeNavigation()
 	const goToEntityDetails = () => goToNode(entity)
+	const [renameModal, setRenameModal] = useState(false)
 
 	function onDelete() {
 		deleteEntity(entity)
+	}
+	function onRename(newName: string) {
+		editEntity(entity, entity.copy({ name: newName }))
 	}
 
 	return (
@@ -45,9 +50,22 @@ function EntityComponent({ entity, theme }: EntityComponentProps) {
 			/>
 			<OptionsDialog
 				title={wTranslate('abm.options')}
-				options={[{ action: onDelete, title: wTranslate('abm.delete') }]}
+				options={[
+					{ action: onDelete, title: wTranslate('abm.delete') },
+					{
+						action: () => setRenameModal(true),
+						title: wTranslate('abm.rename'),
+					},
+				]}
 				visible={isOptionsVisible}
 				dismiss={() => setOptionsDialogVisible(false)}
+			/>
+			<TextFormModal
+				onSubmit={onRename}
+				setVisible={setRenameModal}
+				visible={renameModal}
+				title={wTranslate('abm.rename')}
+				currentText={entity.name}
 			/>
 		</>
 	)

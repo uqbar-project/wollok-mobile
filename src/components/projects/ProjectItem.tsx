@@ -7,8 +7,8 @@ import {
 import { useTheme } from '../../theme'
 import { wTranslate } from '../../utils/translation-helpers'
 import { stylesheet } from '../entities/Entity/styles'
+import { TextFormModal } from '../ui/FormModal/TextFormModal'
 import { OptionsDialog } from '../ui/OptionsDialog'
-import { ProjectFormModal } from './ProjectFormModal'
 
 export const ProjectItem = (props: {
 	project: string
@@ -57,12 +57,12 @@ export const ProjectItem = (props: {
 					},
 				]}
 			/>
-			<ProjectFormModal
+			<TextFormModal
 				title={wTranslate('project.rename')}
 				onSubmit={onRenameProject}
 				setVisible={setShowRename}
 				visible={showRename}
-				currentName={props.project}
+				currentText={props.project}
 			/>
 		</>
 	)

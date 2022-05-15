@@ -21,6 +21,7 @@ function NewEntityModal(props: {
 			onSubmit={addEntity}
 			resetForm={() => resetForm}
 			setVisible={props.setVisible}
+			valid={name !== ''}
 			visible={props.visible}>
 			<TextInput
 				onChangeText={setName}

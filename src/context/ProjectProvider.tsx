@@ -42,6 +42,7 @@ type Actions = {
 	setNewProject: (name: Name, project: Environment) => void
 	rebuildEnvironment: (entity: Entity) => void
 	addEntity: (module: Module) => void
+	editEntity: (oldModule: Module, newModule: Module) => void
 	deleteEntity: (module: Module) => void
 	addDescribe: (test: Describe) => void
 	addMember: (parent: Module) => (newMember: EntityMember) => void
@@ -94,13 +95,12 @@ export function ProjectProvider(
 	}
 
 	function rebuildEnvironment(entity: Entity) {
-		const packageName = entity.is('Describe')
-			? testsPackageName
-			: mainPackageName
-		const newProject = buildEnvironment(packageName, [entity])
-		setProject(newProject)
-		setChanged(true)
-		setProblems(validateProject(newProject))
+		changeProject(_ => {
+			const packageName = entity.is('Describe')
+				? testsPackageName
+				: mainPackageName
+			return buildEnvironment(packageName, [entity])
+		})
 	}
 
 	function validateProject(_project: Environment) {
@@ -112,6 +112,13 @@ export function ProjectProvider(
 			targetPackages.some(target => p.node.ancestors().includes(target))
 
 		return validate(_project).filter(belongsToTargetProject)
+	}
+
+	function changeProject(action: (project: Environment) => Environment) {
+		const newProject = action(project)
+		setProject(newProject)
+		setChanged(true)
+		setProblems(validateProject(newProject))
 	}
 
 	/////////////////////////////////// BUILD //////////////////////////////////
@@ -130,21 +137,37 @@ export function ProjectProvider(
 	}
 
 	function deleteEntity(entity: Module) {
-		const newMembers = entity.parent.members.filter(
-			member => member.fullyQualifiedName() !== entity.fullyQualifiedName(),
-		)
+		changeProject(_ => {
+			const newMembers = entity.parent.members.filter(
+				member => member.fullyQualifiedName() !== entity.fullyQualifiedName(),
+			)
 
-		const newProject = link(
-			[
-				entity.parent.copy({ members: newMembers }),
-				project.getNodeByFQN<Package>(testsPackageName),
-			],
-			fromJSON<Environment>(WRE),
-		)
+			return link(
+				[
+					entity.parent.copy({ members: newMembers }),
+					project.getNodeByFQN<Package>(testsPackageName),
+				],
+				fromJSON<Environment>(WRE),
+			)
+		})
+	}
 
-		setProject(newProject)
-		setChanged(true)
-		setProblems(validateProject(newProject))
+	function editEntity(entity: Module, newEntity: Module) {
+		changeProject(_ => {
+			const newMembers = entity.parent.members
+				.filter(
+					member => member.fullyQualifiedName() !== entity.fullyQualifiedName(),
+				)
+				.concat(newEntity)
+
+			return link(
+				[
+					entity.parent.copy({ members: newMembers }),
+					project.getNodeByFQN<Package>(testsPackageName),
+				],
+				fromJSON<Environment>(WRE),
+			)
+		})
 	}
 
 	function addDescribe(newDescribe: Describe) {
@@ -196,6 +219,7 @@ export function ProjectProvider(
 			setNewProject,
 			addEntity,
 			deleteEntity,
+			editEntity,
 			addDescribe,
 			addMember,
 			changeMember,

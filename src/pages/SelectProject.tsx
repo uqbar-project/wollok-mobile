@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { ScrollView } from 'react-native'
 import { Environment } from 'wollok-ts/dist/model'
 import FabAddScreen from '../components/FabScreens/FabAddScreen'
-import { ProjectFormModal } from '../components/projects/ProjectFormModal'
 import { ProjectItem } from '../components/projects/ProjectItem'
+import { TextFormModal } from '../components/ui/FormModal/TextFormModal'
 import { templateProject } from '../context/initialProject'
 import { useProject } from '../context/ProjectProvider'
 import {
@@ -71,7 +71,7 @@ export function SelectProject() {
 					/>
 				))}
 			</ScrollView>
-			<ProjectFormModal
+			<TextFormModal
 				title={wTranslate('project.newProject')}
 				visible={showNewProjectModal}
 				setVisible={setShowNewProjectModal}
