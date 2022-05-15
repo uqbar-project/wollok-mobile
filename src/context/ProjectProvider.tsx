@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react'
 import 'react-native-get-random-values'
 import { ExecutionDirector } from 'wollok-ts/dist/interpreter/interpreter'
+import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import link from 'wollok-ts/dist/linker'
 import {
 	Describe,
@@ -15,6 +16,7 @@ import {
 	Test,
 } from 'wollok-ts/dist/model'
 import validate from 'wollok-ts/dist/validator'
+import WRE from 'wollok-ts/dist/wre/wre.json'
 import { saveProject } from '../services/persistance.service'
 import { ParentComponentProp } from '../utils/type-helpers'
 import {
@@ -40,6 +42,7 @@ type Actions = {
 	setNewProject: (name: Name, project: Environment) => void
 	rebuildEnvironment: (entity: Entity) => void
 	addEntity: (module: Module) => void
+	deleteEntity: (module: Module) => void
 	addDescribe: (test: Describe) => void
 	addMember: (parent: Module) => (newMember: EntityMember) => void
 	changeMember: (
@@ -68,20 +71,25 @@ export function ProjectProvider(
 	/////////////////////////////////// BUILD //////////////////////////////////
 
 	function buildEnvironment(
-		name: Name,
+		packageName: Name,
 		members: Entity[],
 		base?: Environment,
 	): Environment {
 		const mainImport =
-			name !== mainPackageName
+			packageName !== mainPackageName
 				? [
 						new Import({
 							entity: new Reference({ name: mainPackageName }),
 							isGeneric: true,
 						}),
+						// eslint-disable-next-line no-mixed-spaces-and-tabs
 				  ]
 				: undefined
-		const pack = new Package({ name, members, imports: mainImport })
+		const pack = new Package({
+			name: packageName,
+			members,
+			imports: mainImport,
+		})
 		return link([pack], base ?? project)
 	}
 
@@ -121,6 +129,24 @@ export function ProjectProvider(
 		rebuildEnvironment(newEntity)
 	}
 
+	function deleteEntity(entity: Module) {
+		const newMembers = entity.parent.members.filter(
+			member => member.fullyQualifiedName() !== entity.fullyQualifiedName(),
+		)
+
+		const newProject = link(
+			[
+				entity.parent.copy({ members: newMembers }),
+				project.getNodeByFQN<Package>(testsPackageName),
+			],
+			fromJSON<Environment>(WRE),
+		)
+
+		setProject(newProject)
+		setChanged(true)
+		setProblems(validateProject(newProject))
+	}
+
 	function addDescribe(newDescribe: Describe) {
 		rebuildEnvironment(newDescribe)
 	}
@@ -157,7 +183,7 @@ export function ProjectProvider(
 	/////////////////////////////////// EXECUTION //////////////////////////////////
 
 	async function save() {
-		await saveProject(props.projectName, project)
+		await saveProject(name, project)
 		setChanged(false)
 	}
 
@@ -169,6 +195,7 @@ export function ProjectProvider(
 		actions: {
 			setNewProject,
 			addEntity,
+			deleteEntity,
 			addDescribe,
 			addMember,
 			changeMember,
