@@ -49,6 +49,7 @@ type Actions = {
 	changeMember: (
 		parent: Module,
 	) => (oldMember: EntityMember, newMember: EntityMember) => void
+	deleteMember: (member: EntityMember) => void
 	runTest: (test: Test) => TestRun
 	execution: (test: Test) => ExecutionDirector<void>
 	save: () => Promise<unknown>
@@ -190,6 +191,14 @@ export function ProjectProvider(
 				}) as Module,
 			)
 		}
+	const deleteMember = (member: EntityMember) => {
+		editEntity(
+			member.parent,
+			member.parent.copy({
+				members: member.parent.members.filter(m => m !== member),
+			}),
+		)
+	}
 
 	/////////////////////////////////// ENTITIES //////////////////////////////////
 
@@ -223,6 +232,7 @@ export function ProjectProvider(
 			addDescribe,
 			addMember,
 			changeMember,
+			deleteMember,
 			rebuildEnvironment,
 			runTest,
 			execution,

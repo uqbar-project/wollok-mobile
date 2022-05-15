@@ -14,7 +14,7 @@ import styles from './styles'
 function AttributeItem(props: { attribute: Field; theme: Theme }) {
 	const { attribute, theme } = props
 	const {
-		actions: { changeMember, editEntity },
+		actions: { changeMember, deleteMember },
 	} = useProject()
 
 	const { isProperty, isConstant, name, value } = attribute
@@ -34,12 +34,7 @@ function AttributeItem(props: { attribute: Field; theme: Theme }) {
 	]
 
 	function onDelete() {
-		editEntity(
-			attribute.parent,
-			attribute.parent.copy({
-				members: attribute.parent.members.filter(m => m !== attribute),
-			}),
-		)
+		deleteMember(attribute)
 	}
 
 	function onEdit(newAttribute: Field) {

@@ -32,6 +32,7 @@ function ProblemModal({
 			Test: t => t.name,
 			Body: b => nodeDescription(b.parent),
 			Sentence: a => nodeDescription(a.parent),
+			Parameter: a => nodeDescription(a.parent) + ' - ' + a.name,
 		})
 
 	return (

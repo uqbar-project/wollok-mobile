@@ -1,19 +1,16 @@
-import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Describe, Field, is, Method, Module } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
-import { EditorScreenNavigationProp } from '../../pages/Editor'
 import { wTranslate } from '../../utils/translation-helpers'
-import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
-import { ProblemReporterButton } from '../problems/ProblemReporterButton'
 import { AccordionList } from './AccordionList'
 import AttributeItemComponent from './AttributeItem/AttributeItem'
+import { MethodItem } from './MethodItem'
 import AttributeFormModal from './new-attribute-modal/AttributeFormModal'
-import NewMethodModal from './new-method-modal/NewMethodModal'
+import MethodFormModal from './new-method-modal/MethodFormModal'
 
 export type ModuleDetailsProps = {
 	module: Exclude<Module, Describe>
@@ -56,10 +53,11 @@ export const ModuleDetails = function ({ module }: ModuleDetailsProps) {
 					/>
 				</ScrollView>
 			</List.Section>
-			<NewMethodModal
+			<MethodFormModal
+				title={wTranslate('entityDetails.methodModal.newMethod')}
 				visible={methodModalVisible}
 				setVisible={setMethodModalVisible}
-				addNewMethod={addMember(module)}
+				onSubmit={addMember(module)}
 			/>
 			<AttributeFormModal
 				title={wTranslate('entityDetails.attributeModal.newAttribute')}
@@ -74,21 +72,4 @@ export const ModuleDetails = function ({ module }: ModuleDetailsProps) {
 
 function AttributeItem({ item: attribute }: { item: Field }) {
 	return <AttributeItemComponent key={attribute.name} attribute={attribute} />
-}
-
-function MethodItem({ item: method }: { item: Method }) {
-	const navigator = useNavigation<EditorScreenNavigationProp>()
-	function gotoMethod() {
-		navigator.navigate('Editor', {
-			fqn: methodFQN(method),
-		})
-	}
-	return (
-		<List.Item
-			key={method.name}
-			title={methodLabel(method)}
-			left={() => <ProblemReporterButton node={method} />}
-			onPress={gotoMethod}
-		/>
-	)
 }
