@@ -7,10 +7,10 @@ import {
 } from '../../../context/NodeNavigation'
 import { useProject } from '../../../context/ProjectProvider'
 import { Theme } from '../../../theme'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
 import { TextFormModal } from '../../ui/FormModal/TextFormModal'
-import { OptionsDialog } from '../../ui/OptionsDialog'
+import { OptionsDialog, optionsTitleFromName } from '../../ui/OptionsDialog'
 import { EntityKindIcon } from '../EntityKindIcon'
 import { stylesheet } from './styles'
 
@@ -49,7 +49,7 @@ function EntityComponent({ entity, theme }: EntityComponentProps) {
 				onLongPress={() => setOptionsDialogVisible(true)}
 			/>
 			<OptionsDialog
-				title={wTranslate('abm.options')}
+				title={optionsTitleFromName(entity.name!)}
 				options={[
 					{ action: onDelete, title: wTranslate('abm.delete') },
 					{

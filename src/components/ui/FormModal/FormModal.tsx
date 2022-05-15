@@ -9,7 +9,7 @@ import {
 	withTheme,
 } from 'react-native-paper'
 import { theme, Theme } from '../../../theme'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { ParentComponentProp, Visible } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 

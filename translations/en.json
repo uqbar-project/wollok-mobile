@@ -75,5 +75,12 @@
 		"shouldInitializeAllAttributes": "All object attributes should be initialized",
 		"nameShouldBeginWithLowercase": "This name should start with lowercase",
 		"shouldNotDefineUnusedVariables": "This variable is never used"
+	},
+	"abm": {
+		"edit": "Edit",
+		"options": "\"%{name}\" options",
+		"delete": "Delete",
+		"rename": "Rename",
+		"editing": "Editing"
 	}
 }

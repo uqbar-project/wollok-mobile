@@ -7,7 +7,7 @@ import { Expression, Send } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import ExpressionInput from '../components/ui/ExpressionInput'
 import { SubmitCheckButton } from '../components/ui/Header'
-import { wTranslate } from '../utils/translation-helpers'
+import { wTranslate } from '../utils/translation/translation-helpers'
 import { methodLabel } from '../utils/wollok-helpers'
 
 export function ArgumentsMaker({

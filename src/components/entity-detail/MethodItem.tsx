@@ -4,10 +4,10 @@ import { List } from 'react-native-paper'
 import { Method } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
 import { EditorScreenNavigationProp } from '../../pages/Editor'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
 import { ProblemReporterButton } from '../problems/ProblemReporterButton'
-import { OptionsDialog } from '../ui/OptionsDialog'
+import { OptionsDialog, optionsTitleFromName } from '../ui/OptionsDialog'
 import MethodFormModal from './new-method-modal/MethodFormModal'
 
 export function MethodItem({ item: method }: { item: Method }) {
@@ -45,7 +45,7 @@ export function MethodItem({ item: method }: { item: Method }) {
 				onLongPress={() => setOptionsDialogVisible(true)}
 			/>
 			<OptionsDialog
-				title={method.name}
+				title={optionsTitleFromName(method.name)}
 				options={[
 					{ action: onDelete, title: wTranslate('abm.delete') },
 					{
@@ -57,7 +57,7 @@ export function MethodItem({ item: method }: { item: Method }) {
 				dismiss={() => setOptionsDialogVisible(false)}
 			/>
 			<MethodFormModal
-				title={wTranslate('abm.edit')}
+				title={wTranslate('abm.editing')}
 				initialMethod={method}
 				visible={methodModalVisible}
 				onSubmit={onEdit}

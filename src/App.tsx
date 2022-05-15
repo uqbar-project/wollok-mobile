@@ -20,7 +20,10 @@ import { Home } from './pages/Home'
 import { SelectProject } from './pages/SelectProject'
 import { createPersistanceFolder } from './services/persistance.service'
 import { theme } from './theme'
-import { setI18nConfig, wTranslate } from './utils/translation-helpers'
+import {
+	setI18nConfig,
+	wTranslate,
+} from './utils/translation/translation-helpers'
 import './weak-ref/WeakRef'
 
 export type RootStackParamList = {

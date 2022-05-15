@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { Text, ToggleButton } from 'react-native-paper'
 import { Kind } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { stylesheet } from './styles'
 
 type VisualKind = { kind: Kind; description: string }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text } from 'react-native-paper'
 import { Sentence } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { Row } from '../../ui/Row'
 import { Assignment } from './Assignment'
 import { Return } from './Return'

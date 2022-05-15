@@ -76,5 +76,12 @@
 		"shouldInitializeAllAttributes": "Todos los atributos del objeto deben estar inicializados",
 		"nameShouldBeginWithLowercase": "Este nombre debería empezar con minúscula",
 		"shouldNotDefineUnusedVariables": "Esta variable no se está usando"
+	},
+	"abm": {
+		"edit": "Editar",
+		"options": "Opciones para \"%{name}\"",
+		"delete": "Borrar",
+		"rename": "Renombrar",
+		"editing": "Editando"
 	}
 }

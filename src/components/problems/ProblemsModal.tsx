@@ -6,7 +6,7 @@ import {
 	useNodeNavigation,
 	withNodeNavigation,
 } from '../../context/NodeNavigation'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import { methodFQN } from '../../utils/wollok-helpers'
 import FormModal, { FormModalProps } from '../ui/FormModal/FormModal'
 import { ProblemIcon } from './ProblemIcon'
@@ -48,7 +48,7 @@ function ProblemModal({
 							onSelect && onSelect(problem)
 							goToNode(problem.node)
 						}}
-						title={wTranslate(`problem.${problem.code}`)}
+						title={wTranslate(`problem.${problem.code}` as any)}
 						titleNumberOfLines={2}
 						left={() => <ProblemIcon problem={problem} />}
 						description={nodeDescription(problem.node)}

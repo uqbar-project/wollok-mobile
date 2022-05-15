@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextInput, withTheme } from 'react-native-paper'
 import { Theme } from '../../../theme'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 
 const ParameterInput = (props: {
 	setParameter: (parameter: string) => void

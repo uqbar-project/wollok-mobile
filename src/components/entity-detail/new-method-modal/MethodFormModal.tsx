@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Body, Method, Parameter } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { Visible } from '../../../utils/type-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import ParameterInput from './ParameterInput'
@@ -25,7 +25,6 @@ const MethodFormModal = ({
 	const [parameters, setParameters] = useState<string[]>(
 		initialMethod?.parameters.map(p => p.name) || [],
 	)
-	console.log(parameters)
 	const [nextParameter, setNextParameter] = useState('')
 
 	return (
@@ -75,8 +74,6 @@ const MethodFormModal = ({
 	}
 
 	function newMethod() {
-		console.log(parameters)
-		console.log(parameters.map(paramName => new Parameter({ name: paramName })))
 		onSubmit(
 			new Method({
 				name,

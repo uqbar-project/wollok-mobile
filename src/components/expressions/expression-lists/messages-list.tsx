@@ -14,7 +14,7 @@ import {
 import { useExpressionContext } from '../../../context/ExpressionContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
 import { ExpressionMakerScreenProp } from '../../../pages/ExpressionMaker'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import {
 	allMethods,
 	isNamedSingleton,

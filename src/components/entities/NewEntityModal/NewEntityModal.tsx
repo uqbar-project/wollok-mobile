@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper'
 import { Class, Kind, Mixin, Module, Singleton } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import { SelectKind } from '../SelectKind/SelectKind'
 

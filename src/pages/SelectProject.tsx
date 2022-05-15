@@ -12,7 +12,7 @@ import {
 	savedProjects,
 	saveProject,
 } from '../services/persistance.service'
-import { wTranslate } from '../utils/translation-helpers'
+import { wTranslate } from '../utils/translation/translation-helpers'
 import { HomeScreenNavigationProp } from './Home'
 
 export function SelectProject() {

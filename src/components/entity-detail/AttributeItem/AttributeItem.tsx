@@ -3,10 +3,10 @@ import { List, withTheme } from 'react-native-paper'
 import { Field } from 'wollok-ts/dist/model'
 import { useProject } from '../../../context/ProjectProvider'
 import { Theme } from '../../../theme'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
-import { OptionsDialog } from '../../ui/OptionsDialog'
+import { OptionsDialog, optionsTitleFromName } from '../../ui/OptionsDialog'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 import AttributeFormModal from '../new-attribute-modal/AttributeFormModal'
 import styles from './styles'
@@ -64,7 +64,7 @@ function AttributeItem(props: { attribute: Field; theme: Theme }) {
 			/>
 			<OptionsDialog
 				visible={isOptionsShowing}
-				title={wTranslate('abm.options')}
+				title={optionsTitleFromName(attribute.name)}
 				dismiss={() => setOptionsShowing(false)}
 				options={[{ action: onDelete, title: wTranslate('abm.delete') }]}
 			/>

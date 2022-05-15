@@ -5,10 +5,10 @@ import {
 	renameProject,
 } from '../../services/persistance.service'
 import { useTheme } from '../../theme'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import { stylesheet } from '../entities/Entity/styles'
 import { TextFormModal } from '../ui/FormModal/TextFormModal'
-import { OptionsDialog } from '../ui/OptionsDialog'
+import { OptionsDialog, optionsTitleFromName } from '../ui/OptionsDialog'
 
 export const ProjectItem = (props: {
 	project: string
@@ -43,7 +43,7 @@ export const ProjectItem = (props: {
 				onLongPress={() => setShowOptions(true)}
 			/>
 			<OptionsDialog
-				title={wTranslate('abm.options')}
+				title={optionsTitleFromName(props.project)}
 				visible={showOptions}
 				dismiss={() => setShowOptions(false)}
 				options={[
@@ -58,7 +58,7 @@ export const ProjectItem = (props: {
 				]}
 			/>
 			<TextFormModal
-				title={wTranslate('project.rename')}
+				title={wTranslate('abm.rename')}
 				onSubmit={onRenameProject}
 				setVisible={setShowRename}
 				visible={showRename}

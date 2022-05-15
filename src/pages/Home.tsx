@@ -7,7 +7,7 @@ import { upperCaseFirst } from 'upper-case-first'
 import { RootStackParamList } from '../App'
 import ProjectHeader from '../components/projects/ProjectHeader'
 import { useProject } from '../context/ProjectProvider'
-import { wTranslate } from '../utils/translation-helpers'
+import { wTranslate } from '../utils/translation/translation-helpers'
 import { Describes } from './tabs/Describes'
 import { Modules } from './tabs/Modules'
 
