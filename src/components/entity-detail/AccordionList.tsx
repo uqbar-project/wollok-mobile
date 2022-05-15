@@ -24,14 +24,22 @@ export const AccordionList = function <
 			title={`${props.title} (${props.items.length})`}
 			expanded={expanded}
 			onPress={() => switchExpanded()}>
-			{props.items.map(item => {
-				return (
-					<View key={`${item.name}${item.parameters?.length}`}>
-						<props.VisualItem item={item} />
-						<Divider style={styles.divider} />
-					</View>
-				)
-			})}
+			{props.items
+				.sort((a, b) => {
+					if (a.name < b.name) {
+						return -1
+					} else {
+						return 1
+					}
+				})
+				.map(item => {
+					return (
+						<View key={`${item.name}${item.parameters?.length}`}>
+							<props.VisualItem item={item} />
+							<Divider style={styles.divider} />
+						</View>
+					)
+				})}
 		</ListComponent.Accordion>
 	)
 

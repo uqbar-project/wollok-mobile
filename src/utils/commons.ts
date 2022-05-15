@@ -17,3 +17,11 @@ export function runAsync(f: () => void) {
 export function log(obj: any) {
 	console.log(JSON.stringify(obj, undefined, 2))
 }
+
+export function sortWithoutEffect<T>(
+	array: ReadonlyArray<T>,
+	sortBy: (a: T, b: T) => number,
+) {
+	const aux = [...array]
+	return aux.sort(sortBy)
+}
