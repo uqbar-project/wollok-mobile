@@ -81,7 +81,11 @@ export function AssignmentComponent({
 			/>
 			{!ignoreValue && <IconButton icon="arrow-right" />}
 			{!ignoreValue && (
-				<ExpressionDisplay expression={node.value} withIcon={false} />
+				<ExpressionDisplay
+					expression={node.value}
+					withIcon={false}
+					highlightedNode={highlightedNode}
+				/>
 			)}
 		</Row>
 	)

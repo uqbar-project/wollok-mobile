@@ -29,38 +29,87 @@ const Debugger = ({
 		actions: { execution: exec },
 	} = useProject()
 	const test = entityMemberByFQN(project, fqn) as Test
-	const execution = exec(test)
-	const [state, setState] = useState(execution.stepThrough())
+	const [execution, setExecution] = useState(exec(test))
+	const [state, setState] = useState(execution.stepIn())
+	const [node, setNode] = useState(!state.done ? state.next : null)
+	const [body, setBody] = useState(
+		node ? [node, ...node.ancestors()].find(is('Body')) : null,
+	)
 
-	function stepIn() {
-		setState(execution.stepIn())
+	const stepIn = () => {
+		const newState = execution.stepIn()
+		console.log({ newState })
+		setState(newState)
+		setNode(!newState.done ? newState.next : null)
+		const newBody = !newState.done
+			? [newState.next, ...newState.next.ancestors()].find(is('Body'))
+			: null
+		console.log(newBody?.parent)
+		setBody(newBody)
+		setExecution(execution)
 	}
 
-	function stepOver() {
-		setState(execution.stepOver())
+	const stepOver = () => {
+		const newState = execution.stepOver()
+		setState(newState)
+		setNode(!newState.done ? newState.next : null)
+		setBody(
+			!newState.done
+				? [newState.next, ...newState.next.ancestors()].find(is('Body'))
+				: null,
+		)
+		setExecution(execution)
 	}
 
-	function stepOut() {
-		setState(execution.stepOut())
+	const stepOut = () => {
+		const newState = execution.stepOut()
+		setState(newState)
+		setNode(!newState.done ? newState.next : null)
+		setBody(
+			!newState.done
+				? [newState.next, ...newState.next.ancestors()].find(is('Body'))
+				: null,
+		)
+		setExecution(execution)
 	}
 
-	function stepThrough() {
-		setState(execution.stepThrough())
+	const stepThrough = () => {
+		const newState = execution.stepThrough()
+		setState(newState)
+		setNode(!newState.done ? newState.next : null)
+		setBody(
+			!newState.done
+				? [newState.next, ...newState.next.ancestors()].find(is('Body'))
+				: null,
+		)
+		setExecution(execution)
 	}
 
-	if (!state.done) {
-		console.log('NEXT', state.next)
+	if (node) {
+		console.log('NEXT', node)
 		console.log('ERROR', state.error)
-		const body = state.next.ancestors().find(is('Body'))
-		if (!body) {
-			throw 'BODY NOT FOUND'
+		if (!body && !node.is('Method')) {
+			console.log(`BODY NOT FOUND ${node.kind}`)
+			return (
+				<>
+					<Text>{node.kind} ????</Text>
+
+					<Row>
+						<IconButton icon={'chevron-right'} onPress={stepOver} />
+						<IconButton icon={'chevron-double-right'} onPress={stepIn} />
+						<IconButton icon={'chevron-down'} onPress={stepThrough} />
+						<IconButton icon={'chevron-up'} onPress={stepOut} />
+					</Row>
+				</>
+			)
 		}
-		const entity = body.parent as CodeContainer
+		const entity = node.is('Method') ? node : body!.parent
+		console.log({ entity })
 		return (
 			<>
 				<BodyMaker
-					codeContainer={entity}
-					highlightedNode={state.next}
+					codeContainer={entity as CodeContainer}
+					highlightedNode={node}
 					setBody={log}
 				/>
 				<Row>

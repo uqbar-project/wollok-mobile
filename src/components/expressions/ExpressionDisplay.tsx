@@ -72,6 +72,15 @@ export function getVisualSegment(
 					highlighted={highlighted}
 				/>
 			)
+		case 'Self':
+			return (
+				<ReferenceSegment
+					text={'SELF'}
+					key={i}
+					index={i}
+					highlighted={highlighted}
+				/>
+			)
 		default:
 			throw Error(`Not supported expression ${expression.kind}`)
 	}

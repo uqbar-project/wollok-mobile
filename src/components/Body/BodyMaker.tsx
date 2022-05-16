@@ -28,10 +28,11 @@ export function BodyMaker({
 }: BodyMakerProps) {
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
-
+	console.log('ANTES', codeContainer.sentences().length)
 	const [sentences, setSentences] = useState<Sentence[]>(
 		Array.from(codeContainer.sentences()),
 	)
+	console.log('DESPUES', sentences.length)
 	const contextFQN = entityMemberFQN(codeContainer)
 
 	function addSentence(sentence: Sentence) {
@@ -95,7 +96,7 @@ export function BodyMaker({
 	return (
 		<MultiFabScreen actions={actions}>
 			<ScrollView style={styles.sentences}>
-				{sentences.map((sentence, i) => (
+				{codeContainer.sentences().map((sentence, i) => (
 					<VisualSentence
 						key={i}
 						sentence={sentence}
