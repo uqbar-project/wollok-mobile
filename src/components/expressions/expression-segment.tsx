@@ -103,7 +103,13 @@ const Pill = (
 	props: ParentComponentProp<NodeSegment<{ color: ColorValue }>>,
 ) => {
 	return (
-		<View style={[style.pill, style.row, highlight(props)]}>
+		<View
+			style={[
+				style.pill,
+				style.row,
+				segmentStyle(props),
+				highlightStyle(props),
+			]}>
 			{props.children}
 		</View>
 	)
@@ -122,19 +128,31 @@ const Bullet = (
 			: {}
 
 	return (
-		<View style={[style.bullet, style.row, curve, highlight(props)]}>
+		<View
+			style={[
+				style.bullet,
+				style.row,
+				curve,
+				segmentStyle(props),
+				highlightStyle(props),
+			]}>
 			{props.children}
 		</View>
 	)
 }
 
-const highlight = ({
+const segmentStyle = ({
 	color,
 	index,
-	highlighted,
-}: NodeSegment<{ color: ColorValue }>) => ({
+}: {
+	color: ColorValue
+	index: number
+}) => ({
 	backgroundColor: color,
 	zIndex: -index,
+})
+
+export const highlightStyle = ({ highlighted }: { highlighted?: boolean }) => ({
 	borderColor: 'yellow',
 	borderWidth: highlighted ? 3 : 0,
 })

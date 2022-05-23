@@ -1,14 +1,22 @@
 import React from 'react'
 import { IconButton, Text } from 'react-native-paper'
-import { Node, Return, Sentence, Variable } from 'wollok-ts/dist/model'
+import {
+	Assignment,
+	Node,
+	Return,
+	Sentence,
+	Variable,
+} from 'wollok-ts/dist/model'
 import { wTranslate } from '../../utils/translation-helpers'
 import { isNullExpression } from '../../utils/wollok-helpers'
-import { ReferenceSegment } from '../expressions/expression-segment'
+import {
+	highlightStyle,
+	ReferenceSegment,
+} from '../expressions/expression-segment'
 import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
 import { ProblemReporterButton } from '../problems/ProblemReporterButton'
 import { ConstantVariableIcon } from '../ui/ConstantVariableIcon'
 import { Row } from '../ui/Row'
-import { Assignment } from 'wollok-ts/dist/model'
 
 type VisualSentenceProps = {
 	sentence: Sentence
@@ -119,9 +127,13 @@ export function ReturnComponent({
 	return: Return
 	highlightedNode?: Node
 }) {
+	const highlighted = highlightedNode === wReturn
 	return (
 		<Row>
-			<IconButton icon={returnIconName} /*color={theme.colors.primary}*/ />
+			<IconButton
+				style={highlightStyle({ highlighted })}
+				icon={returnIconName} /*color={theme.colors.primary}*/
+			/>
 			<ExpressionDisplay
 				expression={wReturn.value}
 				withIcon={false}

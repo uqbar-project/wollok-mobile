@@ -2,6 +2,7 @@ import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { IconButton, Text } from 'react-native-paper'
+import { ExecutionState } from 'wollok-ts/dist/interpreter/interpreter'
 import { is, Test } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import { BodyMaker } from '../components/Body/BodyMaker'
@@ -30,76 +31,63 @@ const Debugger = ({
 	} = useProject()
 	const test = entityMemberByFQN(project, fqn) as Test
 	const [execution, setExecution] = useState(exec(test))
-	const [state, setState] = useState(execution.stepIn())
-	const [node, setNode] = useState(!state.done ? state.next : null)
-	const [body, setBody] = useState(
-		node ? [node, ...node.ancestors()].find(is('Body')) : null,
-	)
+	const [state, setState] = useState<ExecutionState<void> | null>(null)
 
-	const stepIn = () => {
-		const newState = execution.stepIn()
-		console.log({ newState })
-		setState(newState)
-		setNode(!newState.done ? newState.next : null)
-		const newBody = !newState.done
-			? [newState.next, ...newState.next.ancestors()].find(is('Body'))
-			: null
-		console.log(newBody?.parent)
-		setBody(newBody)
+	function updateState(newState: ExecutionState<void>) {
 		setExecution(execution)
+		setState(newState)
 	}
 
-	const stepOver = () => {
-		const newState = execution.stepOver()
-		setState(newState)
-		setNode(!newState.done ? newState.next : null)
-		setBody(
-			!newState.done
-				? [newState.next, ...newState.next.ancestors()].find(is('Body'))
-				: null,
+	function stepIn() {
+		updateState(execution.stepIn())
+	}
+	function stepOut() {
+		updateState(execution.stepOut())
+	}
+	function stepOver() {
+		updateState(execution.stepOver())
+	}
+	function stepThrough() {
+		updateState(execution.stepThrough())
+	}
+
+	function DebuggerButtons() {
+		return (
+			<Row>
+				<IconButton icon={'chevron-right'} onPress={stepOver} />
+				<IconButton icon={'chevron-double-right'} onPress={stepIn} />
+				<IconButton icon={'chevron-down'} onPress={stepThrough} />
+				<IconButton icon={'chevron-up'} onPress={stepOut} />
+			</Row>
 		)
-		setExecution(execution)
 	}
 
-	const stepOut = () => {
-		const newState = execution.stepOut()
-		setState(newState)
-		setNode(!newState.done ? newState.next : null)
-		setBody(
-			!newState.done
-				? [newState.next, ...newState.next.ancestors()].find(is('Body'))
-				: null,
-		)
-		setExecution(execution)
+	if (state && state.done) {
+		console.log('DONE', state.error)
+		return <Text>FINISH</Text>
 	}
 
-	const stepThrough = () => {
-		const newState = execution.stepThrough()
-		setState(newState)
-		setNode(!newState.done ? newState.next : null)
-		setBody(
-			!newState.done
-				? [newState.next, ...newState.next.ancestors()].find(is('Body'))
-				: null,
+	// const container = state ? state.next : test
+
+	if (state === null) {
+		return (
+			<>
+				<BodyMaker codeContainer={test} setBody={log} />
+				<DebuggerButtons />
+			</>
 		)
-		setExecution(execution)
 	}
+	const node = !state.done ? state.next : null
 
 	if (node) {
 		console.log('NEXT', node)
 		console.log('ERROR', state.error)
+		const body = [node, ...node.ancestors()].find(is('Body'))
 		if (!body && !node.is('Method')) {
-			console.log(`BODY NOT FOUND ${node.kind}`)
 			return (
 				<>
-					<Text>{node.kind} ????</Text>
-
-					<Row>
-						<IconButton icon={'chevron-right'} onPress={stepOver} />
-						<IconButton icon={'chevron-double-right'} onPress={stepIn} />
-						<IconButton icon={'chevron-down'} onPress={stepThrough} />
-						<IconButton icon={'chevron-up'} onPress={stepOut} />
-					</Row>
+					<Text>HOW TO SHOW {node.kind}?</Text>
+					<DebuggerButtons />
 				</>
 			)
 		}
@@ -112,18 +100,10 @@ const Debugger = ({
 					highlightedNode={node}
 					setBody={log}
 				/>
-				<Row>
-					<IconButton icon={'chevron-right'} onPress={stepOver} />
-					<IconButton icon={'chevron-double-right'} onPress={stepIn} />
-					<IconButton icon={'chevron-down'} onPress={stepThrough} />
-					<IconButton icon={'chevron-up'} onPress={stepOut} />
-				</Row>
+				<DebuggerButtons />
 			</>
 		)
 	}
-	console.log('DONE', state.error)
-
-	return <Text>FINISH</Text>
 }
 
 export default Debugger
