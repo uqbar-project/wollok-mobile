@@ -28,6 +28,7 @@ export function BodyMaker({
 }: BodyMakerProps) {
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
+	console.log('NATIVE?', codeContainer.body == 'native')
 	console.log('ANTES', codeContainer.sentences().length)
 	const [sentences, setSentences] = useState<Sentence[]>(
 		Array.from(codeContainer.sentences()),
@@ -88,7 +89,6 @@ export function BodyMaker({
 			onPress: () => {
 				setVariableModalVisible(true)
 			},
-
 			label: upperCaseFirst(wTranslate('sentence.variable')),
 		},
 	]
