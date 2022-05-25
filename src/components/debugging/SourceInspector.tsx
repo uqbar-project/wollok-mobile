@@ -5,6 +5,7 @@ import { ExecutionState } from 'wollok-ts/dist/interpreter/interpreter'
 import { log } from '../../utils/commons'
 import { CodeContainer } from '../../utils/wollok-helpers'
 import { BodyMaker } from '../Body/BodyMaker'
+import { View } from 'react-native'
 
 export type SourceInspectorProps = {
 	state: ExecutionState<void>
@@ -33,18 +34,20 @@ function SourceInspector({ state }: SourceInspectorProps) {
 		return (
 			<>
 				<Text>
-					ERROR: {state?.next.kind} - {container}
+					ERROR: {state?.next.kind} - {container?.kind}
 				</Text>
 			</>
 		)
 	}
 
 	return (
-		<BodyMaker
-			codeContainer={container as CodeContainer}
-			highlightedNode={state.next}
-			setBody={log}
-		/>
+		<View style={{ height: 200 }}>
+			<BodyMaker
+				codeContainer={container as CodeContainer}
+				highlightedNode={state.next}
+				setBody={log}
+			/>
+		</View>
 	)
 }
 

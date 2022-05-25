@@ -4,7 +4,6 @@ import { upperCaseFirst } from 'upper-case-first'
 import { List } from 'wollok-ts/dist/extensions'
 import interpret, {
 	DirectedInterpreter,
-	ExecutionDirector,
 } from 'wollok-ts/dist/interpreter/interpreter'
 import {
 	Evaluation,
@@ -139,16 +138,8 @@ export function isNullExpression(expression: Expression): boolean {
 	return expression.is('Literal') && expression.value === null
 }
 
-export function executionFor(
-	test: Test,
-	environment: Environment,
-): ExecutionDirector<void> {
-	const director = new DirectedInterpreter(
-		Evaluation.build(environment, WRENatives),
-	)
-	const executionDirector = director.exec(test)
-	executionDirector.resume(n => n === test.body)
-	return executionDirector
+export function executionFor(environment: Environment) {
+	return new DirectedInterpreter(Evaluation.build(environment, WRENatives))
 }
 
 export function projectToJSON(wre: Environment) {
