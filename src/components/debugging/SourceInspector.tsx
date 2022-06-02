@@ -13,7 +13,7 @@ export type SourceInspectorProps = {
 
 function SourceInspector({ state }: SourceInspectorProps) {
 	if (state.done) {
-		console.log('DONE', state.error)
+		// TODO: state.error
 		return <Text>FINISH</Text>
 	}
 
@@ -41,7 +41,7 @@ function SourceInspector({ state }: SourceInspectorProps) {
 	}
 
 	return (
-		<View style={{ height: 200 }}>
+		<View style={{ minHeight: 200 }}>
 			<BodyMaker
 				codeContainer={container as CodeContainer}
 				highlightedNode={state.next}

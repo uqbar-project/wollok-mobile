@@ -1,10 +1,12 @@
 import React from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
+import { List, withTheme } from 'react-native-paper'
 import { DirectedInterpreter } from 'wollok-ts/dist/interpreter/interpreter'
-import { Row } from '../ui/Row'
+import { Theme } from '../../theme'
 
 export type LocalsInspectorProps = {
 	interpreter: DirectedInterpreter
+	theme: Theme
 }
 
 function LocalsInspector({ interpreter }: LocalsInspectorProps) {
@@ -12,7 +14,6 @@ function LocalsInspector({ interpreter }: LocalsInspectorProps) {
 		<ScrollView>
 			{interpreter.evaluation.currentFrame.contextHierarchy().map(context => (
 				<View key={context.id}>
-					<Text>{context.id}</Text>
 					{[...context.locals.keys()].map(local => {
 						const value = context.get(local)
 						const stringValue = interpreter
@@ -27,11 +28,11 @@ function LocalsInspector({ interpreter }: LocalsInspectorProps) {
 							: stringValue.result?.innerValue ?? 'null'
 
 						return (
-							<Row key={local}>
-								<Text>{local}</Text>
-								<Text>{'||'}</Text>
-								<Text>{valueLabel}</Text>
-							</Row>
+							<List.Item
+								key={`${local}-${valueLabel}`}
+								title={local}
+								description={valueLabel}
+							/>
 						)
 					})}
 				</View>
@@ -40,4 +41,4 @@ function LocalsInspector({ interpreter }: LocalsInspectorProps) {
 	)
 }
 
-export default LocalsInspector
+export default withTheme(LocalsInspector)

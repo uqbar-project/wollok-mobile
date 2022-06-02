@@ -25,7 +25,7 @@ function DebuggerButtons({ execution, updateState }: DebuggerButtonsProps) {
 		updateState(execution.stepThrough())
 	}
 	return (
-		<Row>
+		<Row style={{ justifyContent: 'space-between' }}>
 			<IconButton icon={'chevron-right'} onPress={stepOver} />
 			<IconButton icon={'chevron-double-right'} onPress={stepIn} />
 			<IconButton icon={'chevron-down'} onPress={stepThrough} />

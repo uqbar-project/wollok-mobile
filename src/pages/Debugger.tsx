@@ -1,9 +1,13 @@
 import { RouteProp } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useState } from 'react'
-import { ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { ScrollView, View } from 'react-native'
 import { Divider, List, Text } from 'react-native-paper'
-import { ExecutionState } from 'wollok-ts/dist/interpreter/interpreter'
+import {
+	DirectedInterpreter,
+	ExecutionDirector,
+	ExecutionState,
+} from 'wollok-ts/dist/interpreter/interpreter'
 import { Test } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import LocalsInspector from '../components/debugging/LocalsInspector'
@@ -31,12 +35,23 @@ const Debugger = ({
 		project,
 		actions: { newInterpreter },
 	} = useProject()
-	const test = entityMemberByFQN(project, fqn) as Test
-	const [interpreter, setInterpreter] = useState(newInterpreter())
-	const executionDirector = interpreter.exec(test)
-	const baseState = executionDirector.resume(n => n === test.body)
-	const [execution, setExecution] = useState(executionDirector)
-	const [state, setState] = useState<ExecutionState<void>>(baseState)
+	const [interpreter, setInterpreter] = useState<DirectedInterpreter>(
+		null as any,
+	)
+	const [execution, setExecution] = useState<ExecutionDirector<void>>(
+		null as any,
+	)
+	const [state, setState] = useState<ExecutionState<void>>(null as any)
+
+	useEffect(() => {
+		const test = entityMemberByFQN(project, fqn) as Test
+		const interpreter = newInterpreter()
+		const executionDirector = interpreter.exec(test)
+		const baseState = executionDirector.resume(n => n === test.body)
+		setInterpreter(interpreter)
+		setExecution(executionDirector)
+		setState(baseState)
+	}, [fqn, newInterpreter, project])
 
 	function updateState(newState: ExecutionState<void>) {
 		setInterpreter(interpreter)
@@ -44,33 +59,28 @@ const Debugger = ({
 		setState(newState)
 	}
 
-	if (!execution) {
+	if (!interpreter) {
 		return <Text>Waiting</Text>
 	}
 
 	return (
-		<List.Section>
-			<ScrollView>
+		<View style={{ height: '100%' }}>
+			<ScrollView style={{ height: '90%' }}>
 				<List.Accordion
 					// title={wTranslate('entityDetails.attributes').toUpperCase()}
-					title={'STACK'}
-					// onPress={() => switchExpanded()}
-				>
+					title={'STACK'}>
 					<StackInspector evaluation={interpreter.evaluation} />
 				</List.Accordion>
 				<Divider />
-				<List.Accordion
-					style={{ height: 100 }}
-					expanded={true}
-					title={'SOURCE'}>
+				<List.Accordion expanded={true} title={'SOURCE'}>
 					<SourceInspector state={state} />
 				</List.Accordion>
-				<List.Accordion style={{ height: 100 }} title={'LOCALS'}>
+				<List.Accordion title={'LOCALS'}>
 					<LocalsInspector interpreter={interpreter} />
 				</List.Accordion>
 			</ScrollView>
 			<DebuggerButtons execution={execution} updateState={updateState} />
-		</List.Section>
+		</View>
 	)
 }
 
