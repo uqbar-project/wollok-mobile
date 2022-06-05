@@ -11,6 +11,7 @@ import StackInspector from '../components/debugging/StackInspector'
 import DebuggerButtons from '../components/debugging/StepButtons'
 import { ExecutionContextProvider } from '../context/ExecutionContextProvider'
 import { useProject } from '../context/ProjectProvider'
+import { wTranslate } from '../utils/translation-helpers'
 
 export type EditorScreenNavigationProp = StackNavigationProp<
 	RootStackParamList,
@@ -30,22 +31,24 @@ const Debugger = ({
 	const test = project.getNodeByFQN<Test>(fqn)
 
 	return (
-		<ExecutionContextProvider code={test}>
+		<ExecutionContextProvider container={test}>
 			<View style={{ height: '100%' }}>
-				<ScrollView style={{ height: '90%' }}>
-					<List.Accordion
-						// title={wTranslate('entityDetails.attributes').toUpperCase()}
-						title={'STACK'}>
+				<ScrollView>
+					<List.Accordion title={wTranslate('debugger.stack').toUpperCase()}>
 						<StackInspector />
 					</List.Accordion>
 					<Divider />
-					<List.Accordion expanded={true} title={'SOURCE'}>
+					<List.Accordion
+						expanded={true}
+						title={wTranslate('debugger.source').toUpperCase()}>
 						<SourceInspector />
 					</List.Accordion>
-					<List.Accordion title={'LOCALS'}>
+					<Divider />
+					<List.Accordion title={wTranslate('debugger.locals').toUpperCase()}>
 						<LocalsInspector />
 					</List.Accordion>
 				</ScrollView>
+				<Divider />
 				<DebuggerButtons />
 			</View>
 		</ExecutionContextProvider>

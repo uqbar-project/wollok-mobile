@@ -18,10 +18,10 @@ export const ExecutionContext = createContext<{
 
 export function ExecutionContextProvider(
 	props: ParentComponentProp<{
-		code: CodeContainer
+		container: CodeContainer
 	}>,
 ) {
-	const { code, children } = props
+	const { container, children } = props
 	const {
 		project,
 		actions: { newInterpreter },
@@ -39,12 +39,12 @@ export function ExecutionContextProvider(
 	// we need to perform this only once
 	useEffect(() => {
 		const interpreter = newInterpreter()
-		const executionDirector = interpreter.exec(code)
-		const baseState = executionDirector.resume(n => n === code.body)
+		const executionDirector = interpreter.exec(container)
+		const baseState = executionDirector.resume(n => n === container.body)
 		setInterpreter(interpreter)
 		setExecution(executionDirector)
 		setState(baseState)
-	}, [code, newInterpreter, project])
+	}, [container, newInterpreter, project])
 
 	function updateState(newState: ExecutionState<void>) {
 		setInterpreter(interpreter)

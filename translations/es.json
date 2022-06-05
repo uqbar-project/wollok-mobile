@@ -76,5 +76,10 @@
 		"shouldInitializeAllAttributes": "Todos los atributos del objeto deben estar inicializados",
 		"nameShouldBeginWithLowercase": "Este nombre debería empezar con minúscula",
 		"shouldNotDefineUnusedVariables": "Esta variable no se está usando"
+	},
+	"debugger": {
+		"stack": "pila de ejecución",
+		"source": "fuente",
+		"locals": "referencias"
 	}
 }

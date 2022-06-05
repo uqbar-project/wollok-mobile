@@ -75,5 +75,10 @@
 		"shouldInitializeAllAttributes": "All object attributes should be initialized",
 		"nameShouldBeginWithLowercase": "This name should start with lowercase",
 		"shouldNotDefineUnusedVariables": "This variable is never used"
+	},
+	"debugger": {
+		"stack": "stack",
+		"source": "source",
+		"locals": "references"
 	}
 }
