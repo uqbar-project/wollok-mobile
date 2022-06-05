@@ -1,15 +1,10 @@
 import React from 'react'
 import { ScrollView, View } from 'react-native'
 import { List, withTheme } from 'react-native-paper'
-import { DirectedInterpreter } from 'wollok-ts/dist/interpreter/interpreter'
-import { Theme } from '../../theme'
+import { useExecutionContext } from '../../context/ExecutionContextProvider'
 
-export type LocalsInspectorProps = {
-	interpreter: DirectedInterpreter
-	theme: Theme
-}
-
-function LocalsInspector({ interpreter }: LocalsInspectorProps) {
+function LocalsInspector() {
+	const { interpreter } = useExecutionContext()
 	return (
 		<ScrollView>
 			{interpreter.evaluation.currentFrame.contextHierarchy().map(context => (

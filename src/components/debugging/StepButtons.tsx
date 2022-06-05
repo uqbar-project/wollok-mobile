@@ -1,17 +1,13 @@
 import React from 'react'
 import { IconButton } from 'react-native-paper'
-import {
-	ExecutionDirector,
-	ExecutionState,
-} from 'wollok-ts/dist/interpreter/interpreter'
+import { useExecutionContext } from '../../context/ExecutionContextProvider'
 import { Row } from '../ui/Row'
 
-export type DebuggerButtonsProps = {
-	execution: ExecutionDirector<void>
-	updateState: (newState: ExecutionState<void>) => void
-}
-
-function DebuggerButtons({ execution, updateState }: DebuggerButtonsProps) {
+function DebuggerButtons() {
+	const {
+		execution,
+		actions: { updateState },
+	} = useExecutionContext()
 	function stepIn() {
 		updateState(execution.stepIn())
 	}

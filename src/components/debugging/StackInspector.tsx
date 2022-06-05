@@ -1,16 +1,14 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Divider, IconButton, Text } from 'react-native-paper'
-import { Evaluation, Frame } from 'wollok-ts/dist/interpreter/runtimeModel'
+import { Frame } from 'wollok-ts/dist/interpreter/runtimeModel'
 import { Node } from 'wollok-ts/dist/model'
+import { useExecutionContext } from '../../context/ExecutionContextProvider'
 import { Row } from '../ui/Row'
 
-export type StackInspectorProps = {
-	evaluation: Evaluation
-}
-
-function StackInspector({ evaluation }: StackInspectorProps) {
-	const [, ...stack] = evaluation.frameStack
+function StackInspector() {
+	const { interpreter } = useExecutionContext()
+	const [, ...stack] = interpreter.evaluation.frameStack
 	return (
 		<View>
 			{stack.reverse().map((frame, i) => (

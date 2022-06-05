@@ -1,17 +1,14 @@
 import React from 'react'
+import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { is, Node } from 'wollok-ts/dist/model'
-import { ExecutionState } from 'wollok-ts/dist/interpreter/interpreter'
+import { useExecutionContext } from '../../context/ExecutionContextProvider'
 import { log } from '../../utils/commons'
 import { CodeContainer } from '../../utils/wollok-helpers'
 import { BodyMaker } from '../Body/BodyMaker'
-import { View } from 'react-native'
 
-export type SourceInspectorProps = {
-	state: ExecutionState<void>
-}
-
-function SourceInspector({ state }: SourceInspectorProps) {
+function SourceInspector() {
+	const { state } = useExecutionContext()
 	if (state.done) {
 		// TODO: state.error
 		return <Text>FINISH</Text>
