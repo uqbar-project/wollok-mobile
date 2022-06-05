@@ -12,7 +12,7 @@ import VisualSentence, {
 	AssignmentComponent,
 	ReturnComponent,
 	VariableComponent,
-} from '../components/Body/VisualSentence'
+} from '../components/sentences/VisualSentence'
 import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
 import { renderWithTheme } from './utils/test-helpers'
 

@@ -1,8 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
 import { upperCaseFirst } from 'upper-case-first'
-import { Body, Expression, Node, Return, Sentence } from 'wollok-ts/dist/model'
+import { Body, Expression, Return, Sentence } from 'wollok-ts/dist/model'
 import { ExpressionOnSubmit } from '../../pages/ExpressionMaker'
 import { wTranslate } from '../../utils/translation-helpers'
 import {
@@ -13,27 +12,21 @@ import {
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
 import { SubmitCheckButton } from '../ui/Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
+import SentencesView from './SentencesView'
 import { VariableFormModal } from './VariableForm'
-import VisualSentence, { returnIconName } from './VisualSentence'
+import { returnIconName } from './VisualSentence'
 
 type BodyMakerProps = {
 	codeContainer: CodeContainer
 	setBody: (newSentence: Body) => void
-	highlightedNode?: Node
 }
-export function BodyMaker({
-	codeContainer,
-	setBody,
-	highlightedNode,
-}: BodyMakerProps) {
+export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
-	console.log('NATIVE?', codeContainer.body == 'native')
-	console.log('ANTES', codeContainer.sentences().length)
 	const [sentences, setSentences] = useState<Sentence[]>(
 		Array.from(codeContainer.sentences()),
 	)
-	console.log('DESPUES', sentences.length)
+
 	const contextFQN = entityMemberFQN(codeContainer)
 
 	function addSentence(sentence: Sentence) {
@@ -95,15 +88,7 @@ export function BodyMaker({
 
 	return (
 		<MultiFabScreen actions={actions}>
-			<ScrollView style={styles.sentences}>
-				{codeContainer.sentences().map((sentence, i) => (
-					<VisualSentence
-						key={i}
-						sentence={sentence}
-						highlightedNode={highlightedNode}
-					/>
-				))}
-			</ScrollView>
+			<SentencesView sentences={sentences} />
 
 			<AssignmentFormModal
 				variables={allScopedVariables(codeContainer)}
@@ -122,9 +107,3 @@ export function BodyMaker({
 		</MultiFabScreen>
 	)
 }
-
-const styles = StyleSheet.create({
-	sentences: {
-		paddingLeft: 15,
-	},
-})

@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
 import { Body } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
-import { BodyMaker } from '../components/Body/BodyMaker'
+import { BodyMaker } from '../components/sentences/BodyMaker'
 import { useProject } from '../context/ProjectProvider'
 import { CodeContainer, entityMemberByFQN } from '../utils/wollok-helpers'
 

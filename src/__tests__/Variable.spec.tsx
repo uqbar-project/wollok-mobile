@@ -1,6 +1,6 @@
 import React from 'react'
 import { Literal, Variable as VariableModel } from 'wollok-ts/dist/model'
-import { VariableComponent } from '../components/Body/VisualSentence'
+import { VariableComponent } from '../components/sentences/VisualSentence'
 import { renderWithTheme } from './utils/test-helpers'
 
 function renderVariable(variable: VariableModel) {

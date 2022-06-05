@@ -3,9 +3,8 @@ import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { is, Node } from 'wollok-ts/dist/model'
 import { useExecutionContext } from '../../context/ExecutionContextProvider'
-import { log } from '../../utils/commons'
 import { CodeContainer } from '../../utils/wollok-helpers'
-import { BodyMaker } from '../Body/BodyMaker'
+import SentencesView from '../sentences/SentencesView'
 
 function SourceInspector() {
 	const { state } = useExecutionContext()
@@ -14,35 +13,34 @@ function SourceInspector() {
 		return <Text>FINISH</Text>
 	}
 
-	function findContainer(node: Node) {
+	function findContainer(node: Node): CodeContainer | undefined {
 		if (node.is('Method')) {
 			return node
 		}
 		if (node.is('Test')) {
 			return node
 		}
-		return [node, ...node.ancestors()].find(is('Body'))?.parent
+		const container = [node, ...node.ancestors()].find(is('Body'))?.parent
+
+		// TODO: If view
+		if (container?.is('If')) {
+			return findContainer(container)
+		}
+
+		return container as CodeContainer
 	}
 
 	const container = findContainer(state.next)
 
-	// TODO: Fix if
-	if (!container || container.is('If')) {
-		return (
-			<>
-				<Text>
-					ERROR: {state?.next.kind} - {container?.kind}
-				</Text>
-			</>
-		)
+	if (!container) {
+		return <Text>SHOW ERROR: {state.next.kind}</Text>
 	}
 
 	return (
 		<View style={{ minHeight: 200 }}>
-			<BodyMaker
-				codeContainer={container as CodeContainer}
+			<SentencesView
+				sentences={container.sentences()}
 				highlightedNode={state.next}
-				setBody={log}
 			/>
 		</View>
 	)
