@@ -7,7 +7,8 @@ import { EditorScreenNavigationProp } from '../../pages/Editor'
 import { wTranslate } from '../../utils/translation/translation-helpers'
 import { methodFQN, methodLabel } from '../../utils/wollok-helpers'
 import { ProblemReporterButton } from '../problems/ProblemReporterButton'
-import { OptionsDialog, optionsTitleFromName } from '../ui/OptionsDialog'
+import { CommonOptionsDialog } from '../ui/Options/CommonOptionsDialog'
+import { optionsTitleFromName } from '../ui/Options/OptionsDialog'
 import MethodFormModal from './new-method-modal/MethodFormModal'
 
 export function MethodItem({ item: method }: { item: Method }) {
@@ -44,15 +45,9 @@ export function MethodItem({ item: method }: { item: Method }) {
 				onPress={gotoMethod}
 				onLongPress={() => setOptionsDialogVisible(true)}
 			/>
-			<OptionsDialog
+			<CommonOptionsDialog
 				title={optionsTitleFromName(method.name)}
-				options={[
-					{ action: onDelete, title: wTranslate('abm.delete') },
-					{
-						action: () => setMethodModalVisible(true),
-						title: wTranslate('abm.edit'),
-					},
-				]}
+				actions={{ delete: onDelete, edit: () => setMethodModalVisible(true) }}
 				visible={isOptionsVisible}
 				dismiss={() => setOptionsDialogVisible(false)}
 			/>

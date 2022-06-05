@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import { List } from 'react-native-paper'
 import {
 	deleteProject,
 	renameProject,
 } from '../../services/persistance.service'
-import { useTheme } from '../../theme'
 import { wTranslate } from '../../utils/translation/translation-helpers'
-import { stylesheet } from '../entities/Entity/styles'
 import { TextFormModal } from '../ui/FormModal/TextFormModal'
-import { OptionsDialog, optionsTitleFromName } from '../ui/OptionsDialog'
+import { NamedListItem } from '../ui/NamedListItem'
+import { CommonOptionsDialog } from '../ui/Options/CommonOptionsDialog'
+import { optionsTitleFromName } from '../ui/Options/OptionsDialog'
 
 export const ProjectItem = (props: {
 	project: string
@@ -18,8 +17,6 @@ export const ProjectItem = (props: {
 }) => {
 	const [showOptions, setShowOptions] = useState(false)
 	const [showRename, setShowRename] = useState(false)
-
-	const styles = stylesheet(useTheme())
 
 	async function onDeleteProject() {
 		await deleteProject(props.project)
@@ -35,27 +32,19 @@ export const ProjectItem = (props: {
 
 	return (
 		<>
-			<List.Item
+			<NamedListItem
 				onPress={() => props.navigateToProject(props.project)}
-				title={props.project}
-				style={styles.item}
-				titleStyle={styles.itemTitle}
+				namedItem={{ name: props.project }}
 				onLongPress={() => setShowOptions(true)}
 			/>
-			<OptionsDialog
+			<CommonOptionsDialog
 				title={optionsTitleFromName(props.project)}
 				visible={showOptions}
 				dismiss={() => setShowOptions(false)}
-				options={[
-					{
-						action: onDeleteProject,
-						title: wTranslate('abm.delete'),
-					},
-					{
-						action: () => setShowRename(true),
-						title: wTranslate('abm.rename'),
-					},
-				]}
+				actions={{
+					delete: onDeleteProject,
+					rename: () => setShowRename(true),
+				}}
 			/>
 			<TextFormModal
 				title={wTranslate('abm.rename')}

@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Dialog, Divider, List, Portal } from 'react-native-paper'
-import { Theme, useTheme } from '../../theme'
-import { wTranslate } from '../../utils/translation/translation-helpers'
+import { Theme, useTheme } from '../../../theme'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 
-type Option = { title: string; action: () => void }
+export type Option = { title: string; action: () => void }
 
-type OptionsDialogProps<Optionable> = {
+type OptionsDialogProps = {
 	options: Option[]
 	visible: boolean
 	dismiss: () => void
@@ -17,12 +17,12 @@ export function optionsTitleFromName(name: string) {
 	return wTranslate('abm.options', { name })
 }
 
-export function OptionsDialog<Optionable>({
+export function OptionsDialog({
 	options,
 	visible,
 	dismiss,
 	title,
-}: OptionsDialogProps<Optionable>) {
+}: OptionsDialogProps) {
 	const styles = makeStyles(useTheme())
 
 	return (

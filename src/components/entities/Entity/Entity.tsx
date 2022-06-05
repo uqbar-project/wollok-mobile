@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { List, withTheme } from 'react-native-paper'
+import { withTheme } from 'react-native-paper'
 import { Module } from 'wollok-ts/dist/model'
 import {
 	useNodeNavigation,
@@ -10,17 +10,17 @@ import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
 import { TextFormModal } from '../../ui/FormModal/TextFormModal'
-import { OptionsDialog, optionsTitleFromName } from '../../ui/OptionsDialog'
+import { NamedListItem } from '../../ui/NamedListItem'
+import { CommonOptionsDialog } from '../../ui/Options/CommonOptionsDialog'
+import { optionsTitleFromName } from '../../ui/Options/OptionsDialog'
 import { EntityKindIcon } from '../EntityKindIcon'
-import { stylesheet } from './styles'
 
 type EntityComponentProps = {
 	entity: Module
 	theme: Theme
 }
 
-function EntityComponent({ entity, theme }: EntityComponentProps) {
-	const styles = stylesheet(theme)
+function EntityComponent({ entity }: EntityComponentProps) {
 	const {
 		actions: { deleteEntity, editEntity },
 	} = useProject()
@@ -38,25 +38,20 @@ function EntityComponent({ entity, theme }: EntityComponentProps) {
 
 	return (
 		<>
-			<List.Item
+			<NamedListItem
+				namedItem={entity}
 				onPress={goToEntityDetails}
 				key={entity.name}
-				style={styles.item}
-				titleStyle={styles.itemTitle}
-				title={entity.name}
 				left={() => <EntityKindIcon kind={entity.kind} />}
 				right={() => <ProblemReporterButton node={entity} />}
 				onLongPress={() => setOptionsDialogVisible(true)}
 			/>
-			<OptionsDialog
+			<CommonOptionsDialog
 				title={optionsTitleFromName(entity.name!)}
-				options={[
-					{ action: onDelete, title: wTranslate('abm.delete') },
-					{
-						action: () => setRenameModal(true),
-						title: wTranslate('abm.rename'),
-					},
-				]}
+				actions={{
+					rename: () => setRenameModal(true),
+					delete: onDelete,
+				}}
 				visible={isOptionsVisible}
 				dismiss={() => setOptionsDialogVisible(false)}
 			/>

@@ -6,7 +6,8 @@ import { Theme } from '../../../theme'
 import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { ExpressionDisplay } from '../../expressions/ExpressionDisplay'
 import { ProblemReporterButton } from '../../problems/ProblemReporterButton'
-import { OptionsDialog, optionsTitleFromName } from '../../ui/OptionsDialog'
+import { CommonOptionsDialog } from '../../ui/Options/CommonOptionsDialog'
+import { optionsTitleFromName } from '../../ui/Options/OptionsDialog'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 import AttributeFormModal from '../new-attribute-modal/AttributeFormModal'
 import styles from './styles'
@@ -62,11 +63,11 @@ function AttributeItem(props: { attribute: Field; theme: Theme }) {
 						))
 				}
 			/>
-			<OptionsDialog
+			<CommonOptionsDialog
 				visible={isOptionsShowing}
 				title={optionsTitleFromName(attribute.name)}
 				dismiss={() => setOptionsShowing(false)}
-				options={[{ action: onDelete, title: wTranslate('abm.delete') }]}
+				actions={{ delete: onDelete }}
 			/>
 			<AttributeFormModal
 				title={wTranslate('abm.editing')}
