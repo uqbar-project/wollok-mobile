@@ -5,6 +5,7 @@ import { upperCaseFirst } from 'upper-case-first'
 import { Describe, is, Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
 import { EditorScreenNavigationProp } from '../../pages/Editor'
+import { localCompareByProperty } from '../../utils/commons'
 import { wTranslate } from '../../utils/translation/translation-helpers'
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
 import NewTestModal from './NewTestModal'
@@ -52,7 +53,7 @@ export const Tests = function ({ describe }: TestsProps) {
 				},
 			]}>
 			<ScrollView>
-				{tests.map(test => (
+				{tests.sort(localCompareByProperty('name')).map(test => (
 					<TestItem
 						key={test.id}
 						item={test}

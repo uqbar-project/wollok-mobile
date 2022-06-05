@@ -25,3 +25,11 @@ export function sortWithoutEffect<T>(
 	const aux = [...array]
 	return aux.sort(sortBy)
 }
+
+export function localCompareByProperty<T extends { [key: string]: any }>(
+	property: keyof T,
+) {
+	return function (a: T, b: T) {
+		return b[property].localeCompare(a[property])
+	}
+}
