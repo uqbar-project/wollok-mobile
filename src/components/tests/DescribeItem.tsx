@@ -5,6 +5,7 @@ import {
 	useNodeNavigation,
 	withNodeNavigation,
 } from '../../context/NodeNavigation'
+import { useProject } from '../../context/ProjectProvider'
 import { Theme } from '../../theme'
 import { wTranslate } from '../../utils/translation/translation-helpers'
 import { TextFormModal } from '../ui/FormModal/TextFormModal'
@@ -21,14 +22,21 @@ type Props = {
 
 // TODO: Merge with Entity component
 function DescribeItem({ describe }: Props) {
+	const {
+		actions: { editEntity, deleteEntity },
+	} = useProject()
 	const { goToNode } = useNodeNavigation()
 	const [showOptions, setShowOptions] = useState(false)
 	const [showRename, setShowRename] = useState(false)
 	const goToEntityDetails = () => goToNode(describe)
 
-	function onDeleteDescribe() {}
+	function onDeleteDescribe() {
+		deleteEntity(describe)
+	}
 
-	function onRenameDescribe() {}
+	function onRenameDescribe(newName: string) {
+		editEntity(describe, describe.copy({ name: newName }))
+	}
 
 	return (
 		<>
@@ -37,6 +45,7 @@ function DescribeItem({ describe }: Props) {
 				key={describe.name}
 				namedItem={describe}
 				left={() => <IconImage icon={icon} />}
+				onLongPress={() => setShowOptions(true)}
 			/>
 			<CommonOptionsDialog
 				title={optionsTitleFromName(describe.name)}

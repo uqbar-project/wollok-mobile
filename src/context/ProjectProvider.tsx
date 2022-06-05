@@ -30,6 +30,8 @@ import { createContextHook } from './create-context-hook'
 export const mainPackageName = 'main'
 export const testsPackageName = 'tests'
 
+const allPackageNames = [mainPackageName, testsPackageName]
+
 export const ProjectContext = createContext<{
 	project: Environment
 	name: string
@@ -122,6 +124,18 @@ export function ProjectProvider(
 		setProblems(validateProject(newProject))
 	}
 
+	function linkWithAllOtherPackages(newPackage: Package): Environment {
+		return link(
+			[
+				newPackage,
+				...allPackageNames
+					.filter(pn => pn !== newPackage.name)
+					.map(pn => project.getNodeByFQN<Package>(pn)),
+			],
+			fromJSON<Environment>(WRE),
+		)
+	}
+
 	/////////////////////////////////// BUILD //////////////////////////////////
 
 	/////////////////////////////////// ENTITIES //////////////////////////////////
@@ -143,12 +157,8 @@ export function ProjectProvider(
 				member => member.fullyQualifiedName() !== entity.fullyQualifiedName(),
 			)
 
-			return link(
-				[
-					entity.parent.copy({ members: newMembers }),
-					project.getNodeByFQN<Package>(testsPackageName),
-				],
-				fromJSON<Environment>(WRE),
+			return linkWithAllOtherPackages(
+				entity.parent.copy({ members: newMembers }),
 			)
 		})
 	}
@@ -161,12 +171,8 @@ export function ProjectProvider(
 				)
 				.concat(newEntity)
 
-			return link(
-				[
-					entity.parent.copy({ members: newMembers }),
-					project.getNodeByFQN<Package>(testsPackageName),
-				],
-				fromJSON<Environment>(WRE),
+			return linkWithAllOtherPackages(
+				entity.parent.copy({ members: newMembers }),
 			)
 		})
 	}
