@@ -21,11 +21,11 @@ const Tab = createBottomTabNavigator()
 export function Home() {
 	const { name, project } = useProject()
 
-	// MOve to another component
-	const [message, setMessage] = useState('')
+	// Move to another component
+	const [message, setMessage] = useState<'saved' | undefined>(undefined)
 	const [showMessage, setShowMessage] = useState(false)
 
-	function pushMessage(tag: string) {
+	function pushMessage(tag: 'saved') {
 		setMessage(tag)
 		setShowMessage(true)
 	}
@@ -60,7 +60,7 @@ export function Home() {
 				}}
 				duration={2000}
 				wrapperStyle={{ marginBottom: '20%' }}>
-				{wTranslate(`project.${message}`)}
+				{wTranslate(`project.${message!}`)}
 			</Snackbar>
 		</>
 	)
