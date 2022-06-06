@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
+import { InnerValue, RuntimeValue } from 'wollok-ts'
 import {
 	DirectedInterpreter,
 	ExecutionDirector,
@@ -14,6 +15,7 @@ export const ExecutionContext = createContext<{
 	execution: ExecutionDirector<void>
 	state: ExecutionState<void>
 	actions: { updateState: (newState: ExecutionState<void>) => void }
+	eval: { toStringOf: (obj: RuntimeValue) => InnerValue }
 } | null>(null)
 
 export function ExecutionContextProvider(
@@ -52,6 +54,19 @@ export function ExecutionContextProvider(
 		setState(newState)
 	}
 
+	function toStringOf(obj: RuntimeValue) {
+		const stringValue = interpreter
+			.fork()
+			.do(function* () {
+				return obj && (yield* this.send('toString', obj))
+			})
+			.finish()
+
+		return stringValue.error
+			? 'ERROR!'
+			: stringValue.result?.innerValue ?? 'null'
+	}
+
 	if (state == null) {
 		return null
 	}
@@ -61,6 +76,7 @@ export function ExecutionContextProvider(
 		execution,
 		state,
 		actions: { updateState },
+		eval: { toStringOf },
 	}
 
 	return (
