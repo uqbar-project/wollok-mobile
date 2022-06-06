@@ -80,6 +80,7 @@
 		"stack": "stack",
 		"source": "source",
 		"locals": "references",
+		"nativeCode": "Native code",
 		"done": {
 			"message": "Execution finished successfully",
 			"stack": "Execution ends"

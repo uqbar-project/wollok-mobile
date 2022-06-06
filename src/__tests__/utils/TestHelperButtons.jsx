@@ -13,9 +13,13 @@ export function TestHelperButtons() {
         updateState(execution.finish())
     }
 
-    function stepToNextBody() {
+    function nextBody() {
         execution.resume(is('Body'))
         updateState(execution.stepOver())
+    }
+
+    function nextNative() {
+        updateState(execution.resume(n => n.is('Method') && n.isNative()))
     }
 
     return (<>
@@ -23,8 +27,12 @@ export function TestHelperButtons() {
             FINISH
         </Button>
 
-        <Button testID="NEXT FRAME" onPress={stepToNextBody}>
+        <Button testID="NEXT FRAME" onPress={nextBody}>
             NEXT FRAME
+        </Button>
+
+        <Button testID="NATIVE" onPress={nextNative}>
+        NATIVE
         </Button>
     </>)
 }

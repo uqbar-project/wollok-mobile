@@ -19,6 +19,15 @@ function SourceInspector() {
 		return <Text>SHOW ERROR: {state.next.kind}</Text>
 	}
 
+	if (container.is('Method') && container.isNative()) {
+		return (
+			<List.Item
+				title={wTranslate('debugger.nativeCode')}
+				left={() => <IconButton icon="apps-box" />}
+			/>
+		)
+	}
+
 	return (
 		<SentencesView
 			sentences={container.sentences()}
