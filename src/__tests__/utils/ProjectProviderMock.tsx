@@ -2,6 +2,8 @@ import React from 'react'
 import { Environment, Problem } from 'wollok-ts/dist/model'
 import { ProjectContext } from '../../context/ProjectProvider'
 import { ParentComponentProp } from '../../utils/type-helpers'
+import { executionFor } from '../../utils/wollok-helpers'
+import { project } from './wollokProject'
 
 export const initialContext = {
 	project: new Environment({ members: [] }),
@@ -18,7 +20,7 @@ export const initialContext = {
 		runTest: jest.fn(),
 		execution: jest.fn(),
 		save: jest.fn(),
-		newInterpreter: jest.fn(),
+		newInterpreter: () => executionFor(project),
 	},
 }
 

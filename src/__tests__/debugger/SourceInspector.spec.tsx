@@ -1,23 +1,14 @@
 import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
-import { Button } from 'react-native-paper'
 import { Test } from 'wollok-ts'
 import SourceInspector from '../../components/debugging/SourceInspector'
 import ExceptionModal from '../../components/ui/ExceptionModal'
-import {
-	ExecutionContextProvider,
-	useExecutionContext,
-} from '../../context/ExecutionContextProvider'
-import { executionFor } from '../../utils/wollok-helpers'
-import { initialContext } from '../utils/ProjectProviderMock'
+import { ExecutionContextProvider } from '../../context/ExecutionContextProvider'
 import { renderOnProvider } from '../utils/test-helpers'
-import { describe as wDescribe, project, test } from '../utils/wollokProject'
+import { describe as wDescribe, test } from '../utils/wollokProject'
+import { TestHelperButtons } from '../utils/TestHelperButtons'
 
 describe('SourceInspector', () => {
-	beforeEach(() => {
-		initialContext.actions.newInterpreter.mockReturnValue(executionFor(project))
-	})
-
 	describe('on init', () => {
 		it('should show test code', () => {
 			const { queryByText } = renderSourceInspector()
@@ -56,7 +47,7 @@ function renderSourceInspector(_test: Test = test) {
 		renderOnProvider(
 			<ExecutionContextProvider container={_test}>
 				<SourceInspector />
-				<FinishButton />
+				<TestHelperButtons />
 			</ExecutionContextProvider>,
 		)
 
@@ -69,21 +60,4 @@ function renderSourceInspector(_test: Test = test) {
 		finish: () => getByTestId('FINISH'),
 		queryByText,
 	}
-}
-
-function FinishButton() {
-	const {
-		execution,
-		actions: { updateState },
-	} = useExecutionContext()
-
-	function stepToBody() {
-		updateState(execution.finish())
-	}
-
-	return (
-		<Button testID="FINISH" onPress={stepToBody}>
-			X
-		</Button>
-	)
 }

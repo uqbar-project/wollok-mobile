@@ -5,7 +5,6 @@ import { Frame } from 'wollok-ts/dist/interpreter/runtimeModel'
 import { Node } from 'wollok-ts/dist/model'
 import { useExecutionContext } from '../../context/ExecutionContextProvider'
 import { wTranslate } from '../../utils/translation-helpers'
-import { Row } from '../ui/Row'
 
 function StackInspector() {
 	const { interpreter } = useExecutionContext()
@@ -20,6 +19,7 @@ function StackInspector() {
 			{stack.reverse().map((frame, i) => (
 				<View key={`${frame.node.id}${i}`}>
 					<FrameItem item={frame} />
+					<Divider />
 				</View>
 			))}
 		</View>
@@ -28,13 +28,10 @@ function StackInspector() {
 
 function FrameItem({ item: frame }: { item: Frame }) {
 	return (
-		<>
-			<Row>
-				<WollokIcon node={frame.node} />
-				<Text>{frame.description}</Text>
-			</Row>
-			<Divider />
-		</>
+		<List.Item
+			title={frame.description}
+			left={() => <WollokIcon node={frame.node} />}
+		/>
 	)
 }
 
