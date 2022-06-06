@@ -5,10 +5,10 @@ import { ScrollView, View } from 'react-native'
 import { Divider, List } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
+import ExecutionStepButtons from '../components/debugging/ExecutionStepButtons'
 import LocalsInspector from '../components/debugging/LocalsInspector'
 import SourceInspector from '../components/debugging/SourceInspector'
 import StackInspector from '../components/debugging/StackInspector'
-import ExecutionStepButtons from '../components/debugging/ExecutionStepButtons'
 import { ExecutionContextProvider } from '../context/ExecutionContextProvider'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
@@ -34,14 +34,14 @@ const Debugger = ({
 		<ExecutionContextProvider container={test}>
 			<View style={{ height: '100%' }}>
 				<ScrollView>
-					<List.Accordion title={wTranslate('debugger.locals').toUpperCase()}>
-						<LocalsInspector />
-					</List.Accordion>
-					<Divider />
 					<List.Accordion
 						expanded={true}
 						title={wTranslate('debugger.source').toUpperCase()}>
 						<SourceInspector />
+					</List.Accordion>
+					<Divider />
+					<List.Accordion title={wTranslate('debugger.locals').toUpperCase()}>
+						<LocalsInspector />
 					</List.Accordion>
 					<Divider />
 					<List.Accordion title={wTranslate('debugger.stack').toUpperCase()}>

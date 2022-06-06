@@ -1,14 +1,20 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Divider, IconButton, Text } from 'react-native-paper'
+import { Divider, IconButton, List, Text } from 'react-native-paper'
 import { Frame } from 'wollok-ts/dist/interpreter/runtimeModel'
 import { Node } from 'wollok-ts/dist/model'
 import { useExecutionContext } from '../../context/ExecutionContextProvider'
+import { wTranslate } from '../../utils/translation-helpers'
 import { Row } from '../ui/Row'
 
 function StackInspector() {
 	const { interpreter } = useExecutionContext()
 	const [, ...stack] = interpreter.evaluation.frameStack
+
+	if (!stack.length) {
+		return <List.Item title={wTranslate('debugger.done.stack')} />
+	}
+
 	return (
 		<View>
 			{stack.reverse().map((frame, i) => (

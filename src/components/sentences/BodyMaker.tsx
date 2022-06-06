@@ -2,7 +2,10 @@ import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { upperCaseFirst } from 'upper-case-first'
 import { Body, Expression, Return, Sentence } from 'wollok-ts/dist/model'
-import { ExpressionOnSubmit } from '../../pages/ExpressionMaker'
+import {
+	ExpressionMakerScreenProp,
+	ExpressionOnSubmit,
+} from '../../pages/ExpressionMaker'
 import { wTranslate } from '../../utils/translation-helpers'
 import {
 	allScopedVariables,
@@ -21,6 +24,7 @@ type BodyMakerProps = {
 	setBody: (newSentence: Body) => void
 }
 export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
+	const navigation = useNavigation<ExpressionMakerScreenProp>()
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
 	const [sentences, setSentences] = useState<Sentence[]>(
@@ -37,7 +41,6 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 		addSentence(new Return({ value: expression }))
 	}
 
-	const navigation = useNavigation()
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (

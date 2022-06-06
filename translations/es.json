@@ -80,6 +80,10 @@
 	"debugger": {
 		"stack": "pila de ejecución",
 		"source": "fuente",
-		"locals": "referencias"
+		"locals": "referencias",
+		"done": {
+			"message": "La ejecución terminó correctamente",
+			"stack": "Nada más por ejecutar"
+		}
 	}
 }

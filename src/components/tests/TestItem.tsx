@@ -6,7 +6,6 @@ import {
 	Divider,
 	IconButton,
 	List,
-	Text,
 	withTheme,
 } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
@@ -16,7 +15,7 @@ import { runAsync } from '../../utils/commons'
 import { Maybe } from '../../utils/type-helpers'
 import { TestRun } from '../../utils/wollok-helpers'
 import { ProblemReporterButton } from '../problems/ProblemReporterButton'
-import FormModal from '../ui/FormModal/FormModal'
+import ExceptionModal from '../ui/ExceptionModal'
 
 type TestItemProps = {
 	item: Test
@@ -42,7 +41,7 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 				)}
 				right={() => (
 					<>
-						{testRun?.exception?.message && (
+						{testRun?.exception && (
 							<IconButton
 								color={theme.colors.error}
 								icon={'alert-outline'}
@@ -83,13 +82,11 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 				onPress={onClick}
 			/>
 			<Divider />
-			<FormModal
+			<ExceptionModal
+				exception={testRun?.exception}
 				visible={showMessage}
-				title={testRun?.exception?.name}
 				setVisible={setShowMessage}
-				onSubmit={() => setShowMessage(false)}>
-				<Text>{testRun?.exception?.message}</Text>
-			</FormModal>
+			/>
 		</>
 	)
 }

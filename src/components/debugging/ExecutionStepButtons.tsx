@@ -6,6 +6,7 @@ import { Row } from '../ui/Row'
 function ExecutionStepButtons() {
 	const {
 		execution,
+		state,
 		actions: { updateState },
 	} = useExecutionContext()
 	function stepIn() {
@@ -22,10 +23,22 @@ function ExecutionStepButtons() {
 	}
 	return (
 		<Row style={{ justifyContent: 'space-between' }}>
-			<IconButton icon={'chevron-right'} onPress={stepOver} />
-			<IconButton icon={'chevron-double-right'} onPress={stepIn} />
-			<IconButton icon={'chevron-down'} onPress={stepThrough} />
-			<IconButton icon={'chevron-up'} onPress={stepOut} />
+			<IconButton
+				disabled={state.done}
+				icon={'chevron-right'}
+				onPress={stepOver}
+			/>
+			<IconButton
+				disabled={state.done}
+				icon={'chevron-double-right'}
+				onPress={stepIn}
+			/>
+			<IconButton
+				disabled={state.done}
+				icon={'chevron-down'}
+				onPress={stepThrough}
+			/>
+			<IconButton disabled={state.done} icon={'chevron-up'} onPress={stepOut} />
 		</Row>
 	)
 }

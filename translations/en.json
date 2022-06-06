@@ -79,6 +79,10 @@
 	"debugger": {
 		"stack": "stack",
 		"source": "source",
-		"locals": "references"
+		"locals": "references",
+		"done": {
+			"message": "Execution finished successfully",
+			"stack": "Execution ends"
+		}
 	}
 }

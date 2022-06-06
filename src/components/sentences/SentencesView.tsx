@@ -25,6 +25,7 @@ function SentencesView({ sentences, highlightedNode }: SentencesViewProps) {
 const styles = StyleSheet.create({
 	sentences: {
 		paddingLeft: 15,
+		marginBottom: 15,
 	},
 })
 

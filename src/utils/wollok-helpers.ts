@@ -4,6 +4,7 @@ import { upperCaseFirst } from 'upper-case-first'
 import { List } from 'wollok-ts/dist/extensions'
 import interpret, {
 	DirectedInterpreter,
+	ExecutionState,
 } from 'wollok-ts/dist/interpreter/interpreter'
 import {
 	Evaluation,
@@ -68,6 +69,23 @@ export function allScopedVariables(node: CodeContainer): Referenciable[] {
 	return [...fields, ...params, ...methodVars]
 }
 
+export function containerOf(node: Node): CodeContainer | undefined {
+	if (node.is('Method')) {
+		return node
+	}
+	if (node.is('Test')) {
+		return node
+	}
+	const container = [node, ...node.ancestors()].find(is('Body'))?.parent
+
+	// TODO: If view
+	if (container?.is('If')) {
+		return containerOf(container)
+	}
+
+	return container as CodeContainer
+}
+
 // METHODS
 
 export function methodFQN(method: Method) {
@@ -120,7 +138,11 @@ export function isError(problem: Problem): boolean {
 // TESTS
 
 export type TestResult = 'Passed' | 'Failure' | 'Error'
+
 export type TestRun = { result: TestResult; exception?: WollokException }
+
+export type FinishedExecutionState = ExecutionState<void> & { done: true }
+
 export function interpretTest(test: Test, environment: Environment): TestRun {
 	const interpreter = interpret(environment, WRENatives)
 	try {

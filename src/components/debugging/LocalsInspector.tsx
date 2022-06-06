@@ -13,6 +13,7 @@ function LocalsInspector() {
 						const value = context.get(local)
 						const stringValue = interpreter
 							.fork()
+							//TODO: Move to context
 							.do(function* () {
 								return value && (yield* this.send('toString', value))
 							})
