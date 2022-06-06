@@ -8,7 +8,7 @@ import { RootStackParamList } from '../App'
 import LocalsInspector from '../components/debugging/LocalsInspector'
 import SourceInspector from '../components/debugging/SourceInspector'
 import StackInspector from '../components/debugging/StackInspector'
-import DebuggerButtons from '../components/debugging/StepButtons'
+import ExecutionStepButtons from '../components/debugging/ExecutionStepButtons'
 import { ExecutionContextProvider } from '../context/ExecutionContextProvider'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation-helpers'
@@ -34,8 +34,8 @@ const Debugger = ({
 		<ExecutionContextProvider container={test}>
 			<View style={{ height: '100%' }}>
 				<ScrollView>
-					<List.Accordion title={wTranslate('debugger.stack').toUpperCase()}>
-						<StackInspector />
+					<List.Accordion title={wTranslate('debugger.locals').toUpperCase()}>
+						<LocalsInspector />
 					</List.Accordion>
 					<Divider />
 					<List.Accordion
@@ -44,12 +44,12 @@ const Debugger = ({
 						<SourceInspector />
 					</List.Accordion>
 					<Divider />
-					<List.Accordion title={wTranslate('debugger.locals').toUpperCase()}>
-						<LocalsInspector />
+					<List.Accordion title={wTranslate('debugger.stack').toUpperCase()}>
+						<StackInspector />
 					</List.Accordion>
 				</ScrollView>
 				<Divider />
-				<DebuggerButtons />
+				<ExecutionStepButtons />
 			</View>
 		</ExecutionContextProvider>
 	)

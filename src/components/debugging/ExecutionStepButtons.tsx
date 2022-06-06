@@ -3,7 +3,7 @@ import { IconButton } from 'react-native-paper'
 import { useExecutionContext } from '../../context/ExecutionContextProvider'
 import { Row } from '../ui/Row'
 
-function DebuggerButtons() {
+function ExecutionStepButtons() {
 	const {
 		execution,
 		actions: { updateState },
@@ -30,4 +30,4 @@ function DebuggerButtons() {
 	)
 }
 
-export default DebuggerButtons
+export default ExecutionStepButtons
