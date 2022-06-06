@@ -39,7 +39,8 @@ export function ExecutionContextProvider(
 	useEffect(() => {
 		const interpreter = newInterpreter()
 		const executionDirector = interpreter.exec(container)
-		const baseState = executionDirector.resume(n => n === container.body)
+		executionDirector.resume(n => n === container.body)
+		const baseState = executionDirector.stepOver() // Enter into the body
 		setInterpreter(interpreter)
 		setExecution(executionDirector)
 		setState(baseState)

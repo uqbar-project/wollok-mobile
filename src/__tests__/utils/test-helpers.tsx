@@ -5,7 +5,7 @@ import { theme } from '../../theme'
 import ProjectProviderMock from './ProjectProviderMock'
 import { OneOrMany } from '../../utils/type-helpers'
 
-export function renderWithTheme(children: OneOrMany<JSX.Element>) {
+export function renderOnProvider(children: OneOrMany<JSX.Element>) {
 	return render(
 		<ProjectProviderMock>
 			<NavigationContainer theme={theme}>{children}</NavigationContainer>

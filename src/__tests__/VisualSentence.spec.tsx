@@ -14,7 +14,7 @@ import VisualSentence, {
 	VariableComponent,
 } from '../components/sentences/VisualSentence'
 import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
-import { renderWithTheme } from './utils/test-helpers'
+import { renderOnProvider } from './utils/test-helpers'
 
 describe('matching sentences with components', () => {
 	it('should match a send sentence', () => {
@@ -57,7 +57,7 @@ describe('matching sentences with components', () => {
 		const unsupportedKind = 'Crazy'
 		const crazySentence = { kind: unsupportedKind } as unknown as Sentence
 
-		const { getByText } = renderWithTheme(
+		const { getByText } = renderOnProvider(
 			<VisualSentence sentence={crazySentence} />,
 		)
 		expect(getByText(unsupportedKind, { exact: false })).toBeTruthy()
@@ -68,7 +68,7 @@ function checkMatch(
 	sentence: Sentence,
 	component: (props: any) => JSX.Element,
 ) {
-	const { UNSAFE_queryByType } = renderWithTheme(
+	const { UNSAFE_queryByType } = renderOnProvider(
 		<VisualSentence sentence={sentence} />,
 	)
 	expect(UNSAFE_queryByType(component)).toBeTruthy()
