@@ -23,7 +23,6 @@ export function ExecutionContextProvider(
 ) {
 	const { container, children } = props
 	const {
-		project,
 		actions: { newInterpreter },
 	} = useProject()
 	const [interpreter, setInterpreter] = useState<DirectedInterpreter>(
@@ -44,7 +43,7 @@ export function ExecutionContextProvider(
 		setInterpreter(interpreter)
 		setExecution(executionDirector)
 		setState(baseState)
-	}, [container, newInterpreter, project])
+	}, [container, newInterpreter])
 
 	function updateState(newState: ExecutionState<void>) {
 		setInterpreter(interpreter)

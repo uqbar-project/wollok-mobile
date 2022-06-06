@@ -18,6 +18,7 @@ export const initialContext = {
 		runTest: jest.fn(),
 		execution: jest.fn(),
 		save: jest.fn(),
+		newInterpreter: jest.fn(),
 	},
 }
 

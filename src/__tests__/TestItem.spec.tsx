@@ -33,7 +33,7 @@ const errorTest: () => TestRun = () => ({
 
 const finishTestRunning = () =>
 	act(async () => {
-		jest.runAllTimers()
+		jest.runOnlyPendingTimers()
 	})
 
 const runTest = async (button: () => ReactTestInstance) => {
