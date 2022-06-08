@@ -61,6 +61,7 @@
 		"@bam.tech/react-native-make": "^3.0.3",
 		"@react-native-community/eslint-config": "^2.0.0",
 		"@testing-library/jest-native": "^4.0.4",
+		"@testing-library/react-hooks": "^8.0.0",
 		"@testing-library/react-native": "^9.0.0",
 		"@types/i18n-js": "^3.8.1",
 		"@types/jest": "^26.0.24",
