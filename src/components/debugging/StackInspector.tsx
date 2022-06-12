@@ -4,7 +4,7 @@ import { Divider, IconButton, List, Text } from 'react-native-paper'
 import { Frame } from 'wollok-ts/dist/interpreter/runtimeModel'
 import { Node } from 'wollok-ts/dist/model'
 import { useExecutionContext } from '../../context/ExecutionContextProvider'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 
 function StackInspector() {
 	const { interpreter } = useExecutionContext()

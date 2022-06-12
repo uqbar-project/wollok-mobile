@@ -5,7 +5,7 @@ import ProblemModal from '../problems/ProblemsModal'
 import { Row } from '../ui/Row'
 
 interface ProjectHeaderProp {
-	pushMessage: (tag: string) => void
+	pushMessage: (tag: 'saved') => void
 }
 
 function ProjectHeader({ pushMessage }: ProjectHeaderProp) {

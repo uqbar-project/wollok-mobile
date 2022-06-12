@@ -3,31 +3,41 @@ import { StyleSheet } from 'react-native'
 import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Body, Method, Parameter } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { Visible } from '../../../utils/type-helpers'
 import FormModal from '../../ui/FormModal/FormModal'
 import ParameterInput from './ParameterInput'
 
-type NewMethodModalProps = Visible & { addNewMethod: (m: Method) => void }
+type NewMethodModalProps = Visible & {
+	onSubmit: (m: Method) => void
+	initialMethod?: Method
+	title: string
+}
 
-const NewMethodModal = ({
+const MethodFormModal = ({
+	title,
 	visible,
 	setVisible,
-	addNewMethod,
+	onSubmit,
+	initialMethod,
 }: NewMethodModalProps) => {
-	const [name, setName] = useState('')
-	const [parameters, setParameters] = useState<string[]>([])
+	const [name, setName] = useState(initialMethod?.name || '')
+	const [parameters, setParameters] = useState<string[]>(
+		initialMethod?.parameters.map(p => p.name) || [],
+	)
 	const [nextParameter, setNextParameter] = useState('')
 
 	return (
 		<FormModal
-			title={wTranslate('entityDetails.methodModal.newMethod')}
+			title={title}
 			resetForm={reset}
 			onSubmit={newMethod}
 			setVisible={setVisible}
+			valid={name.length > 0}
 			visible={visible}>
 			<TextInput
 				onChangeText={setName}
+				value={name}
 				label={wTranslate('entityDetails.methodModal.nameOfMethod')}
 			/>
 
@@ -56,19 +66,21 @@ const NewMethodModal = ({
 	)
 
 	function reset() {
-		setName('')
-		setNextParameter('')
-		setParameters([])
+		if (!initialMethod) {
+			setName('')
+			setNextParameter('')
+			setParameters([])
+		}
 	}
 
 	function newMethod() {
-		addNewMethod(
+		onSubmit(
 			new Method({
 				name,
 				parameters: parameters.map(
 					paramName => new Parameter({ name: paramName }),
 				),
-				body: new Body({ sentences: [] }),
+				body: initialMethod?.body || new Body({ sentences: [] }),
 			}),
 		)
 	}
@@ -93,4 +105,4 @@ const styles = StyleSheet.create({
 	subtitle: { fontSize: 16, marginTop: 15 },
 })
 
-export default NewMethodModal
+export default MethodFormModal

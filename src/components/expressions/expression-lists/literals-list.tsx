@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { List } from 'react-native-paper'
 import { Expression, Literal, Self } from 'wollok-ts/dist/model'
 import { useExpressionContext } from '../../../context/ExpressionContextProvider'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import {
 	NumberInputModal,
 	TextInputModal,

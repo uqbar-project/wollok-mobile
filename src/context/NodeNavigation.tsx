@@ -8,6 +8,7 @@ import { createContextHook } from './create-context-hook'
 
 export type Context = Module | Method | Test
 
+// eslint-disable-next-line no-spaced-func
 export const ContextContext = createContext<{
 	goToNode: (n: Node) => void
 } | null>(null)
@@ -36,6 +37,7 @@ export function NodeNavigationProvider({ children }: ParentComponentProp) {
 			Body: b => goToNode(b.parent),
 			Sentence: e => goToNode(e.parent),
 			Expression: e => goToNode(e.parent),
+			Parameter: e => goToNode(e.parent.parent),
 		})
 	}
 

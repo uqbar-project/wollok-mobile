@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IconButton, List, Text } from 'react-native-paper'
 import { useExecutionContext } from '../../context/ExecutionContextProvider'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import { containerOf, FinishedExecutionState } from '../../utils/wollok-helpers'
 import SentencesView from '../sentences/SentencesView'
 import ExceptionModal from '../ui/ExceptionModal'

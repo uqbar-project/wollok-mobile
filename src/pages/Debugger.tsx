@@ -12,7 +12,7 @@ import StackInspector from '../components/debugging/StackInspector'
 import Accordion from '../components/ui/Accordion'
 import { ExecutionContextProvider } from '../context/ExecutionContextProvider'
 import { useProject } from '../context/ProjectProvider'
-import { wTranslate } from '../utils/translation-helpers'
+import { wTranslate } from '../utils/translation/translation-helpers'
 
 export type EditorScreenNavigationProp = StackNavigationProp<
 	RootStackParamList,

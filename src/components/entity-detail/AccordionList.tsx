@@ -3,6 +3,7 @@ import React, { Key } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Divider } from 'react-native-paper'
 import { List } from 'wollok-ts/dist/extensions'
+import { localCompareByProperty } from '../../utils/commons'
 import Accordion from '../ui/Accordion'
 
 type Props<Item> = {
@@ -21,7 +22,7 @@ export const AccordionList = function <
 		<Accordion
 			title={`${props.title} (${props.items.length})`}
 			initialExpanded={props.initialExpanded}>
-			{props.items.map(item => (
+			{props.items.sort(localCompareByProperty('name')).map(item => (
 				<View key={`${item.name}${item.parameters?.length}`}>
 					<props.VisualItem item={item} />
 					<Divider style={styles.divider} />

@@ -7,7 +7,7 @@ import {
 	Sentence,
 	Variable,
 } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import { isNullExpression } from '../../utils/wollok-helpers'
 import {
 	highlightStyle,

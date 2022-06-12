@@ -2,10 +2,8 @@ import React from 'react'
 import { View } from 'react-native'
 import { Text, ToggleButton } from 'react-native-paper'
 import { Kind } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { stylesheet } from './styles'
-
-type VisualKind = { kind: Kind; description: string }
 
 export function SelectKind(props: {
 	kind: Kind
@@ -20,7 +18,7 @@ export function SelectKind(props: {
 			style={stylesheet.toggleButtonRow}
 			onValueChange={value => props.setKind(value as Kind)}
 			value={props.kind}>
-			{entityKinds.map((aKind: VisualKind) => {
+			{entityKinds.map(aKind => {
 				return (
 					<ToggleButton
 						key={aKind.kind}
@@ -41,17 +39,20 @@ export function SelectKind(props: {
 	)
 }
 
-function translateDescription(kind: VisualKind): VisualKind {
+function translateDescription(kind: typeof kinds[number]): {
+	kind: Kind
+	description: string
+} {
 	return {
 		...kind,
-		description: wTranslate(kind.description, {
-			scope: 'entities.kinds',
-		}).toUpperCase(),
+		description: wTranslate(`entities.kinds.${kind.description}`).toUpperCase(),
 	}
 }
 
-const entityKinds: VisualKind[] = [
+const kinds = [
 	{ kind: 'Singleton' as Kind, description: 'object' },
 	{ kind: 'Class' as Kind, description: 'class' },
 	{ kind: 'Mixin' as Kind, description: 'mixin' },
-].map(translateDescription)
+] as const
+
+const entityKinds = kinds.map(translateDescription)

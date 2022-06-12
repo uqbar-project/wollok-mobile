@@ -6,7 +6,7 @@ import {
 	ExpressionMakerScreenProp,
 	ExpressionOnSubmit,
 } from '../../pages/ExpressionMaker'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import {
 	allScopedVariables,
 	CodeContainer,

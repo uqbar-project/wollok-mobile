@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleProp, TextStyle } from 'react-native'
 import {
 	Button,
 	Modal,
@@ -7,8 +8,8 @@ import {
 	Title,
 	withTheme,
 } from 'react-native-paper'
-import { Theme } from '../../../theme'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { theme, Theme } from '../../../theme'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { ParentComponentProp, Visible } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 
@@ -26,6 +27,10 @@ function FormModal(props: FormModalProps) {
 	const styles = stylesheet(props.theme)
 
 	const disabledSubmit = props.valid === undefined ? false : !props.valid
+
+	const okStyle: StyleProp<TextStyle> = {
+		color: disabledSubmit ? 'grey' : theme.colors.text,
+	}
 
 	function closeModal() {
 		props.resetForm?.call(this)
@@ -45,7 +50,7 @@ function FormModal(props: FormModalProps) {
 						props.onSubmit && props.onSubmit()
 						closeModal()
 					}}>
-					<Text>{wTranslate('ok').toUpperCase()}</Text>
+					<Text style={okStyle}>{wTranslate('ok').toUpperCase()}</Text>
 				</Button>
 			</Modal>
 		</Portal>

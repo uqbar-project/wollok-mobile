@@ -12,3 +12,5 @@ export type Visible = {
 	visible: boolean
 	setVisible: (value: boolean) => void
 }
+
+export type PartialRecord<K extends keyof any, T> = Partial<Record<K, T>>
