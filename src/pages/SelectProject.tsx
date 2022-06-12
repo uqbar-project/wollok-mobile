@@ -1,11 +1,11 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { ScrollView } from 'react-native'
-import { List } from 'react-native-paper'
 import { Environment } from 'wollok-ts/dist/model'
-import { stylesheet } from '../components/entities/Entity/styles'
 import FabAddScreen from '../components/FabScreens/FabAddScreen'
-import { NewProjectModal } from '../components/projects/NewProjectModal'
+import { ProjectItem } from '../components/projects/ProjectItem'
+import { TextFormModal } from '../components/ui/FormModal/TextFormModal'
+import { LoadingScreen } from '../components/ui/LoadingScreen'
 import { templateProject } from '../context/initialProject'
 import { useProject } from '../context/ProjectProvider'
 import {
@@ -13,7 +13,7 @@ import {
 	savedProjects,
 	saveProject,
 } from '../services/persistance.service'
-import { useTheme } from '../theme'
+import { wTranslate } from '../utils/translation/translation-helpers'
 import { HomeScreenNavigationProp } from './Home'
 
 export function SelectProject() {
@@ -23,11 +23,8 @@ export function SelectProject() {
 	const [projects, setProjects] = useState<string[]>([])
 	const [showNewProjectModal, setShowNewProjectModal] = useState(false)
 	const focused = useIsFocused()
+	const [loadingProject, setLoadingProject] = useState(false)
 	const navigation = useNavigation<HomeScreenNavigationProp>()
-
-	const theme = useTheme()
-
-	const styles = stylesheet(theme)
 
 	function navigateToProject(
 		projectName: string,
@@ -40,9 +37,12 @@ export function SelectProject() {
 		if (selectedProject) {
 			navigate(selectedProject)
 		} else {
-			loadProject(projectName).then(project => {
-				navigate(project)
-			})
+			setLoadingProject(true)
+			loadProject(projectName)
+				.then(project => {
+					navigate(project)
+				})
+				.finally(() => setLoadingProject(false))
 		}
 	}
 
@@ -55,30 +55,34 @@ export function SelectProject() {
 
 	useEffect(() => {
 		if (focused) {
-			savedProjects().then(setProjects)
+			refresh()
 		}
 	}, [setProjects, navigation, focused])
+
+	function refresh() {
+		savedProjects().then(setProjects)
+	}
 
 	return (
 		<FabAddScreen onPress={() => setShowNewProjectModal(true)}>
 			<ScrollView>
-				<>
-					{projects.map(p => (
-						<List.Item
-							key={p}
-							onPress={() => navigateToProject(p)}
-							title={p}
-							style={styles.item}
-							titleStyle={styles.itemTitle}
-						/>
-					))}
-				</>
+				{projects.map((p, i) => (
+					<ProjectItem
+						project={p}
+						key={i}
+						navigateToProject={navigateToProject}
+						onDelete={refresh}
+						onRename={refresh}
+					/>
+				))}
 			</ScrollView>
-			<NewProjectModal
+			<TextFormModal
+				title={wTranslate('project.newProject')}
 				visible={showNewProjectModal}
 				setVisible={setShowNewProjectModal}
 				onSubmit={newProject}
 			/>
+			{loadingProject && <LoadingScreen />}
 		</FabAddScreen>
 	)
 }

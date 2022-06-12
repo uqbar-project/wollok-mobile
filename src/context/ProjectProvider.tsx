@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react'
 import 'react-native-get-random-values'
-import { ExecutionDirector } from 'wollok-ts/dist/interpreter/interpreter'
+import { DirectedInterpreter } from 'wollok-ts/dist/interpreter/interpreter'
+import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import link from 'wollok-ts/dist/linker'
 import {
 	Describe,
@@ -15,6 +16,7 @@ import {
 	Test,
 } from 'wollok-ts/dist/model'
 import validate from 'wollok-ts/dist/validator'
+import WRE from 'wollok-ts/dist/wre/wre.json'
 import { saveProject } from '../services/persistance.service'
 import { ParentComponentProp } from '../utils/type-helpers'
 import {
@@ -28,6 +30,8 @@ import { createContextHook } from './create-context-hook'
 export const mainPackageName = 'main'
 export const testsPackageName = 'tests'
 
+const allPackageNames = [mainPackageName, testsPackageName]
+
 export const ProjectContext = createContext<{
 	project: Environment
 	name: string
@@ -40,13 +44,16 @@ type Actions = {
 	setNewProject: (name: Name, project: Environment) => void
 	rebuildEnvironment: (entity: Entity) => void
 	addEntity: (module: Module) => void
+	editEntity: (oldModule: Module, newModule: Module) => void
+	deleteEntity: (module: Module) => void
 	addDescribe: (test: Describe) => void
 	addMember: (parent: Module) => (newMember: EntityMember) => void
 	changeMember: (
 		parent: Module,
 	) => (oldMember: EntityMember, newMember: EntityMember) => void
+	deleteMember: (member: EntityMember) => void
 	runTest: (test: Test) => TestRun
-	execution: (test: Test) => ExecutionDirector<void>
+	newInterpreter: () => DirectedInterpreter
 	save: () => Promise<unknown>
 }
 
@@ -68,31 +75,35 @@ export function ProjectProvider(
 	/////////////////////////////////// BUILD //////////////////////////////////
 
 	function buildEnvironment(
-		name: Name,
+		packageName: Name,
 		members: Entity[],
 		base?: Environment,
 	): Environment {
 		const mainImport =
-			name !== mainPackageName
+			packageName !== mainPackageName
 				? [
 						new Import({
 							entity: new Reference({ name: mainPackageName }),
 							isGeneric: true,
 						}),
+						// eslint-disable-next-line no-mixed-spaces-and-tabs
 				  ]
 				: undefined
-		const pack = new Package({ name, members, imports: mainImport })
+		const pack = new Package({
+			name: packageName,
+			members,
+			imports: mainImport,
+		})
 		return link([pack], base ?? project)
 	}
 
 	function rebuildEnvironment(entity: Entity) {
-		const packageName = entity.is('Describe')
-			? testsPackageName
-			: mainPackageName
-		const newProject = buildEnvironment(packageName, [entity])
-		setProject(newProject)
-		setChanged(true)
-		setProblems(validateProject(newProject))
+		changeProject(_ => {
+			const packageName = entity.is('Describe')
+				? testsPackageName
+				: mainPackageName
+			return buildEnvironment(packageName, [entity])
+		})
 	}
 
 	function validateProject(_project: Environment) {
@@ -104,6 +115,25 @@ export function ProjectProvider(
 			targetPackages.some(target => p.node.ancestors().includes(target))
 
 		return validate(_project).filter(belongsToTargetProject)
+	}
+
+	function changeProject(action: (project: Environment) => Environment) {
+		const newProject = action(project)
+		setProject(newProject)
+		setChanged(true)
+		setProblems(validateProject(newProject))
+	}
+
+	function linkWithAllOtherPackages(newPackage: Package): Environment {
+		return link(
+			[
+				newPackage,
+				...allPackageNames
+					.filter(pn => pn !== newPackage.name)
+					.map(pn => project.getNodeByFQN<Package>(pn)),
+			],
+			fromJSON<Environment>(WRE),
+		)
 	}
 
 	/////////////////////////////////// BUILD //////////////////////////////////
@@ -119,6 +149,32 @@ export function ProjectProvider(
 
 	function addEntity(newEntity: Module) {
 		rebuildEnvironment(newEntity)
+	}
+
+	function deleteEntity(entity: Module) {
+		changeProject(_ => {
+			const newMembers = entity.parent.members.filter(
+				member => member.fullyQualifiedName() !== entity.fullyQualifiedName(),
+			)
+
+			return linkWithAllOtherPackages(
+				entity.parent.copy({ members: newMembers }),
+			)
+		})
+	}
+
+	function editEntity(entity: Module, newEntity: Module) {
+		changeProject(_ => {
+			const newMembers = entity.parent.members
+				.filter(
+					member => member.fullyQualifiedName() !== entity.fullyQualifiedName(),
+				)
+				.concat(newEntity)
+
+			return linkWithAllOtherPackages(
+				entity.parent.copy({ members: newMembers }),
+			)
+		})
 	}
 
 	function addDescribe(newDescribe: Describe) {
@@ -141,23 +197,31 @@ export function ProjectProvider(
 				}) as Module,
 			)
 		}
+	const deleteMember = (member: EntityMember) => {
+		editEntity(
+			member.parent,
+			member.parent.copy({
+				members: member.parent.members.filter(m => m !== member),
+			}),
+		)
+	}
 
 	/////////////////////////////////// ENTITIES //////////////////////////////////
 
 	/////////////////////////////////// EXECUTION //////////////////////////////////
 
-	function runTest(test: Test) {
-		return interpretTest(test, project)
+	function newInterpreter() {
+		return executionFor(project)
 	}
 
-	function execution(test: Test) {
-		return executionFor(test, project)
+	function runTest(test: Test) {
+		return interpretTest(test, project)
 	}
 
 	/////////////////////////////////// EXECUTION //////////////////////////////////
 
 	async function save() {
-		await saveProject(props.projectName, project)
+		await saveProject(name, project)
 		setChanged(false)
 	}
 
@@ -169,12 +233,15 @@ export function ProjectProvider(
 		actions: {
 			setNewProject,
 			addEntity,
+			deleteEntity,
+			editEntity,
 			addDescribe,
 			addMember,
 			changeMember,
+			deleteMember,
 			rebuildEnvironment,
 			runTest,
-			execution,
+			newInterpreter,
 			save,
 		},
 	}

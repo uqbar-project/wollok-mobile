@@ -1,16 +1,17 @@
-import * as RNLocalize from 'react-native-localize'
 import i18n from 'i18n-js'
 import memoize from 'lodash.memoize'
 import { I18nManager } from 'react-native'
+import * as RNLocalize from 'react-native-localize'
+import { InternationalDictionary } from './translation-types'
 
 const translationGetters: { [locale: string]: any } = {
 	// lazy requires (metro bundler does not support symlinks)
-	es: () => require('../../translations/es.json'),
-	en: () => require('../../translations/en.json'),
+	es: () => require('../../../translations/es.json'),
+	en: () => require('../../../translations/en.json'),
 }
 
 export const wTranslate =
-	memoize<(key: string, config?: i18n.TranslateOptions) => string>( // prettier-ignore
+	memoize<(key: InternationalDictionary, config?: i18n.TranslateOptions) => string>( // prettier-ignore
 		(key, config) => i18n.t(key, config),
 		(key, config) => (config ? key + JSON.stringify(config) : key),
 	)

@@ -3,11 +3,12 @@ import React, { ComponentType, createContext } from 'react'
 import { Entity, Method, Module, Node, Test } from 'wollok-ts/dist/model'
 import { HomeScreenNavigationProp } from '../pages/Home'
 import { ParentComponentProp } from '../utils/type-helpers'
-import { entityMemberFQN, EntityMemberWithBody } from '../utils/wollok-helpers'
+import { entityMemberFQN, CodeContainer } from '../utils/wollok-helpers'
 import { createContextHook } from './create-context-hook'
 
 export type Context = Module | Method | Test
 
+// eslint-disable-next-line no-spaced-func
 export const ContextContext = createContext<{
 	goToNode: (n: Node) => void
 } | null>(null)
@@ -20,7 +21,7 @@ export function NodeNavigationProvider({ children }: ParentComponentProp) {
 			entityFQN: entity.fullyQualifiedName(),
 		})
 	}
-	const goToEditor = (entityMember: EntityMemberWithBody) => {
+	const goToEditor = (entityMember: CodeContainer) => {
 		navigation.navigate('Editor', {
 			fqn: entityMemberFQN(entityMember),
 		})
@@ -36,6 +37,7 @@ export function NodeNavigationProvider({ children }: ParentComponentProp) {
 			Body: b => goToNode(b.parent),
 			Sentence: e => goToNode(e.parent),
 			Expression: e => goToNode(e.parent),
+			Parameter: e => goToNode(e.parent.parent),
 		})
 	}
 

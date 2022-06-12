@@ -14,5 +14,10 @@ export function Row(
 }
 
 const styles = StyleSheet.create({
-	row: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
+	row: {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		width: '100%',
+	},
 })

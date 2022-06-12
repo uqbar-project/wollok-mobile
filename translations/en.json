@@ -2,6 +2,8 @@
 	"ok": "ok",
 	"clear": "clear",
 	"enterValue": "enter value",
+	"discard": "Discard",
+	"cancel": "Cancel",
 	"entities": {
 		"title": "entities",
 		"kinds": {
@@ -75,5 +77,26 @@
 		"shouldInitializeAllAttributes": "All object attributes should be initialized",
 		"nameShouldBeginWithLowercase": "This name should start with lowercase",
 		"shouldNotDefineUnusedVariables": "This variable is never used"
+	},
+	"abm": {
+		"edit": "Edit",
+		"options": "\"%{name}\" options",
+		"delete": "Delete",
+		"rename": "Rename",
+		"editing": "Editing"
+	},
+	"debugger": {
+		"stack": "stack",
+		"source": "source",
+		"locals": "references",
+		"nativeCode": "Native code",
+		"done": {
+			"message": "Execution finished successfully",
+			"stack": "Execution ends"
+		}
+	},
+	"home": {
+		"unsavedChanges": "Unsaved changes",
+		"youWillLoseThem": "Are you sure you want to discard them?"
 	}
 }

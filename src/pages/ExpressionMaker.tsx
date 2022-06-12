@@ -18,7 +18,7 @@ import {
 	useExpressionContext,
 } from '../context/ExpressionContextProvider'
 import { useProject } from '../context/ProjectProvider'
-import { wTranslate } from '../utils/translation-helpers'
+import { wTranslate } from '../utils/translation/translation-helpers'
 import { entityMemberByFQN } from '../utils/wollok-helpers'
 
 export type ExpressionMakerScreenProp = StackNavigationProp<

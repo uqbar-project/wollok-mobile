@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { Text, TextInput } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { Expression, Field } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../../utils/translation-helpers'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { Visible } from '../../../utils/type-helpers'
 import CheckIcon from '../../ui/CheckIcon'
 import ExpressionInput from '../../ui/ExpressionInput'
@@ -11,20 +11,30 @@ import FormModal from '../../ui/FormModal/FormModal'
 import { ATTRIBUTE_ICONS } from '../attribute-icons'
 
 type AttributeFormModalProps = Visible & {
-	addNewField: (f: Field) => void
+	title: string
+	onSubmit: (f: Field) => void
 	contextFQN: string
+	initialAttribute?: Field
 }
 
 const AttributeFormModal = ({
+	title,
 	visible,
 	setVisible,
-	addNewField,
+	onSubmit,
 	contextFQN,
+	initialAttribute,
 }: AttributeFormModalProps) => {
-	const [name, setName] = useState('')
-	const [isConstant, setConstant] = useState(false)
-	const [isProperty, setProperty] = useState(false)
-	const [initialValue, setInitialValue] = useState<Expression>()
+	const [name, setName] = useState(initialAttribute?.name || '')
+	const [isConstant, setConstant] = useState(
+		initialAttribute?.isConstant || false,
+	)
+	const [isProperty, setProperty] = useState(
+		initialAttribute?.isProperty || false,
+	)
+	const [initialValue, setInitialValue] = useState<Expression | undefined>(
+		initialAttribute?.value,
+	)
 
 	const checkboxes = [
 		{
@@ -43,14 +53,16 @@ const AttributeFormModal = ({
 
 	return (
 		<FormModal
-			title={wTranslate('entityDetails.attributeModal.newAttribute')}
+			title={title}
 			resetForm={resetForm}
 			onSubmit={newAttribute}
 			visible={visible}
+			valid={name.length > 0}
 			setVisible={setVisible}>
 			<TextInput
 				label={wTranslate('entityDetails.attributeModal.nameOfAttribute')}
 				onChangeText={setName}
+				value={name}
 			/>
 			<>
 				{checkboxes.map(cbox => (
@@ -73,16 +85,16 @@ const AttributeFormModal = ({
 	)
 
 	function resetForm() {
-		setName('')
-		setConstant(false)
-		setProperty(false)
-		setInitialValue(undefined)
+		if (!initialAttribute) {
+			setName('')
+			setConstant(false)
+			setProperty(false)
+			setInitialValue(undefined)
+		}
 	}
 
 	function newAttribute() {
-		addNewField(
-			new Field({ name, isConstant, isProperty, value: initialValue }),
-		)
+		onSubmit(new Field({ name, isConstant, isProperty, value: initialValue }))
 	}
 }
 

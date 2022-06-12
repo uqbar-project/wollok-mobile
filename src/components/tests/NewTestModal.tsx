@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { TextInput } from 'react-native-paper'
 import { Body, Test } from 'wollok-ts/dist/model'
-import { wTranslate } from '../../utils/translation-helpers'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import FormModal, { FormModalProps } from '../ui/FormModal/FormModal'
 
 const initialName: string = ''
