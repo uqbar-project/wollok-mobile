@@ -39,11 +39,11 @@ export function ExecutionContextProvider(
 	// This component has states, so it can be re-redered
 	// we need to perform this only once
 	useEffect(() => {
-		const interpreter = newInterpreter()
-		const executionDirector = interpreter.exec(container)
+		const instancedInterpreter = newInterpreter()
+		const executionDirector = instancedInterpreter.exec(container)
 		executionDirector.resume(n => n === container.body)
 		const baseState = executionDirector.stepOver() // Enter into the body
-		setInterpreter(interpreter)
+		setInterpreter(instancedInterpreter)
 		setExecution(executionDirector)
 		setState(baseState)
 	}, [container, newInterpreter])

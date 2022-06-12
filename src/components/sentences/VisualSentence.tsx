@@ -108,7 +108,7 @@ export function VariableComponent({
 }) {
 	return (
 		<Row>
-			<IconButton icon="variable" /*olor={theme.colors.primary}*/ />
+			<IconButton icon="variable" />
 			<ConstantVariableIcon variable={variable} />
 			<AssignmentComponent
 				node={variable}
@@ -132,7 +132,7 @@ export function ReturnComponent({
 		<Row>
 			<IconButton
 				style={highlightStyle({ highlighted })}
-				icon={returnIconName} /*color={theme.colors.primary}*/
+				icon={returnIconName}
 			/>
 			<ExpressionDisplay
 				expression={wReturn.value}
