@@ -1,10 +1,11 @@
 import { readdirSync } from 'fs'
+import { resolve } from 'path'
 import { dictionary } from './../utils/translation/translation-types'
 
 describe('translation files', () => {
 	it('should contain all translations', async () => {
 		await Promise.all(
-			readdirSync(__dirname + '/../../translations').map(async file => {
+			readdirSync(resolve('translations')).map(async file => {
 				const dic = await import('../../translations/' + file)
 				dictionary.forEach(key => {
 					expect(
