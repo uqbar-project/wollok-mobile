@@ -73,4 +73,10 @@ export const dictionary = [
 	'enterValue',
 	'clear',
 	'ok',
+	'debugger.stack',
+	'debugger.source',
+	'debugger.locals',
+	'debugger.nativeCode',
+	'debugger.done.message',
+	'debugger.done.stack',
 ] as const
