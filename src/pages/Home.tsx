@@ -41,6 +41,7 @@ export function Home() {
 	}, [navigation, project, name])
 
 	useEffect(() => {
+		navigation.removeListener('beforeRemove', _ => {})
 		navigation.addListener('beforeRemove', e => {
 			if (!changed) {
 				return
