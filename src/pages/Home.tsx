@@ -58,8 +58,6 @@ export function Home() {
 					},
 				],
 			)
-
-			//navigation.dispatch(e.data.action)
 		})
 	}, [navigation, changed])
 

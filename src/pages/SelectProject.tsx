@@ -5,6 +5,7 @@ import { Environment } from 'wollok-ts/dist/model'
 import FabAddScreen from '../components/FabScreens/FabAddScreen'
 import { ProjectItem } from '../components/projects/ProjectItem'
 import { TextFormModal } from '../components/ui/FormModal/TextFormModal'
+import { LoadingScreen } from '../components/ui/LoadingScreen'
 import { templateProject } from '../context/initialProject'
 import { useProject } from '../context/ProjectProvider'
 import {
@@ -22,6 +23,7 @@ export function SelectProject() {
 	const [projects, setProjects] = useState<string[]>([])
 	const [showNewProjectModal, setShowNewProjectModal] = useState(false)
 	const focused = useIsFocused()
+	const [loadingProject, setLoadingProject] = useState(false)
 	const navigation = useNavigation<HomeScreenNavigationProp>()
 
 	function navigateToProject(
@@ -35,9 +37,12 @@ export function SelectProject() {
 		if (selectedProject) {
 			navigate(selectedProject)
 		} else {
-			loadProject(projectName).then(project => {
-				navigate(project)
-			})
+			setLoadingProject(true)
+			loadProject(projectName)
+				.then(project => {
+					navigate(project)
+				})
+				.finally(() => setLoadingProject(false))
 		}
 	}
 
@@ -77,6 +82,7 @@ export function SelectProject() {
 				setVisible={setShowNewProjectModal}
 				onSubmit={newProject}
 			/>
+			{loadingProject && <LoadingScreen />}
 		</FabAddScreen>
 	)
 }
