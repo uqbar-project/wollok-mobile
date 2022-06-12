@@ -2,6 +2,8 @@
 	"ok": "ok",
 	"clear": "limpiar",
 	"enterValue": "ingresar valor",
+	"discard": "Descartar",
+	"cancel": "Cancelar",
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -93,5 +95,9 @@
 			"message": "La ejecución terminó correctamente",
 			"stack": "Nada más por ejecutar"
 		}
+	},
+	"home": {
+		"unsavedChanges": "Tenés cambios sin guardar",
+		"youWillLoseThem": "¿Estás seguro que querés descartarlos?"
 	}
 }
