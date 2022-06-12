@@ -1,7 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/core'
 import { StackNavigationProp } from '@react-navigation/stack'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Alert } from 'react-native'
 import { IconButton, Snackbar } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { RootStackParamList } from '../App'
@@ -19,7 +20,7 @@ export type HomeScreenNavigationProp = StackNavigationProp<
 const Tab = createBottomTabNavigator()
 
 export function Home() {
-	const { name, project } = useProject()
+	const { name, project, changed } = useProject()
 
 	// Move to another component
 	const [message, setMessage] = useState<'saved' | undefined>(undefined)
@@ -38,6 +39,27 @@ export function Home() {
 			headerRight: () => <ProjectHeader pushMessage={pushMessage} />,
 		})
 	}, [navigation, project, name])
+
+	useEffect(() => {
+		navigation.addListener('beforeRemove', e => {
+			if (!changed) {
+				return
+			}
+			e.preventDefault()
+			Alert.alert(
+				wTranslate('home.unsavedChanges'),
+				wTranslate('home.youWillLoseThem'),
+				[
+					{ text: wTranslate('cancel'), style: 'cancel', onPress: () => {} },
+					{
+						text: wTranslate('discard'),
+						style: 'destructive',
+						onPress: () => navigation.dispatch(e.data.action),
+					},
+				],
+			)
+		})
+	}, [navigation, changed])
 
 	return (
 		<>

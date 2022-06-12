@@ -1,6 +1,8 @@
 export type InternationalDictionary = typeof dictionary[number]
 
 export const dictionary = [
+	'discard',
+	'cancel',
 	'abm.options',
 	'abm.delete',
 	'abm.rename',
@@ -79,4 +81,6 @@ export const dictionary = [
 	'debugger.nativeCode',
 	'debugger.done.message',
 	'debugger.done.stack',
+	'home.unsavedChanges',
+	'home.youWillLoseThem',
 ] as const
