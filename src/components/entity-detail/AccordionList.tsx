@@ -1,8 +1,10 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { Key, useState } from 'react'
+import React, { Key } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Divider, List as ListComponent } from 'react-native-paper'
+import { Divider } from 'react-native-paper'
 import { List } from 'wollok-ts/dist/extensions'
+import { localCompareByProperty } from '../../utils/commons'
+import Accordion from '../ui/Accordion'
 
 type Props<Item> = {
 	title: string
@@ -15,39 +17,22 @@ export const AccordionList = function <
 >(props: Props<Item>) {
 	const reactNavigationTheme = useTheme()
 	const styles = getStyles(reactNavigationTheme)
-	const [expanded, setExpanded] = useState<boolean>(
-		props.initialExpanded || false,
-	)
 
 	return (
-		<ListComponent.Accordion
+		<Accordion
 			title={`${props.title} (${props.items.length})`}
-			expanded={expanded}
-			onPress={() => switchExpanded()}>
-			{props.items
-				.sort((a, b) => {
-					if (a.name < b.name) {
-						return -1
-					} else {
-						return 1
-					}
-				})
-				.map(item => {
-					return (
-						<View key={`${item.name}${item.parameters?.length}`}>
-							<props.VisualItem item={item} />
-							<Divider style={styles.divider} />
-						</View>
-					)
-				})}
-		</ListComponent.Accordion>
+			initialExpanded={props.initialExpanded}>
+			{props.items.sort(localCompareByProperty('name')).map(item => (
+				<View key={`${item.name}${item.parameters?.length}`}>
+					<props.VisualItem item={item} />
+					<Divider style={styles.divider} />
+				</View>
+			))}
+		</Accordion>
 	)
-
-	function switchExpanded() {
-		setExpanded(!expanded)
-	}
 }
 
+// TODO: Use same style in all Dividers
 function getStyles(theme: Theme) {
 	return StyleSheet.create({
 		divider: {

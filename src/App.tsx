@@ -13,6 +13,7 @@ import {
 import { templateProject } from './context/initialProject'
 import { ProjectProvider } from './context/ProjectProvider'
 import { ArgumentsMaker } from './pages/ArgumentsMaker'
+import Debugger from './pages/Debugger'
 import { Editor } from './pages/Editor'
 import EntityDetails from './pages/EntityDetails'
 import ExpressionMaker, { ExpressionOnSubmit } from './pages/ExpressionMaker'
@@ -31,9 +32,8 @@ export type RootStackParamList = {
 	ProjectNavigator: { name: string; project: Environment }
 	Home: undefined
 	EntityDetails: { entityFQN: Name }
-	Editor: {
-		fqn: Name
-	}
+	Editor: { fqn: Name }
+	Debugger: { fqn: Name }
 	ExpressionMaker: {
 		onSubmit: ExpressionOnSubmit
 		contextFQN: Name
@@ -76,6 +76,7 @@ const App = () => {
 						<Stack.Screen name="Home" component={Home} />
 						<Stack.Screen name="EntityDetails" component={EntityDetails} />
 						<Stack.Screen name="Editor" component={Editor} />
+						<Stack.Screen name="Debugger" component={Debugger} />
 						<Stack.Screen name="ExpressionMaker" component={ExpressionMaker} />
 						<Stack.Screen name="ArgumentsMaker" component={ArgumentsMaker} />
 					</Stack.Navigator>

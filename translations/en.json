@@ -82,5 +82,15 @@
 		"delete": "Delete",
 		"rename": "Rename",
 		"editing": "Editing"
+	},
+	"debugger": {
+		"stack": "stack",
+		"source": "source",
+		"locals": "references",
+		"nativeCode": "Native code",
+		"done": {
+			"message": "Execution finished successfully",
+			"stack": "Execution ends"
+		}
 	}
 }

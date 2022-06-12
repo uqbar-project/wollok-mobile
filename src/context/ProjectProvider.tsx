@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react'
 import 'react-native-get-random-values'
-import { ExecutionDirector } from 'wollok-ts/dist/interpreter/interpreter'
+import { DirectedInterpreter } from 'wollok-ts/dist/interpreter/interpreter'
 import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import link from 'wollok-ts/dist/linker'
 import {
@@ -53,7 +53,7 @@ type Actions = {
 	) => (oldMember: EntityMember, newMember: EntityMember) => void
 	deleteMember: (member: EntityMember) => void
 	runTest: (test: Test) => TestRun
-	execution: (test: Test) => ExecutionDirector<void>
+	newInterpreter: () => DirectedInterpreter
 	save: () => Promise<unknown>
 }
 
@@ -210,12 +210,12 @@ export function ProjectProvider(
 
 	/////////////////////////////////// EXECUTION //////////////////////////////////
 
-	function runTest(test: Test) {
-		return interpretTest(test, project)
+	function newInterpreter() {
+		return executionFor(project)
 	}
 
-	function execution(test: Test) {
-		return executionFor(test, project)
+	function runTest(test: Test) {
+		return interpretTest(test, project)
 	}
 
 	/////////////////////////////////// EXECUTION //////////////////////////////////
@@ -241,7 +241,7 @@ export function ProjectProvider(
 			deleteMember,
 			rebuildEnvironment,
 			runTest,
-			execution,
+			newInterpreter,
 			save,
 		},
 	}

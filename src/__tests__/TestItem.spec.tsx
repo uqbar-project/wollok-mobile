@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react-native'
+import { fireEvent } from '@testing-library/react-native'
 import React from 'react'
 import { ActivityIndicator } from 'react-native-paper'
 import { act, ReactTestInstance } from 'react-test-renderer'
@@ -6,7 +6,7 @@ import { Body, Test, WollokException } from 'wollok-ts'
 import TestItem from '../components/tests/TestItem'
 import { theme } from '../theme'
 import { TestRun } from '../utils/wollok-helpers'
-import ProjectProviderMock from './utils/ProjectProviderMock'
+import { renderOnProvider } from './utils/test-helpers'
 
 const testMock = new Test({
 	name: 'TEST',
@@ -52,15 +52,13 @@ const renderTest = (runner: () => TestRun = jest.fn()) => {
 		UNSAFE_getByProps,
 		UNSAFE_queryByProps,
 		queryByText,
-	} = render(
-		<ProjectProviderMock>
-			<TestItem
-				item={testMock}
-				runner={runner}
-				onClick={jest.fn()}
-				theme={theme}
-			/>
-		</ProjectProviderMock>,
+	} = renderOnProvider(
+		<TestItem
+			item={testMock}
+			runner={runner}
+			onClick={jest.fn()}
+			theme={theme}
+		/>,
 	)
 	return {
 		runIcon: () => UNSAFE_getByProps({ icon: 'play-circle' }),

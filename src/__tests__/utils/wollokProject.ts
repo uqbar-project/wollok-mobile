@@ -72,13 +72,26 @@ const tests = new Package({
 			members: [
 				new Test({
 					id: 'TEST',
-					name: 'test for testing',
+					name: 'Passed test for testing',
 					body: new Body({
 						sentences: [
 							new Send({
 								receiver: new Reference({ name: 'assert' }),
 								message: 'that',
 								args: [new Literal({ value: true })],
+							}),
+						],
+					}),
+				}),
+				new Test({
+					id: 'TEST failure',
+					name: 'Failure test for testing',
+					body: new Body({
+						sentences: [
+							new Send({
+								receiver: new Reference({ name: 'assert' }),
+								message: 'that',
+								args: [new Literal({ value: false })],
 							}),
 						],
 					}),

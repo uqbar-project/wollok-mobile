@@ -83,5 +83,15 @@
 		"delete": "Borrar",
 		"rename": "Renombrar",
 		"editing": "Editando"
+	},
+	"debugger": {
+		"stack": "pila de ejecución",
+		"source": "fuente",
+		"locals": "referencias",
+		"nativeCode": "Código nativo",
+		"done": {
+			"message": "La ejecución terminó correctamente",
+			"stack": "Nada más por ejecutar"
+		}
 	}
 }
