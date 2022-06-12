@@ -44,13 +44,13 @@ export const ModuleDetails = function ({ module }: ModuleDetailsProps) {
 				<ScrollView>
 					<AccordionList<Field>
 						title={wTranslate('entityDetails.attributes').toUpperCase()}
-						items={module.members.filter(is('Field')) as Field[]}
+						items={module.members.filter(is('Field'))}
 						VisualItem={AttributeItem}
 						initialExpanded={true}
 					/>
 					<AccordionList<Method>
 						title={wTranslate('entityDetails.methods').toUpperCase()}
-						items={module.members.filter(is('Method')) as Method[]}
+						items={module.members.filter(is('Method'))}
 						VisualItem={MethodItem}
 						initialExpanded={true}
 					/>

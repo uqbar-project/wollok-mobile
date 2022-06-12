@@ -1,20 +1,15 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import {
-	ActivityIndicator,
-	Divider,
-	IconButton,
-	List,
-	Text,
-	withTheme,
-} from 'react-native-paper'
+import { Divider, IconButton, List, withTheme } from 'react-native-paper'
 import { Test } from 'wollok-ts/dist/model'
+import { HomeScreenNavigationProp } from '../../pages/Home'
 import { Theme } from '../../theme'
 import { runAsync } from '../../utils/commons'
 import { Maybe } from '../../utils/type-helpers'
 import { TestRun } from '../../utils/wollok-helpers'
 import { ProblemReporterButton } from '../problems/ProblemReporterButton'
-import FormModal from '../ui/FormModal/FormModal'
+import ExceptionModal from '../ui/ExceptionModal'
+import LoadingIconButton from '../ui/LoadingIconButton'
 
 type TestItemProps = {
 	item: Test
@@ -26,6 +21,7 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 	const [testRun, setTestRun] = useState<Maybe<TestRun>>(undefined)
 	const [running, setRunning] = useState(false)
 	const [showMessage, setShowMessage] = useState<boolean>(false)
+	const navigation = useNavigation<HomeScreenNavigationProp>()
 
 	return (
 		<>
@@ -39,7 +35,7 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 				)}
 				right={() => (
 					<>
-						{testRun?.exception?.message && (
+						{testRun?.exception && (
 							<IconButton
 								color={theme.colors.error}
 								icon={'alert-outline'}
@@ -48,33 +44,36 @@ function TestItem({ item: test, runner, onClick, theme }: TestItemProps) {
 								}}
 							/>
 						)}
-						{running ? (
-							<ActivityIndicator style={style.spinner} animating={true} />
-						) : (
-							<IconButton
-								color={colorForTestRun(testRun, theme)}
-								icon={'play-circle'}
-								onPress={() => {
-									setRunning(true)
-									runAsync(() => {
-										setTestRun(runner(test))
-										setRunning(false)
-									})
-								}}
-							/>
-						)}
+						<LoadingIconButton
+							loading={running}
+							color={colorForTestRun(testRun, theme)}
+							icon={'play-circle'}
+							onPress={() => {
+								setRunning(true)
+								runAsync(() => {
+									setTestRun(runner(test))
+									setRunning(false)
+								})
+							}}
+						/>
+						<IconButton
+							icon={'bug'}
+							onPress={() => {
+								navigation.navigate('Debugger', {
+									fqn: test.fullyQualifiedName(),
+								})
+							}}
+						/>
 					</>
 				)}
 				onPress={onClick}
 			/>
 			<Divider />
-			<FormModal
+			<ExceptionModal
+				exception={testRun?.exception}
 				visible={showMessage}
-				title={testRun?.exception?.name}
 				setVisible={setShowMessage}
-				onSubmit={() => setShowMessage(false)}>
-				<Text>{testRun?.exception?.message}</Text>
-			</FormModal>
+			/>
 		</>
 	)
 }
@@ -93,11 +92,5 @@ function colorForTestRun(testRun: Maybe<TestRun>, theme: Theme) {
 			return theme.colors.error
 	}
 }
-
-const style = StyleSheet.create({
-	spinner: {
-		marginRight: 10,
-	},
-})
 
 export default withTheme(TestItem)

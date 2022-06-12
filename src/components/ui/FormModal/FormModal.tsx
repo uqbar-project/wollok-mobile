@@ -14,7 +14,7 @@ import { stylesheet } from './styles'
 
 export type FormModalProps = ParentComponentProp<
 	Visible & {
-		onSubmit: () => void
+		onSubmit?: () => void
 		resetForm?: () => void
 		title?: string
 		valid?: boolean
@@ -42,7 +42,7 @@ function FormModal(props: FormModalProps) {
 				<Button
 					disabled={disabledSubmit}
 					onPress={() => {
-						props.onSubmit()
+						props.onSubmit && props.onSubmit()
 						closeModal()
 					}}>
 					<Text>{wTranslate('ok').toUpperCase()}</Text>

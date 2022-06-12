@@ -36,7 +36,7 @@ const localizeMock = {
 };
 
 jest.mock('react-native-localize', () => localizeMock)
-jest.mock('i18n-js', () => ({ t: () => "" /** TODO */ }))
+jest.mock('i18n-js', () => ({ t: (id) => id }))
 
 jest.mock('react-native-paper', () => {
     const RealModule = jest.requireActual('react-native-paper');
@@ -48,12 +48,12 @@ jest.mock('react-native-paper', () => {
 jest.mock('@react-navigation/native', () => {
     const actualNav = jest.requireActual('@react-navigation/native');
     return {
-      ...actualNav,
-      useNavigation: () => ({
-        navigate: jest.fn(),
-      }),
+        ...actualNav,
+        useNavigation: () => ({
+            navigate: jest.fn(),
+        }),
     };
-  });
+});
 jest.mock('react-native-fs', () => ({ readDir: () => Promise.resolve([]) }))
 jest.mock('rn-fetch-blob-v2', () => ({ fs: { exists: () => Promise.resolve(true) } }))
 

@@ -1,37 +1,37 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
 import { upperCaseFirst } from 'upper-case-first'
-import { Body, Expression, Name, Return, Sentence } from 'wollok-ts/dist/model'
-import { List } from 'wollok-ts/dist/extensions'
-import { ExpressionOnSubmit } from '../../pages/ExpressionMaker'
+import { Body, Expression, Return, Sentence } from 'wollok-ts/dist/model'
+import {
+	ExpressionMakerScreenProp,
+	ExpressionOnSubmit,
+} from '../../pages/ExpressionMaker'
 import { wTranslate } from '../../utils/translation-helpers'
-import { Referenciable } from '../../utils/wollok-helpers'
+import {
+	allScopedVariables,
+	CodeContainer,
+	entityMemberFQN,
+} from '../../utils/wollok-helpers'
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
 import { SubmitCheckButton } from '../ui/Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
-import { returnIcon as returnIconName } from './sentences/Return'
-import { VisualSentence } from './sentences/VisualSentence'
+import SentencesView from './SentencesView'
 import { VariableFormModal } from './VariableForm'
+import { returnIconName } from './VisualSentence'
 
 type BodyMakerProps = {
-	sentences: List<Sentence>
-	variables: Referenciable[]
-	contextFQN: Name
+	codeContainer: CodeContainer
 	setBody: (newSentence: Body) => void
 }
-export function BodyMaker({
-	sentences: initialSentences,
-	setBody,
-	variables,
-	contextFQN,
-}: BodyMakerProps) {
+export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
+	const navigation = useNavigation<ExpressionMakerScreenProp>()
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
-
 	const [sentences, setSentences] = useState<Sentence[]>(
-		Array.from(initialSentences),
+		Array.from(codeContainer.sentences()),
 	)
+
+	const contextFQN = entityMemberFQN(codeContainer)
 
 	function addSentence(sentence: Sentence) {
 		setSentences([...sentences, sentence])
@@ -41,7 +41,6 @@ export function BodyMaker({
 		addSentence(new Return({ value: expression }))
 	}
 
-	const navigation = useNavigation()
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
@@ -86,21 +85,16 @@ export function BodyMaker({
 			onPress: () => {
 				setVariableModalVisible(true)
 			},
-
 			label: upperCaseFirst(wTranslate('sentence.variable')),
 		},
 	]
 
 	return (
 		<MultiFabScreen actions={actions}>
-			<ScrollView style={styles.sentences}>
-				{sentences.map((sentence, i) => (
-					<VisualSentence sentence={sentence} key={i} />
-				))}
-			</ScrollView>
+			<SentencesView sentences={sentences} />
 
 			<AssignmentFormModal
-				variables={variables}
+				variables={allScopedVariables(codeContainer)}
 				onSubmit={addSentence}
 				setVisible={setAssignmentModalVisible}
 				contextFQN={contextFQN}
@@ -116,9 +110,3 @@ export function BodyMaker({
 		</MultiFabScreen>
 	)
 }
-
-const styles = StyleSheet.create({
-	sentences: {
-		paddingLeft: 15,
-	},
-})

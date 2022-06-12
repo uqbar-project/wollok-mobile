@@ -1,11 +1,11 @@
 import React from 'react'
 import { Literal, Variable as VariableModel } from 'wollok-ts/dist/model'
-import { renderWithTheme } from './utils/test-helpers'
-import { Variable } from '../components/Body/sentences/Variable'
+import { VariableComponent } from '../components/sentences/VisualSentence'
+import { renderOnProvider } from './utils/test-helpers'
 
 function renderVariable(variable: VariableModel) {
-	const { UNSAFE_queryByProps, getByText } = renderWithTheme(
-		<Variable variable={variable} />,
+	const { UNSAFE_queryByProps, getByText } = renderOnProvider(
+		<VariableComponent variable={variable} />,
 	)
 
 	return {
