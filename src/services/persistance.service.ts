@@ -9,8 +9,10 @@ import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import { Environment } from 'wollok-ts/dist/model'
 import { projectToJSON } from '../utils/wollok-helpers'
 
+const EXTENSION = 'wlkm'
+
 const projectsFolder = 'projects'
-const projectsFolderPath = `${DocumentDirectoryPath}/${projectsFolder}`
+export const projectsFolderPath = `${DocumentDirectoryPath}/${projectsFolder}`
 
 export function saveProject(projectName: string, project: Environment) {
 	return new Promise(async resolve => {
@@ -44,11 +46,11 @@ export async function savedProjects(): Promise<string[]> {
 	const files = await readDir(projectsFolderPath)
 	return files
 		.sort((a, b) => getFileDateValue(b) - getFileDateValue(a))
-		.map(item => item.name.replace('.json', ''))
+		.map(item => item.name.replace(`.${EXTENSION}`, ''))
 }
 
 function projectFilePath(projectName: string): string {
-	return `${projectsFolderPath}/${projectName}.json`
+	return `${projectsFolderPath}/${projectName}.${EXTENSION}`
 }
 
 export function deleteProject(projectName: string) {

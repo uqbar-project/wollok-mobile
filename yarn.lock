@@ -8106,6 +8106,13 @@ react-native-codegen@^0.0.13:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-document-picker@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-8.1.1.tgz#642bbe25752cc428b96416318f8dc07cef29ee10"
+  integrity sha512-mH0oghd7ndgU9/1meVJdqts1sAkOfUQW1qbrqTTsvR5f2K9r0BAj/X02dve5IBMOMZvlGd7qWrNVuIFg5AUXWg==
+  dependencies:
+    invariant "^2.2.4"
+
 react-native-fs@^2.18.0:
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.18.0.tgz#987b99cc90518ef26663a8d60e62104694b41c21"
@@ -8167,6 +8174,11 @@ react-native-screens@^3.2.0:
   integrity sha512-TUmCE2ZIr6SFCUqsUqLsYQZ7EWo+tKyxSVFj3G5BCkGFOl3MwXEPgT/ihNCnL1aUAgr6TEMWVHg+awLkkQgYyQ==
   dependencies:
     warn-once "^0.1.0"
+
+react-native-share@^7.6.4:
+  version "7.6.4"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-7.6.4.tgz#98464ab54a685e156158a2f51e857f28373bc2a0"
+  integrity sha512-Evt6vM76QzHDOv+XYuNCJSDAJ74287FGLq0KlgUZVRlvmQD32gQD03yl6q2kuo0vrpQT67sj3GcVzHglizMfGA==
 
 react-native-vector-icons@^8.1.0:
   version "8.1.0"
