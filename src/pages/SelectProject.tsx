@@ -14,6 +14,8 @@ import {
 	loadProject,
 	savedProjects,
 	saveProject,
+	withoutExtension,
+	WollokProjectDescriptor,
 } from '../services/persistance.service'
 import { log } from '../utils/commons'
 import { wTranslate } from '../utils/translation/translation-helpers'
@@ -23,25 +25,25 @@ export function SelectProject() {
 	const {
 		actions: { setNewProject },
 	} = useProject()
-	const [projects, setProjects] = useState<string[]>([])
+	const [projects, setProjects] = useState<WollokProjectDescriptor[]>([])
 	const [showNewProjectModal, setShowNewProjectModal] = useState(false)
 	const focused = useIsFocused()
 	const [loadingProject, setLoadingProject] = useState(false)
 	const navigation = useNavigation<HomeScreenNavigationProp>()
 
 	function navigateToProject(
-		projectName: string,
+		projectDescriptor: WollokProjectDescriptor,
 		selectedProject?: Environment,
 	) {
 		function navigate(targetProject: Environment) {
-			setNewProject(projectName, targetProject)
+			setNewProject(projectDescriptor, targetProject)
 			navigation.navigate('Home')
 		}
 		if (selectedProject) {
 			navigate(selectedProject)
 		} else {
 			setLoadingProject(true)
-			loadProject(projectName)
+			loadProject(projectDescriptor.url)
 				.then(project => navigate(project))
 				.finally(() => setLoadingProject(false))
 		}
@@ -49,13 +51,14 @@ export function SelectProject() {
 
 	function newProject(newProjectName: string) {
 		const project = templateProject()
-		saveProject(newProjectName, project).then(() => {
-			navigateToProject(newProjectName, project)
+		saveProject(newProjectName, project).then(projectDesc => {
+			navigateToProject(projectDesc, project)
 		})
 	}
 
 	useEffect(() => {
 		if (focused) {
+			savedProjects().then(log)
 			refresh()
 		}
 	}, [setProjects, navigation, focused])
@@ -70,7 +73,15 @@ export function SelectProject() {
 				{
 					icon: 'file-download',
 					label: upperCaseFirst(wTranslate('selectProject.load')),
-					onPress: () => DocumentPicker.pick().then(log),
+					onPress: () =>
+						DocumentPicker.pick().then(files => {
+							log(files[0])
+							const { name, uri } = files[0]
+							navigateToProject({
+								name: withoutExtension(name),
+								url: uri.replace('file://', ''),
+							})
+						}),
 				},
 				{
 					icon: 'open-in-new',

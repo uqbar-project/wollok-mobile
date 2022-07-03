@@ -7,27 +7,35 @@ import {
 import RNFetchBlob from 'rn-fetch-blob-v2'
 import { fromJSON } from 'wollok-ts/dist/jsonUtils'
 import { Environment } from 'wollok-ts/dist/model'
+import { log } from '../utils/commons'
 import { projectToJSON } from '../utils/wollok-helpers'
 
-const EXTENSION = 'wlkm'
-
 const projectsFolder = 'projects'
-export const projectsFolderPath = `${DocumentDirectoryPath}/${projectsFolder}`
+const projectsFolderPath = `${DocumentDirectoryPath}/${projectsFolder}`
 
-export function saveProject(projectName: string, project: Environment) {
+export interface WollokProjectDescriptor {
+	name: string
+	url: string
+}
+
+export function saveProject(
+	projectName: string,
+	project: Environment,
+): Promise<WollokProjectDescriptor> {
 	return new Promise(async resolve => {
 		const path = projectFilePath(projectName)
 		await writeFile(path, '')
-		RNFetchBlob.fs.writeStream(path, 'utf8').then(stream => {
-			resolve(stream.write(projectToJSON(project)))
-		})
+		RNFetchBlob.fs
+			.writeStream(path, 'utf8')
+			.then(stream => stream.write(projectToJSON(project)))
+			.then(() => resolve({ name: projectName, url: path }))
 	})
 }
 
-export async function loadProject(projectName: string): Promise<Environment> {
+export async function loadProject(url: string): Promise<Environment> {
 	return new Promise(resolve => {
 		RNFetchBlob.fs
-			.readStream(projectFilePath(projectName), 'utf8', 4096, -1)
+			.readStream(url, 'utf8', 4096, -1)
 			.then(stream => {
 				let content = ''
 				stream.open()
@@ -36,21 +44,34 @@ export async function loadProject(projectName: string): Promise<Environment> {
 				})
 				stream.onEnd(() => resolve(fromJSON<Environment>(JSON.parse(content))))
 			})
+			.catch(log)
 	})
 }
 
-export async function savedProjects(): Promise<string[]> {
+export async function savedProjects(): Promise<WollokProjectDescriptor[]> {
 	function getFileDateValue(file: ReadDirItem) {
 		return file.mtime?.valueOf() || 0
 	}
 	const files = await readDir(projectsFolderPath)
 	return files
 		.sort((a, b) => getFileDateValue(b) - getFileDateValue(a))
-		.map(item => item.name.replace(`.${EXTENSION}`, ''))
+		.map(item => ({
+			name: withoutExtension(item.name),
+			url: item.path,
+		}))
+}
+
+const EXTENSION = 'wlkm'
+
+export function withExtension(projectName: string): string {
+	return `${projectName}.${EXTENSION}`
+}
+export function withoutExtension(projectName: string): string {
+	return projectName.replace(`.${EXTENSION}`, '')
 }
 
 function projectFilePath(projectName: string): string {
-	return `${projectsFolderPath}/${projectName}.${EXTENSION}`
+	return `${projectsFolderPath}/${withExtension(projectName)}`
 }
 
 export function deleteProject(projectName: string) {
