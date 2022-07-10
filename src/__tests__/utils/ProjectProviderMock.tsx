@@ -8,6 +8,7 @@ import { project } from './wollokProject'
 export const initialContext = {
 	project: new Environment({ members: [] }),
 	name: 'Project Test',
+	url: 'FAKE_URL',
 	changed: false,
 	problems: [] as Problem[],
 	actions: {
