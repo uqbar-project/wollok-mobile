@@ -71,8 +71,9 @@
 	},
 	"project": {
 		"selectProject": "Seleccioná un proyecto",
-		"newProject": "Proyecto nuevo",
-		"saved": "¡Guardado!"
+		"new": "Proyecto nuevo",
+		"saved": "¡Guardado!",
+		"load": "Cargar proyecto"
 	},
 	"problem": {
 		"shouldInitializeAllAttributes": "Todos los atributos del objeto deben estar inicializados",
