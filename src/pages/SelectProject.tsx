@@ -56,6 +56,14 @@ export function SelectProject() {
 		})
 	}
 
+	async function importProject(descriptor: WollokProjectDescriptor) {
+		setLoadingProject(true)
+		const project = await loadProject(descriptor.url)
+		const newDesciptor = await saveProject(descriptor.name, project)
+		navigateToProject(newDesciptor, project)
+		setLoadingProject(false)
+	}
+
 	useEffect(() => {
 		if (focused) {
 			savedProjects().then(log)
@@ -72,12 +80,11 @@ export function SelectProject() {
 			actions={[
 				{
 					icon: 'file-download',
-					label: upperCaseFirst(wTranslate('selectProject.load')),
+					label: upperCaseFirst(wTranslate('project.load')),
 					onPress: () =>
 						DocumentPicker.pick().then(files => {
-							log(files[0])
 							const { name, uri } = files[0]
-							navigateToProject({
+							importProject({
 								name: withoutExtension(name),
 								url: uri.replace('file://', ''),
 							})
@@ -85,7 +92,7 @@ export function SelectProject() {
 				},
 				{
 					icon: 'open-in-new',
-					label: upperCaseFirst(wTranslate('selectProject.new')),
+					label: upperCaseFirst(wTranslate('project.new')),
 					onPress: () => setShowNewProjectModal(true),
 				},
 			]}>
@@ -101,7 +108,7 @@ export function SelectProject() {
 				))}
 			</ScrollView>
 			<TextFormModal
-				title={wTranslate('project.newProject')}
+				title={wTranslate('project.new')}
 				visible={showNewProjectModal}
 				setVisible={setShowNewProjectModal}
 				onSubmit={newProject}
