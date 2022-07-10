@@ -57,6 +57,8 @@ jest.mock('@react-navigation/native', () => {
 jest.mock('react-native-fs', () => ({ readDir: () => Promise.resolve([]) }))
 jest.mock('rn-fetch-blob-v2', () => ({ fs: { exists: () => Promise.resolve(true) } }))
 
+jest.mock('react-native-share', () => ({}))
+
 // Stop animations
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.useFakeTimers();

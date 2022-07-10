@@ -77,7 +77,7 @@ const givenADummyProject = () => {
 	const wrapper = (props: { children: JSX.Element[] }) => (
 		<ProjectProvider
 			initialProject={templateProject()}
-			projectName="test-project">
+			descriptor={{ name: 'test-project', url: 'FAKE_URL' }}>
 			{props.children}
 		</ProjectProvider>
 	)
