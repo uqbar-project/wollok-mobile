@@ -25,16 +25,19 @@ function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 			<IconButton
 				disabled={!problems.length}
 				icon="alert-circle"
+				style={{ right: -24 }}
 				onPress={() => {
 					setShowProblems(true)
 				}}
 			/>
 			<Badge>{problems.length}</Badge>
+
 			<IconButton
 				disabled={!changed}
 				icon="content-save"
 				onPress={() => save().then(() => pushMessage('saved'))}
 			/>
+
 			<IconButton
 				icon="share"
 				onPress={() =>
