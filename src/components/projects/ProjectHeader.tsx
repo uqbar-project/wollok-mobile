@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Badge, IconButton } from 'react-native-paper'
 import Share from 'react-native-share'
 import { useProject } from '../../context/ProjectProvider'
+import { FILE_PREFIX } from '../../services/persistance.service'
 import ProblemModal from '../problems/ProblemsModal'
 import { Row } from '../ui/Row'
 
@@ -14,11 +15,13 @@ interface ProjectHeaderProp {
 function ProjectHeader({ pushMessage }: ProjectHeaderProp) {
 	const [showProblems, setShowProblems] = useState(false)
 	const {
-		url,
+		url: projectUrl,
 		changed,
 		problems,
 		actions: { save },
 	} = useProject()
+
+	const url = `${FILE_PREFIX}${projectUrl}`
 
 	return (
 		<Row>

@@ -10,6 +10,9 @@ import { Environment } from 'wollok-ts/dist/model'
 import { log } from '../utils/commons'
 import { projectToJSON } from '../utils/wollok-helpers'
 
+export const EXTENSION = 'wlkm'
+export const FILE_PREFIX = 'file://'
+
 const projectsFolder = 'projects'
 const projectsFolderPath = `${DocumentDirectoryPath}/${projectsFolder}`
 
@@ -60,8 +63,6 @@ export async function savedProjects(): Promise<WollokProjectDescriptor[]> {
 			url: item.path,
 		}))
 }
-
-const EXTENSION = 'wlkm'
 
 export function withExtension(projectName: string): string {
 	return `${projectName}.${EXTENSION}`

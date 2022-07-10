@@ -11,6 +11,7 @@ import { LoadingScreen } from '../components/ui/LoadingScreen'
 import { templateProject } from '../context/initialProject'
 import { useProject } from '../context/ProjectProvider'
 import {
+	FILE_PREFIX,
 	loadProject,
 	savedProjects,
 	saveProject,
@@ -68,7 +69,7 @@ export function SelectProject() {
 		const { name, uri } = files[0]
 		const newDescriptor = {
 			name: withoutExtension(name),
-			url: uri.replace('file://', ''),
+			url: uri.replace(FILE_PREFIX, ''),
 		}
 
 		if (projects.some(desc => desc.name === newDescriptor.name)) {
