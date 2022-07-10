@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import { IconButton, Text } from 'react-native-paper'
 import {
 	Assignment,
@@ -21,13 +22,33 @@ import { Row } from '../ui/Row'
 type VisualSentenceProps = {
 	sentence: Sentence
 	highlightedNode?: Node
+	style?: StyleProp<ViewStyle>
 }
-function VisualSentence({ sentence, highlightedNode }: VisualSentenceProps) {
+export function ReadonlySentence({
+	sentence,
+	highlightedNode,
+	style,
+}: VisualSentenceProps) {
 	return (
-		<Row>
+		<Row style={style}>
 			<ProblemReporterButton node={sentence} />
 			<NodeComponent node={sentence} highlightedNode={highlightedNode} />
 		</Row>
+	)
+}
+
+//TODO: dont repeat code with readonly
+export function DraggableSentence({
+	sentence,
+	highlightedNode,
+	drag,
+}: VisualSentenceProps & { drag: () => void }) {
+	return (
+		<View>
+			<ProblemReporterButton node={sentence} />
+			<IconButton icon="drag-vertical" onPress={drag} />
+			<NodeComponent node={sentence} highlightedNode={highlightedNode} />
+		</View>
 	)
 }
 
@@ -142,5 +163,3 @@ export function ReturnComponent({
 		</Row>
 	)
 }
-
-export default VisualSentence

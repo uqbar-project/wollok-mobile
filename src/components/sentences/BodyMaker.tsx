@@ -15,7 +15,7 @@ import {
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
 import { SubmitCheckButton } from '../ui/Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
-import SentencesView from './SentencesView'
+import SentencesEditor from './SentencesEditor'
 import { VariableFormModal } from './VariableForm'
 import { returnIconName } from './VisualSentence'
 
@@ -91,7 +91,7 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 
 	return (
 		<MultiFabScreen actions={actions}>
-			<SentencesView sentences={sentences} />
+			<SentencesEditor sentences={sentences} />
 
 			<AssignmentFormModal
 				variables={allScopedVariables(codeContainer)}
