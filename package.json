@@ -1,6 +1,6 @@
 {
 	"name": "wollokmobile",
-	"version": "0.0.2",
+	"version": "0.2.1",
 	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
@@ -23,8 +23,7 @@
 	"lint-staged": {
 		"*.{ts,tsx}": [
 			"prettier --write",
-			"eslint --fix",
-			"git add"
+			"eslint --fix"
 		]
 	},
 	"dependencies": {
@@ -51,8 +50,9 @@
 		"react-native-screens": "^3.2.0",
 		"react-native-vector-icons": "^8.1.0",
 		"rn-fetch-blob-v2": "^0.14.1",
+		"string.prototype.replaceall": "^1.0.6",
 		"upper-case-first": "^2.0.2",
-		"wollok-ts": "^3.0.6"
+		"wollok-ts": "^3.0.8"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.9",
@@ -62,24 +62,28 @@
 		"@bam.tech/react-native-make": "^3.0.3",
 		"@react-native-community/eslint-config": "^2.0.0",
 		"@testing-library/jest-native": "^4.0.4",
+		"@testing-library/react-hooks": "^8.0.0",
 		"@testing-library/react-native": "^9.0.0",
 		"@types/i18n-js": "^3.8.1",
 		"@types/jest": "^26.0.24",
+		"@types/jest-expect-message": "^1.0.3",
 		"@types/lodash.memoize": "^4.1.6",
 		"@types/react": "^17.0.39",
 		"@types/react-native": "^0.66.16",
 		"@types/react-test-renderer": "^17.0.1",
 		"babel-jest": "^26.4.2",
 		"eslint": "^7.14.0",
+		"fs": "^0.0.1-security",
 		"husky": "^7.0.2",
 		"jest": "^26.4.2",
+		"jest-expect-message": "^1.0.2",
 		"lint-staged": "^11.1.2",
 		"metro-react-native-babel-preset": "^0.64.0",
 		"prettier": "^2.4.1",
 		"react-devtools": "^4.21.0",
 		"react-test-renderer": "17.0.2",
 		"ts-jest": "^26.4.2",
-		"typescript": "^3.8.3"
+		"typescript": "~4.6.3"
 	},
 	"resolutions": {
 		"@types/react": "^17"

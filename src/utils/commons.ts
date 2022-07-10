@@ -17,3 +17,19 @@ export function runAsync(f: () => void) {
 export function log(obj: any) {
 	console.log(JSON.stringify(obj, undefined, 2))
 }
+
+export function sortWithoutEffect<T>(
+	array: ReadonlyArray<T>,
+	sortBy: (a: T, b: T) => number,
+) {
+	const aux = [...array]
+	return aux.sort(sortBy)
+}
+
+export function localCompareByProperty<T extends { [key: string]: any }>(
+	property: keyof T,
+) {
+	return function (a: T, b: T) {
+		return b[property].localeCompare(a[property])
+	}
+}

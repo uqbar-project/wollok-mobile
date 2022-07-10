@@ -2,27 +2,29 @@ import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { upperCaseFirst } from 'upper-case-first'
-import { is, Test } from 'wollok-ts/dist/model'
-import { useEntity } from '../../context/EntityProvider'
+import { Describe, is, Test } from 'wollok-ts/dist/model'
 import { useProject } from '../../context/ProjectProvider'
-import { EntityMemberScreenNavigationProp } from '../../pages/EntityMemberDetail'
-import { wTranslate } from '../../utils/translation-helpers'
+import { EditorScreenNavigationProp } from '../../pages/Editor'
+import { localCompareByProperty } from '../../utils/commons'
+import { wTranslate } from '../../utils/translation/translation-helpers'
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
 import NewTestModal from './NewTestModal'
 import TestItem from './TestItem'
 
-export const Tests = function () {
+export type TestsProps = {
+	describe: Describe
+}
+
+export const Tests = function ({ describe }: TestsProps) {
 	const [testNewModalVisible, setTestNewModalVisible] = useState(false)
 	const {
-		actions: { runTest },
+		actions: { runTest, addMember },
 	} = useProject()
-	const { entity } = useEntity()
-	const tests = entity.members.filter(is('Test')) as Test[]
+	const tests = describe.members.filter(is('Test')) as Test[]
 
-	const navigator = useNavigation<EntityMemberScreenNavigationProp>()
+	const navigator = useNavigation<EditorScreenNavigationProp>()
 	function navigateTo(test: Test) {
-		navigator.navigate('EntityMemberDetails', {
-			entityMember: test,
+		navigator.navigate('Editor', {
 			fqn: test.fullyQualifiedName(),
 		})
 	}
@@ -51,7 +53,7 @@ export const Tests = function () {
 				},
 			]}>
 			<ScrollView>
-				{tests.map(test => (
+				{tests.sort(localCompareByProperty('name')).map(test => (
 					<TestItem
 						key={test.id}
 						item={test}
@@ -63,6 +65,7 @@ export const Tests = function () {
 			<NewTestModal
 				visible={testNewModalVisible}
 				setVisible={setTestNewModalVisible}
+				addNewTest={addMember(describe)}
 			/>
 		</MultiFabScreen>
 	)

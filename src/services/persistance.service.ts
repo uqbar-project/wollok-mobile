@@ -5,7 +5,8 @@ import {
 	writeFile,
 } from 'react-native-fs'
 import RNFetchBlob from 'rn-fetch-blob-v2'
-import { Environment, fromJSON } from 'wollok-ts/dist/model'
+import { fromJSON } from 'wollok-ts/dist/jsonUtils'
+import { Environment } from 'wollok-ts/dist/model'
 import { projectToJSON } from '../utils/wollok-helpers'
 
 const projectsFolder = 'projects'
@@ -48,6 +49,14 @@ export async function savedProjects(): Promise<string[]> {
 
 function projectFilePath(projectName: string): string {
 	return `${projectsFolderPath}/${projectName}.json`
+}
+
+export function deleteProject(projectName: string) {
+	return RNFetchBlob.fs.unlink(projectFilePath(projectName))
+}
+
+export function renameProject(oldName: string, newName: string) {
+	return RNFetchBlob.fs.mv(projectFilePath(oldName), projectFilePath(newName))
 }
 
 export async function createPersistanceFolder() {

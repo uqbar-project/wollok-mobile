@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleProp, TextStyle } from 'react-native'
 import {
 	Button,
 	Modal,
@@ -7,25 +8,29 @@ import {
 	Title,
 	withTheme,
 } from 'react-native-paper'
-import { Theme } from '../../../theme'
-import { wTranslate } from '../../../utils/translation-helpers'
-import { ParentComponentProp } from '../../../utils/type-helpers'
+import { theme, Theme } from '../../../theme'
+import { wTranslate } from '../../../utils/translation/translation-helpers'
+import { ParentComponentProp, Visible } from '../../../utils/type-helpers'
 import { stylesheet } from './styles'
 
-function FormModal(
-	props: ParentComponentProp<{
-		visible: boolean
-		setVisible: (value: boolean) => void
-		onSubmit: () => void
+export type FormModalProps = ParentComponentProp<
+	Visible & {
+		onSubmit?: () => void
 		resetForm?: () => void
 		title?: string
 		valid?: boolean
 		theme: Theme
-	}>,
-) {
+	}
+>
+
+function FormModal(props: FormModalProps) {
 	const styles = stylesheet(props.theme)
 
 	const disabledSubmit = props.valid === undefined ? false : !props.valid
+
+	const okStyle: StyleProp<TextStyle> = {
+		color: disabledSubmit ? 'grey' : theme.colors.text,
+	}
 
 	function closeModal() {
 		props.resetForm?.call(this)
@@ -42,10 +47,10 @@ function FormModal(
 				<Button
 					disabled={disabledSubmit}
 					onPress={() => {
-						props.onSubmit()
+						props.onSubmit && props.onSubmit()
 						closeModal()
 					}}>
-					<Text>{wTranslate('ok').toUpperCase()}</Text>
+					<Text style={okStyle}>{wTranslate('ok').toUpperCase()}</Text>
 				</Button>
 			</Modal>
 		</Portal>

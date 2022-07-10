@@ -62,3 +62,9 @@ note: The keystore generation is a one time only process, after that you can reu
 ## Releases
 
 A release is triggered on **every** push to _main_. A tag will be created based on the _package.json_ version number, said version must be bumped **manually**.
+
+Steps for a succesfull release 💪
+1. Bump npm package version on _dev_. Do **not** create a tag here.
+2. Merge dev -> main
+3. ????
+4. Profit

@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react'
-import { List, Method, Module, Name, Test } from 'wollok-ts/dist/model'
+import { List } from 'wollok-ts/dist/extensions'
+import { Method, Module, Name, Test } from 'wollok-ts/dist/model'
 import { ParentComponentProp } from '../utils/type-helpers'
 import { Named } from '../utils/wollok-helpers'
 import { createContextHook } from './create-context-hook'

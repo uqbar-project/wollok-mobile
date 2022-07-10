@@ -2,6 +2,8 @@
 	"ok": "ok",
 	"clear": "limpiar",
 	"enterValue": "ingresar valor",
+	"discard": "Descartar",
+	"cancel": "Cancelar",
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -55,7 +57,11 @@
 		"selectVariable": "Seleccionar variable",
 		"messageSend": "Enviar mensaje",
 		"unsupportedSentence": "Sentencia no soportada",
-		"return": "retornar"
+		"return": "retornar",
+		"variable": "variable",
+		"constant": "Constante",
+		"variableName": "Nombre de la variable"
+
 	},
 	"tests": {
 		"title": "Grupos de tests",
@@ -67,5 +73,31 @@
 		"selectProject": "Seleccioná un proyecto",
 		"newProject": "Proyecto nuevo",
 		"saved": "¡Guardado!"
+	},
+	"problem": {
+		"shouldInitializeAllAttributes": "Todos los atributos del objeto deben estar inicializados",
+		"nameShouldBeginWithLowercase": "Este nombre debería empezar con minúscula",
+		"shouldNotDefineUnusedVariables": "Esta variable no se está usando"
+	},
+	"abm": {
+		"edit": "Editar",
+		"options": "Opciones para \"%{name}\"",
+		"delete": "Borrar",
+		"rename": "Renombrar",
+		"editing": "Editando"
+	},
+	"debugger": {
+		"stack": "pila de ejecución",
+		"source": "fuente",
+		"locals": "referencias",
+		"nativeCode": "Código nativo",
+		"done": {
+			"message": "La ejecución terminó correctamente",
+			"stack": "Nada más por ejecutar"
+		}
+	},
+	"home": {
+		"unsavedChanges": "Tenés cambios sin guardar",
+		"youWillLoseThem": "¿Estás seguro que querés descartarlos?"
 	}
 }
