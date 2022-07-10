@@ -3,6 +3,7 @@ export type InternationalDictionary = typeof dictionary[number]
 export const dictionary = [
 	'discard',
 	'cancel',
+	'override',
 	'abm.options',
 	'abm.delete',
 	'abm.rename',
@@ -17,6 +18,8 @@ export const dictionary = [
 	'project.new',
 	'project.selectProject',
 	'project.load',
+	'project.nameAlreadyExist',
+	'project.youWillOverrideIt',
 	'project',
 	'tests.newTestName',
 	'tests.newTest',

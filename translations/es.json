@@ -4,6 +4,7 @@
 	"enterValue": "ingresar valor",
 	"discard": "Descartar",
 	"cancel": "Cancelar",
+	"override": "Sobreescribir",
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -73,7 +74,9 @@
 		"selectProject": "Seleccioná un proyecto",
 		"new": "Proyecto nuevo",
 		"saved": "¡Guardado!",
-		"load": "Cargar proyecto"
+		"load": "Cargar proyecto",
+		"nameAlreadyExist": "Un proyecto con el nombre \"%{name}\" ya existe",
+		"youWillOverrideIt": "¿Querés sobreescribir el proyecto viejo con este nuevo?"
 	},
 	"problem": {
 		"shouldInitializeAllAttributes": "Todos los atributos del objeto deben estar inicializados",
@@ -99,6 +102,6 @@
 	},
 	"home": {
 		"unsavedChanges": "Tenés cambios sin guardar",
-		"youWillLoseThem": "¿Estás seguro que querés descartarlos?"
+		"youWillLoseThem": "¿Querés descartar los cambios que hiciste?"
 	}
 }

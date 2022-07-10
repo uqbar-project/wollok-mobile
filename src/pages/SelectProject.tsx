@@ -1,6 +1,6 @@
 import { useIsFocused, useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
-import { ScrollView } from 'react-native'
+import { Alert, ScrollView } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { upperCaseFirst } from 'upper-case-first'
 import { Environment } from 'wollok-ts/dist/model'
@@ -17,17 +17,16 @@ import {
 	withoutExtension,
 	WollokProjectDescriptor,
 } from '../services/persistance.service'
-import { log } from '../utils/commons'
 import { wTranslate } from '../utils/translation/translation-helpers'
 import { HomeScreenNavigationProp } from './Home'
 
 export function SelectProject() {
+	const focused = useIsFocused()
 	const {
 		actions: { setNewProject },
 	} = useProject()
 	const [projects, setProjects] = useState<WollokProjectDescriptor[]>([])
 	const [showNewProjectModal, setShowNewProjectModal] = useState(false)
-	const focused = useIsFocused()
 	const [loadingProject, setLoadingProject] = useState(false)
 	const navigation = useNavigation<HomeScreenNavigationProp>()
 
@@ -64,9 +63,34 @@ export function SelectProject() {
 		setLoadingProject(false)
 	}
 
+	async function pickProjectFromFS() {
+		const files = await DocumentPicker.pick()
+		const { name, uri } = files[0]
+		const newDescriptor = {
+			name: withoutExtension(name),
+			url: uri.replace('file://', ''),
+		}
+
+		if (projects.some(desc => desc.name === newDescriptor.name)) {
+			Alert.alert(
+				wTranslate('project.nameAlreadyExist', newDescriptor),
+				wTranslate('project.youWillOverrideIt'),
+				[
+					{ text: wTranslate('cancel'), style: 'cancel', onPress: () => {} },
+					{
+						text: wTranslate('override'),
+						style: 'destructive',
+						onPress: () => importProject(newDescriptor),
+					},
+				],
+			)
+		} else {
+			importProject(newDescriptor)
+		}
+	}
+
 	useEffect(() => {
 		if (focused) {
-			savedProjects().then(log)
 			refresh()
 		}
 	}, [setProjects, navigation, focused])
@@ -81,14 +105,7 @@ export function SelectProject() {
 				{
 					icon: 'file-download',
 					label: upperCaseFirst(wTranslate('project.load')),
-					onPress: () =>
-						DocumentPicker.pick().then(files => {
-							const { name, uri } = files[0]
-							importProject({
-								name: withoutExtension(name),
-								url: uri.replace('file://', ''),
-							})
-						}),
+					onPress: pickProjectFromFS,
 				},
 				{
 					icon: 'open-in-new',
