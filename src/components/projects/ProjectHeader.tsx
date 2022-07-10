@@ -5,8 +5,10 @@ import { useProject } from '../../context/ProjectProvider'
 import ProblemModal from '../problems/ProblemsModal'
 import { Row } from '../ui/Row'
 
+export type MessageTag = 'saved' | 'shared'
+
 interface ProjectHeaderProp {
-	pushMessage: (tag: 'saved' | 'shared') => void
+	pushMessage: (tag: MessageTag) => void
 }
 
 function ProjectHeader({ pushMessage }: ProjectHeaderProp) {

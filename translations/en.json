@@ -73,6 +73,7 @@
 		"selectProject": "Select a project",
 		"new": "New project",
 		"saved": "Saved!",
+		"shared": "Shared!",
 		"load": "Load project",
 		"nameAlreadyExist": "Project with name \"%{name}\" already exist",
 		"youWillOverrideIt": "Are you sure you want to override it?"

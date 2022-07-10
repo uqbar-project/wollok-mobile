@@ -15,6 +15,7 @@ export const dictionary = [
 	'problem.shouldInitializeAllAttributes',
 	'problem',
 	'project.saved',
+	'project.shared',
 	'project.new',
 	'project.selectProject',
 	'project.load',
