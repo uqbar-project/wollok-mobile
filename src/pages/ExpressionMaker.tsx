@@ -38,7 +38,9 @@ function ExpressionMaker(props: {
 		search,
 		actions: { setSearch, clearSearch },
 	} = useExpressionContext()
+	const navigation = useNavigation()
 	const [expression, setInitialExpression] = useState(props.initialExpression)
+	const [expandedDisplay, setExpandedDisplay] = useState(false)
 
 	function setExpression(e?: Expression) {
 		clearSearch()
@@ -48,10 +50,6 @@ function ExpressionMaker(props: {
 	function reset() {
 		setExpression(undefined)
 	}
-
-	const [expandedDisplay, setExpandedDisplay] = useState(false)
-
-	const navigation = useNavigation()
 
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
@@ -71,25 +69,22 @@ function ExpressionMaker(props: {
 
 	const { context } = useExpressionContext()
 
+	const sentences = context.kind === 'Method' && context.sentences()
+
 	return (
 		<View>
 			<Collapsible
 				collapsed={expandedDisplay}
-				collapsedHeight={300}
+				collapsedHeight={sentences ? sentences.length * 50 : 0}
 				renderChildrenCollapsed={true}>
 				<ScrollView
 					style={{
 						backgroundColor: '#fff',
 					}}>
-					{context.kind === 'Method' &&
+					{sentences &&
 						(expandedDisplay
-							? context.sentences()
-							: context
-									.sentences()
-									.slice(
-										context.sentences().length - 3,
-										context.sentences().length - 1,
-									)
+							? sentences
+							: sentences.slice(sentences.length - 2)
 						).map(s => <VisualSentence sentence={s} />)}
 
 					<ExpressionDisplay
@@ -139,6 +134,7 @@ function ExpressionMaker(props: {
 						<ListSingletons packageName="wollok" setReference={setExpression} />
 					</List.Section>
 				)}
+				{/* Move to ExpressionDisplay component */}
 				<Button onPress={reset}>
 					{wTranslate('clear').toLocaleUpperCase()}
 				</Button>
