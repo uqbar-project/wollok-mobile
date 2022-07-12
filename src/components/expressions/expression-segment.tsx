@@ -58,15 +58,19 @@ export const MessageSegment = (
 				highlighted={props.highlighted}>
 				<View style={style.row}>
 					<Text>{props.send.message}(</Text>
-					{props.send.args.map((a, i) => (
-						<Parameter
-							key={i}
-							color={theme.colors.expression.parameter}
-							arg={a}
-							index={props.index - 1}
-							highlightedNode={props.highlightedNode}
-						/>
-					))}
+					{props.send.args.map((a, i) =>
+						a === undefined ? (
+							<EmptyPill index={props.index - 1} />
+						) : (
+							<Parameter
+								key={i}
+								color={theme.colors.expression.parameter}
+								arg={a}
+								index={props.index - 1}
+								highlightedNode={props.highlightedNode}
+							/>
+						),
+					)}
 					<Text>)</Text>
 				</View>
 			</Bullet>
@@ -101,19 +105,18 @@ const Parameter = (
 
 const Pill = (
 	props: ParentComponentProp<NodeSegment<{ color: ColorValue }>>,
-) => {
-	return (
-		<View
-			style={[
-				style.pill,
-				style.row,
-				segmentStyle(props),
-				highlightStyle(props),
-			]}>
-			{props.children}
-		</View>
-	)
-}
+) => (
+	<View
+		style={[style.pill, style.row, segmentStyle(props), highlightStyle(props)]}>
+		{props.children}
+	</View>
+)
+
+const EmptyPill = (props: NodeSegment<{}>) => (
+	<Pill color="black" index={props.index}>
+		<Text> </Text>
+	</Pill>
+)
 
 const Bullet = (
 	props: ParentComponentProp<NodeSegment<{ color: ColorValue }>>,

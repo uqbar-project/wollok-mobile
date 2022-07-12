@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { List as ListComponent, Text } from 'react-native-paper'
@@ -13,7 +12,6 @@ import {
 } from 'wollok-ts/dist/model'
 import { useExpressionContext } from '../../../context/ExpressionContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
-import { ExpressionMakerScreenProp } from '../../../pages/ExpressionMaker'
 import { wTranslate } from '../../../utils/translation/translation-helpers'
 import {
 	allMethods,
@@ -58,7 +56,7 @@ const MessageList = (props: {
 				<MessageItem
 					key={m.id}
 					receiver={props.receiver}
-					message={m}
+					method={m}
 					onSubmit={props.newMessageCall}
 				/>
 			))}
@@ -67,34 +65,42 @@ const MessageList = (props: {
 }
 
 function MessageItem({
-	message: m,
+	method: m,
 	receiver,
 	onSubmit,
 }: {
 	receiver: Expression
-	message: Method
+	method: Method
 	onSubmit: (method: Send) => void
 }) {
-	const navigation = useNavigation<ExpressionMakerScreenProp>()
-	const { fqn } = useExpressionContext()
+	// const navigation = useNavigation<ExpressionMakerScreenProp>()
+	// const { fqn } = useExpressionContext()
 
 	function onPress() {
-		if (m.parameters.length) {
-			navigation.push('ArgumentsMaker', {
-				method: m,
-				receiver,
-				onSubmit,
-				contextFQN: fqn,
-			})
-		} else {
-			onSubmit(new Send({ message: m.name, receiver: receiver }))
-		}
+		onSubmit(
+			new Send({
+				message: m.name,
+				receiver: receiver,
+				args: m.parameters.map(_ => undefined as any),
+			}),
+		)
 	}
 
+	// function onPress() {
+	// 	if (m.parameters.length) {
+	// 		navigation.push('ArgumentsMaker', {
+	// 			method: m,
+	// 			receiver,
+	// 			onSubmit,
+	// 			contextFQN: fqn,
+	// 		})
+	// 	} else {
+	// 		onSubmit(new Send({ message: m.name, receiver: receiver }))
+	// 	}
+	// }
+
 	return (
-		<>
-			<ListComponent.Item key={m.id} title={methodLabel(m)} onPress={onPress} />
-		</>
+		<ListComponent.Item key={m.id} title={methodLabel(m)} onPress={onPress} />
 	)
 }
 
