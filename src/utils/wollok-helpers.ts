@@ -29,7 +29,7 @@ import {
 import WRENatives from 'wollok-ts/dist/wre/wre.natives'
 import { last } from './commons'
 
-export type Named = { name: Name }
+export type Named = { name?: Name }
 
 export type Referenciable = Variable | Field | Parameter
 
@@ -49,7 +49,7 @@ export function allVariables(node: Method | Test): List<Variable> {
 	return node.sentences().filter(is('Variable'))
 }
 
-export function isNamedSingleton(node: Node): node is Singleton & Named {
+export function isNamedSingleton(node: Node): node is Singleton {
 	return node.is('Singleton') && !!node.name
 }
 

@@ -35,7 +35,7 @@ export function ExpressionContextProvider(
 
 	function filterBySearch<T extends Named>(entities: List<T>) {
 		return entities.filter(m =>
-			m.name.toLowerCase().includes(search.toLowerCase()),
+			m.name?.toLowerCase().includes(search.toLowerCase()),
 		)
 	}
 
