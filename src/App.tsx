@@ -3,16 +3,9 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import RNLocalize from 'react-native-localize'
 import { Provider as PaperProvider } from 'react-native-paper'
-import {
-	Environment,
-	Expression,
-	Method,
-	Name,
-	Send,
-} from 'wollok-ts/dist/model'
+import { Environment, Expression, Name } from 'wollok-ts/dist/model'
 import { templateProject } from './context/initialProject'
 import { ProjectProvider } from './context/ProjectProvider'
-import { ArgumentsMaker } from './pages/ArgumentsMaker'
 import Debugger from './pages/Debugger'
 import { Editor } from './pages/Editor'
 import EntityDetails from './pages/EntityDetails'
@@ -38,12 +31,6 @@ export type RootStackParamList = {
 		onSubmit: ExpressionOnSubmit
 		contextFQN: Name
 		initialExpression?: Expression
-	}
-	ArgumentsMaker: {
-		receiver: Expression
-		method: Method
-		contextFQN: Name
-		onSubmit: (s: Send) => void
 	}
 }
 
@@ -78,7 +65,6 @@ const App = () => {
 						<Stack.Screen name="Editor" component={Editor} />
 						<Stack.Screen name="Debugger" component={Debugger} />
 						<Stack.Screen name="ExpressionMaker" component={ExpressionMaker} />
-						<Stack.Screen name="ArgumentsMaker" component={ArgumentsMaker} />
 					</Stack.Navigator>
 				</ProjectProvider>
 			</NavigationContainer>
