@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Button, IconButton, List, TextInput } from 'react-native-paper'
-import { Expression } from 'wollok-ts/dist/model'
+import { Expression, Parameter, Send } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import { ListLiterals } from '../components/expressions/expression-lists/literals-list'
 import { ListMessages } from '../components/expressions/expression-lists/messages-list'
@@ -40,17 +40,10 @@ function ExpressionMaker(props: {
 	} = useExpressionContext()
 	const navigation = useNavigation()
 	const [expression, setInitialExpression] = useState(props.initialExpression)
+	const [controller, setConstroller] = useState({ expression, setExpression })
 	const [expandedDisplay, setExpandedDisplay] = useState(false)
 
-	function setExpression(e?: Expression) {
-		clearSearch()
-		setInitialExpression(e)
-	}
-
-	function reset() {
-		setExpression(undefined)
-	}
-
+	const { onSubmit } = props
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: wTranslate('expression.title'),
@@ -60,12 +53,40 @@ function ExpressionMaker(props: {
 				<SubmitCheckButton
 					disabled={!expression}
 					onSubmit={() => {
-						props.onSubmit(expression!)
+						onSubmit(expression!)
 					}}
 				/>
 			),
 		})
-	}, [navigation, expression, props])
+	}, [navigation, expression, onSubmit])
+
+	function setExpression(e?: Expression) {
+		clearSearch()
+		setInitialExpression(e)
+		setConstroller({
+			expression: e,
+			setExpression,
+		})
+	}
+
+	function reset() {
+		setExpression(undefined)
+	}
+
+	function replaceArgument(send: Send, actual: Expression | Parameter) {
+		return (e?: Expression) => {
+			const args = send.args as any[]
+			args.forEach((a, i) => {
+				if (a === actual) {
+					args[i] = e
+				}
+			})
+			setConstroller({
+				expression: e,
+				setExpression: replaceArgument(send, e!),
+			})
+		}
+	}
 
 	const { context } = useExpressionContext()
 
@@ -91,6 +112,20 @@ function ExpressionMaker(props: {
 						backgroundColor="grey"
 						withIcon={false}
 						expression={expression}
+						highlightedNode={controller.expression}
+						onSelect={(expressionOrParameter, parent) => {
+							if (expressionOrParameter.is('Parameter')) {
+								return setConstroller({
+									expression: expressionOrParameter as any,
+									setExpression: replaceArgument(
+										parent!,
+										expressionOrParameter,
+									),
+								})
+							}
+							// Only edit empty parameters
+							setConstroller({ expression, setExpression })
+						}}
 					/>
 				</ScrollView>
 			</Collapsible>
@@ -108,30 +143,39 @@ function ExpressionMaker(props: {
 				onChangeText={setSearch}
 			/>
 			<ScrollView style={styles.view}>
-				{expression ? (
+				{controller.expression && !controller.expression.is('Parameter') ? (
 					<List.Section>
 						<List.Subheader>{wTranslate('expression.messages')}</List.Subheader>
-						<ListMessages expression={expression} setMessage={setExpression} />
+						<ListMessages
+							expression={controller.expression}
+							setMessage={controller.setExpression}
+						/>
 					</List.Section>
 				) : (
 					<List.Section>
 						<List.Subheader>
 							{wTranslate('expression.variables')}
 						</List.Subheader>
-						<ListVariables setReference={setExpression} />
+						<ListVariables setReference={controller.setExpression} />
 
 						<List.Subheader>
 							{wTranslate('expression.mainObjects')}
 						</List.Subheader>
-						<ListSingletons packageName="main" setReference={setExpression} />
+						<ListSingletons
+							packageName="main"
+							setReference={controller.setExpression}
+						/>
 
 						<List.Subheader>{wTranslate('expression.literals')}</List.Subheader>
-						<ListLiterals setLiteral={setExpression} />
+						<ListLiterals setLiteral={controller.setExpression} />
 
 						<List.Subheader>
 							{wTranslate('expression.wollokObjects')}
 						</List.Subheader>
-						<ListSingletons packageName="wollok" setReference={setExpression} />
+						<ListSingletons
+							packageName="wollok"
+							setReference={controller.setExpression}
+						/>
 					</List.Section>
 				)}
 				{/* Move to ExpressionDisplay component */}

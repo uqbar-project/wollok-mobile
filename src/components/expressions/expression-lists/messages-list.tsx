@@ -65,7 +65,7 @@ const MessageList = (props: {
 }
 
 function MessageItem({
-	method: m,
+	method,
 	receiver,
 	onSubmit,
 }: {
@@ -73,34 +73,22 @@ function MessageItem({
 	method: Method
 	onSubmit: (method: Send) => void
 }) {
-	// const navigation = useNavigation<ExpressionMakerScreenProp>()
-	// const { fqn } = useExpressionContext()
-
 	function onPress() {
 		onSubmit(
 			new Send({
-				message: m.name,
-				receiver: receiver,
-				args: m.parameters.map(_ => undefined as any),
+				receiver,
+				message: method.name,
+				args: method.parameters as any,
 			}),
 		)
 	}
 
-	// function onPress() {
-	// 	if (m.parameters.length) {
-	// 		navigation.push('ArgumentsMaker', {
-	// 			method: m,
-	// 			receiver,
-	// 			onSubmit,
-	// 			contextFQN: fqn,
-	// 		})
-	// 	} else {
-	// 		onSubmit(new Send({ message: m.name, receiver: receiver }))
-	// 	}
-	// }
-
 	return (
-		<ListComponent.Item key={m.id} title={methodLabel(m)} onPress={onPress} />
+		<ListComponent.Item
+			key={method.id}
+			title={methodLabel(method)}
+			onPress={onPress}
+		/>
 	)
 }
 
