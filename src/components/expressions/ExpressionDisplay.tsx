@@ -49,9 +49,10 @@ export function getVisualSegment(
 	i: number,
 	highlightedNode?: Node,
 	onSelect?: SelectExpression,
+	parent?: Send,
 ): JSX.Element {
 	const highlighted = highlightedNode === expression
-	const onPress = onSelect && (() => onSelect(expression))
+	const onPress = onSelect && (() => onSelect(expression, parent))
 
 	const innerProps = {
 		key: i,

@@ -4,13 +4,10 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Button, IconButton, List, TextInput } from 'react-native-paper'
+import { Button, IconButton, TextInput } from 'react-native-paper'
 import { Expression, Parameter, Send } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
-import { ListLiterals } from '../components/expressions/expression-lists/literals-list'
-import { ListMessages } from '../components/expressions/expression-lists/messages-list'
-import { ListSingletons } from '../components/expressions/expression-lists/singletons-list'
-import { ListVariables } from '../components/expressions/expression-lists/variables-list'
+import { NewExpressionList } from '../components/expressions/expression-lists/NewExpressionList'
 import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
 import VisualSentence from '../components/sentences/VisualSentence'
 import { SubmitCheckButton } from '../components/ui/Header'
@@ -73,8 +70,11 @@ function ExpressionMaker(props: {
 		setExpression(undefined)
 	}
 
-	function replaceArgument(send: Send, actual: Expression | Parameter) {
+	function replaceChild(send: Send, actual: Expression | Parameter) {
 		return (e?: Expression) => {
+			if (send.receiver === actual) {
+				;(send as any).receiver = e
+			}
 			const args = send.args as any[]
 			args.forEach((a, i) => {
 				if (a === actual) {
@@ -83,7 +83,7 @@ function ExpressionMaker(props: {
 			})
 			setConstroller({
 				expression: e,
-				setExpression: replaceArgument(send, e!),
+				setExpression: replaceChild(send, e!),
 			})
 		}
 	}
@@ -91,6 +91,9 @@ function ExpressionMaker(props: {
 	const { context } = useExpressionContext()
 
 	const sentences = context.kind === 'Method' && context.sentences()
+
+	const isSubexpressionSelected =
+		controller.expression && !controller.expression.is('Parameter')
 
 	return (
 		<View>
@@ -114,17 +117,15 @@ function ExpressionMaker(props: {
 						expression={expression}
 						highlightedNode={controller.expression}
 						onSelect={(expressionOrParameter, parent) => {
-							if (expressionOrParameter.is('Parameter')) {
-								return setConstroller({
-									expression: expressionOrParameter as any,
-									setExpression: replaceArgument(
-										parent!,
-										expressionOrParameter,
-									),
-								})
-							}
-							// Only edit empty parameters
-							setConstroller({ expression, setExpression })
+							if (!parent) {
+								// We cannot make the correct replacement
+								return setConstroller({ expression, setExpression })
+							} // Select main expression
+
+							setConstroller({
+								expression: expressionOrParameter as any,
+								setExpression: replaceChild(parent, expressionOrParameter),
+							})
 						}}
 					/>
 				</ScrollView>
@@ -137,48 +138,20 @@ function ExpressionMaker(props: {
 			/>
 			<TextInput
 				label={wTranslate(
-					`expression.search.${expression ? 'message' : 'entity'}`,
+					`expression.search.${isSubexpressionSelected ? 'message' : 'entity'}`,
 				)}
 				value={search}
 				onChangeText={setSearch}
 			/>
 			<ScrollView style={styles.view}>
-				{controller.expression && !controller.expression.is('Parameter') ? (
-					<List.Section>
-						<List.Subheader>{wTranslate('expression.messages')}</List.Subheader>
-						<ListMessages
-							expression={controller.expression}
-							setMessage={controller.setExpression}
-						/>
-					</List.Section>
-				) : (
-					<List.Section>
-						<List.Subheader>
-							{wTranslate('expression.variables')}
-						</List.Subheader>
-						<ListVariables setReference={controller.setExpression} />
+				<NewExpressionList
+					expression={
+						isSubexpressionSelected ? controller.expression : undefined
+					}
+					setExpression={controller.setExpression}
+				/>
 
-						<List.Subheader>
-							{wTranslate('expression.mainObjects')}
-						</List.Subheader>
-						<ListSingletons
-							packageName="main"
-							setReference={controller.setExpression}
-						/>
-
-						<List.Subheader>{wTranslate('expression.literals')}</List.Subheader>
-						<ListLiterals setLiteral={controller.setExpression} />
-
-						<List.Subheader>
-							{wTranslate('expression.wollokObjects')}
-						</List.Subheader>
-						<ListSingletons
-							packageName="wollok"
-							setReference={controller.setExpression}
-						/>
-					</List.Section>
-				)}
-				{/* Move to ExpressionDisplay component */}
+				{/* Move to ExpressionDisplay component? */}
 				<Button onPress={reset}>
 					{wTranslate('clear').toLocaleUpperCase()}
 				</Button>

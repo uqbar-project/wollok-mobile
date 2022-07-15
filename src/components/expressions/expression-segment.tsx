@@ -7,7 +7,7 @@ import {
 	ViewStyle,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-import { Expression, LiteralValue, Node, Send } from 'wollok-ts/dist/model'
+import { LiteralValue, Node, Send } from 'wollok-ts/dist/model'
 import { useTheme } from '../../theme'
 import { ParentComponentProp } from '../../utils/type-helpers'
 import { getVisualSegment, SelectExpression } from './ExpressionDisplay'
@@ -54,6 +54,7 @@ export const MessageSegment = (
 				props.index,
 				props.highlightedNode,
 				props.onSelect,
+				send,
 			)}
 			<Bullet
 				color={theme.colors.expression.message}
@@ -62,23 +63,24 @@ export const MessageSegment = (
 				<View style={style.row}>
 					<Text onPress={props.onPress}>{send.message}</Text>
 					<Text>(</Text>
-					{send.args.map((a, i) =>
-						(a as Node).kind === 'Parameter' ? (
+					{send.args.map((arg, i) =>
+						(arg as Node).kind === 'Parameter' ? (
 							<EmptyPill
 								key={i}
 								index={props.index - 1}
-								highlighted={props.highlightedNode === a}
-								onPress={() => onSelect && onSelect(a, send)}
+								highlighted={props.highlightedNode === arg}
+								onPress={() => onSelect && onSelect(arg, send)}
 							/>
 						) : (
-							<Parameter
-								key={i}
-								color={theme.colors.expression.parameter}
-								arg={a}
-								index={props.index - 1}
-								highlightedNode={props.highlightedNode}
-								onSelect={props.onSelect}
-							/>
+							<Argument key={i} color={theme.colors.expression.parameter}>
+								{getVisualSegment(
+									arg,
+									props.index - 1,
+									props.highlightedNode,
+									props.onSelect,
+									send,
+								)}
+							</Argument>
 						),
 					)}
 					<Text>)</Text>
@@ -88,14 +90,7 @@ export const MessageSegment = (
 	)
 }
 
-const Parameter = (
-	props: NodeSegment<{
-		color: ColorValue
-		arg: Expression
-		highlightedNode?: Node
-		onSelect?: SelectExpression
-	}>,
-) => (
+const Argument = (props: ParentComponentProp<{ color: ColorValue }>) => (
 	<View
 		style={[
 			style.pill,
@@ -108,12 +103,7 @@ const Parameter = (
 				shadowOpacity: 50,
 			},
 		]}>
-		{getVisualSegment(
-			props.arg,
-			props.index,
-			props.highlightedNode,
-			props.onSelect,
-		)}
+		{props.children}
 	</View>
 )
 
