@@ -109,7 +109,7 @@ function ExpressionMaker(props: {
 						(expandedDisplay
 							? sentences
 							: sentences.slice(sentences.length - 2)
-						).map(s => <VisualSentence sentence={s} />)}
+						).map((s, i) => <VisualSentence key={i} sentence={s} />)}
 
 					<ExpressionDisplay
 						backgroundColor="grey"

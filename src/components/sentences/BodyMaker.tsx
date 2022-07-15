@@ -6,6 +6,7 @@ import {
 	ExpressionMakerScreenProp,
 	ExpressionOnSubmit,
 } from '../../pages/ExpressionMaker'
+import { runAsync } from '../../utils/commons'
 import { wTranslate } from '../../utils/translation/translation-helpers'
 import {
 	allScopedVariables,
@@ -13,7 +14,7 @@ import {
 	entityMemberFQN,
 } from '../../utils/wollok-helpers'
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
-import { SubmitCheckButton } from '../ui/Header'
+import { Thinking } from '../ui/Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
 import SentencesView from './SentencesView'
 import { VariableFormModal } from './VariableForm'
@@ -25,6 +26,7 @@ type BodyMakerProps = {
 }
 export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 	const navigation = useNavigation<ExpressionMakerScreenProp>()
+	const [processing, setProcessing] = useState(false)
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
 	const [sentences, setSentences] = useState<Sentence[]>(
@@ -35,23 +37,23 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 
 	function addSentence(sentence: Sentence) {
 		setSentences([...sentences, sentence])
+		runAsync(() => {
+			setProcessing(true)
+			setBody(new Body({ sentences: [...sentences, sentence] }))
+			setProcessing(false)
+		})
 	}
 
 	function addReturn(expression: Expression) {
 		addSentence(new Return({ value: expression }))
 	}
 
+	// TODO: Not working
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
-			headerRight: () => (
-				<SubmitCheckButton
-					onSubmit={() => {
-						setBody(new Body({ sentences }))
-					}}
-				/>
-			),
+			headerRight: () => processing && <Thinking />,
 		})
-	}, [navigation, sentences, setBody])
+	}, [navigation, processing])
 
 	function goToExpressionMaker(onSubmit: ExpressionOnSubmit) {
 		return () => {
