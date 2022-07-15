@@ -1,21 +1,23 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { List as ListComponent, Text } from 'react-native-paper'
-import { List } from 'wollok-ts/dist/extensions'
 import {
 	Class,
 	Environment,
 	Expression,
 	is,
 	Method,
+	Module,
 	Send,
 } from 'wollok-ts/dist/model'
-import { useExpressionContext } from '../../../context/ExpressionContextProvider'
+import {
+	Context,
+	useExpressionContext,
+} from '../../../context/ExpressionContextProvider'
 import { useProject } from '../../../context/ProjectProvider'
 import { wTranslate } from '../../../utils/translation/translation-helpers'
 import {
 	allMethods,
-	isNamedSingleton,
 	literalClassFQN,
 	methodLabel,
 } from '../../../utils/wollok-helpers'
@@ -26,38 +28,27 @@ type ListMessagesProps = {
 }
 export function ListMessages({ expression, setMessage }: ListMessagesProps) {
 	const { project } = useProject()
-	const { search } = useExpressionContext()
-	const methods = methodsFor(project, expression, search)
-
-	return methods.length ? (
-		<MessageList
-			receiver={expression}
-			newMessageCall={setMessage}
-			methods={methods}
-		/>
-	) : (
-		<Text style={styles.suggestion}>
-			{wTranslate('expression.notSeggestions')}
-		</Text>
-	)
-}
-
-const MessageList = (props: {
-	receiver: Expression
-	newMessageCall: (message: Send) => void
-	methods: List<Method>
-}) => {
 	const {
+		search,
+		context,
 		actions: { filterBySearch },
 	} = useExpressionContext()
+	const methods = search
+		? filterBySearch(project.descendants().filter(is('Method')))
+		: methodsFor(project, expression, context)
+
+	if (!methods.length) {
+		return <NoSuggestions />
+	}
+
 	return (
 		<>
-			{filterBySearch(props.methods).map(m => (
+			{methods.map(m => (
 				<MessageItem
 					key={m.id}
-					receiver={props.receiver}
+					receiver={expression}
 					method={m}
-					onSubmit={props.newMessageCall}
+					onSubmit={setMessage}
 				/>
 			))}
 		</>
@@ -78,7 +69,7 @@ function MessageItem({
 			new Send({
 				receiver,
 				message: method.name,
-				args: method.parameters as any,
+				args: Array.from<any>(method.parameters),
 			}),
 		)
 	}
@@ -92,31 +83,33 @@ function MessageItem({
 	)
 }
 
+const NoSuggestions = () => (
+	<Text style={styles.suggestion}>
+		{wTranslate('expression.notSeggestions')}
+	</Text>
+)
+
 const styles = StyleSheet.create({
 	suggestion: { display: 'flex', textAlign: 'center' },
 })
 
+// TODO: Testing
 function methodsFor(
 	environment: Environment,
 	expression: Expression,
-	search: string,
+	context: Context,
 ) {
-	if (search) {
-		return environment.descendants().filter(is('Method'))
-	}
 	switch (expression.kind) {
 		case 'Reference':
-			// TODO: This is a workaroud, use scopes?
-			const globalSingletons = environment
-				.descendants()
-				.filter(isNamedSingleton)
-			const singleton = globalSingletons.find(s => s.name === expression.name)
-			return singleton ? allMethods(singleton) : []
+			const module = context.scope.resolve<Module>(expression.name)
+			return module && module.is('Module') ? allMethods(module) : []
 		case 'Literal':
 			const literalClass = environment.getNodeByFQN<Class>(
 				literalClassFQN(expression),
 			)
 			return allMethods(literalClass)
+		case 'Self':
+			return allMethods(context.is('Module') ? context : context.parent)
 		default:
 			return []
 	}
