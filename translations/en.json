@@ -49,7 +49,7 @@
 		"enterValue": "Enter value",
 		"search": {
 			"message": "Search any message",
-			"entity": "Search any entity"
+			"reference": "Search any reference"
 		}
 	},
 	"sentence": {

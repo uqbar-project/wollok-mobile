@@ -136,7 +136,9 @@ function ExpressionMaker(props: {
 			/>
 			<TextInput
 				label={wTranslate(
-					`expression.search.${isSubexpressionSelected ? 'message' : 'entity'}`,
+					`expression.search.${
+						isSubexpressionSelected ? 'message' : 'reference'
+					}`,
 				)}
 				value={search}
 				onChangeText={setSearch}
