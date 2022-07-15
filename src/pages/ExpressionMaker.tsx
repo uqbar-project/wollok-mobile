@@ -18,7 +18,7 @@ import {
 } from '../context/ExpressionContextProvider'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation/translation-helpers'
-import { entityMemberByFQN } from '../utils/wollok-helpers'
+import { entityMemberByFQN, isComplete } from '../utils/wollok-helpers'
 
 export type ExpressionMakerScreenProp = StackNavigationProp<
 	RootStackParamList,
@@ -48,14 +48,14 @@ function ExpressionMaker(props: {
 			animationEnabled: false,
 			headerRight: () => (
 				<SubmitCheckButton
-					disabled={!expression}
+					disabled={!expression || !isComplete(expression)}
 					onSubmit={() => {
 						onSubmit(expression!)
 					}}
 				/>
 			),
 		})
-	}, [navigation, expression, onSubmit])
+	}, [navigation, expression, controller, onSubmit])
 
 	function setExpression(e?: Expression) {
 		clearSearch()
@@ -132,9 +132,7 @@ function ExpressionMaker(props: {
 			</Collapsible>
 			<IconButton
 				icon={expandedDisplay ? 'chevron-up' : 'chevron-down'}
-				onPress={() => {
-					setExpandedDisplay(!expandedDisplay)
-				}}
+				onPress={() => setExpandedDisplay(!expandedDisplay)}
 			/>
 			<TextInput
 				label={wTranslate(

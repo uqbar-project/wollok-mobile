@@ -171,3 +171,16 @@ export function projectToJSON(wre: Environment) {
 		2,
 	)
 }
+
+// EXPRESSION MAKER
+
+export function isComplete(exp: Expression): boolean {
+	return exp.match({
+		Send: s => s.args.concat(s.receiver).every(isComplete),
+		Node: n => !isEmptyArgument(n),
+	})
+}
+
+function isEmptyArgument(node: Node) {
+	return node.is('Parameter')
+}
