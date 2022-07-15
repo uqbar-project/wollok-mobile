@@ -2,6 +2,7 @@ import React from 'react'
 import { IconButton, Text } from 'react-native-paper'
 import {
 	Assignment,
+	Expression,
 	Node,
 	Return,
 	Sentence,
@@ -38,9 +39,10 @@ type NodeComponentProps = {
 function NodeComponent({ node, highlightedNode }: NodeComponentProps) {
 	switch (node.kind) {
 		case 'Send':
+		case 'Reference':
 			return (
 				<ExpressionDisplay
-					expression={node}
+					expression={node as Expression}
 					withIcon={false}
 					highlightedNode={highlightedNode}
 				/>
