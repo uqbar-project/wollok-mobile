@@ -14,6 +14,7 @@ import { ReadonlySentence } from './VisualSentence'
 
 type SentencesViewProps = {
 	sentences: List<Sentence>
+	onSentencesChanged: (sentences: List<Sentence>) => void
 }
 
 // function SentencesEditor({ sentences }: SentencesViewProps) {
@@ -35,7 +36,7 @@ type SentencesViewProps = {
 // 	},
 // })
 
-class SentencesEditorDrag extends React.Component {
+class SentencesEditorDrag extends React.Component<SentencesViewProps> {
 	state
 	_panResponder: PanResponderInstance
 	point = new Animated.ValueXY()
@@ -45,6 +46,10 @@ class SentencesEditorDrag extends React.Component {
 	rowHeight = 0
 	currentIdx = -1
 	active = false
+
+	get offsetY() {
+		return this.currentY - this.flatlistTopOffset
+	}
 
 	constructor(props: SentencesViewProps) {
 		super(props)
@@ -66,11 +71,10 @@ class SentencesEditorDrag extends React.Component {
 				// The gesture has started. Show visual feedback so the user knows
 				// what is happening!
 				// gestureState.d{x,y} will be set to zero now
-				const newY = gestureState.y0
-				this.currentIdx = this.yToIndex(newY)
-				this.currentY = newY
+				this.currentY = gestureState.y0 - this.rowHeight / 2
+				this.currentIdx = this.yToIndex(this.offsetY)
 				Animated.event([{ y: this.point.y }], { useNativeDriver: false })({
-					y: newY - this.rowHeight / 1.5,
+					y: this.currentY,
 				})
 				this.active = true
 				this.setState({ dragging: true, draggingIdx: this.currentIdx }, () => {
@@ -91,6 +95,7 @@ class SentencesEditorDrag extends React.Component {
 				// The user has released all touches while this view is the
 				// responder. This typically means a gesture has succeeded
 				this.reset()
+				this.props.onSentencesChanged(this.state.data)
 			},
 			onPanResponderTerminate: (_evt, _gestureState) => {
 				// Another component has become the responder, so this gesture
@@ -112,7 +117,7 @@ class SentencesEditorDrag extends React.Component {
 
 		requestAnimationFrame(() => {
 			// check y value see if we need to reorder
-			const newIdx = this.yToIndex(this.currentY)
+			const newIdx = this.yToIndex(this.offsetY)
 			if (this.currentIdx !== newIdx) {
 				this.setState({
 					data: immutableMove(this.state.data, this.currentIdx, newIdx),
@@ -126,17 +131,7 @@ class SentencesEditorDrag extends React.Component {
 	}
 
 	yToIndex = (y: number) => {
-		const value = Math.floor(
-			(this.scrollOffset + y - this.flatlistTopOffset) / this.rowHeight,
-		)
-
-		console.log(
-			this.scrollOffset,
-			y,
-			this.flatlistTopOffset,
-			this.rowHeight,
-			value,
-		)
+		const value = Math.floor((this.scrollOffset + y) / this.rowHeight)
 
 		if (value < 0) {
 			return 0
@@ -165,14 +160,14 @@ class SentencesEditorDrag extends React.Component {
 				onLayout={e => {
 					this.rowHeight = e.nativeEvent.layout.height
 				}}
-				style={{
-					height: 80,
-					padding: 16,
-					backgroundColor: '#404040',
-					flexDirection: 'row',
-					opacity: draggingIdx === index ? 0 : 1,
-				}}>
-				<ReadonlySentence style={{ width: '90%' }} sentence={item} />
+				style={[
+					styles.sentenceRow,
+					// eslint-disable-next-line react-native/no-inline-styles
+					{
+						opacity: draggingIdx === index ? 0 : 1,
+					},
+				]}>
+				<ReadonlySentence style={styles.sentenceItem} sentence={item} />
 				<View {...(noPanResponder ? {} : this._panResponder.panHandlers)}>
 					<IconButton icon="drag-vertical" color="#fff" />
 				</View>
@@ -183,28 +178,27 @@ class SentencesEditorDrag extends React.Component {
 			<View style={styles.container}>
 				{dragging && (
 					<Animated.View
-						style={{
-							position: 'absolute',
-							backgroundColor: 'black',
-							zIndex: 2,
-							width: '100%',
-							top: this.point.getLayout().top,
-						}}>
+						style={[
+							styles.floatingListItem,
+							{
+								top: this.point.getLayout().top,
+							},
+						]}>
 						{renderItem({ item: data[draggingIdx], index: -1 }, true)}
 					</Animated.View>
 				)}
 				<FlatList
 					scrollEnabled={!dragging}
-					style={{ width: '100%', backgroundColor: '#696969' }}
+					style={styles.list}
 					data={data}
 					renderItem={renderItem}
 					onScroll={e => {
-						console.log(e.nativeEvent.contentOffset.y)
 						this.scrollOffset = e.nativeEvent.contentOffset.y
 					}}
 					onLayout={e => {
-						console.log(e.nativeEvent.layout.y)
-						this.flatlistTopOffset = e.nativeEvent.layout.y
+						// hardcoding height due to layout being wrong (0 instead of 90)
+						this.point.setOffset({ x: 0, y: -90 })
+						this.flatlistTopOffset = e.nativeEvent.layout.y + 90
 					}}
 					scrollEventThrottle={16}
 					keyExtractor={item => '' + item.id}
@@ -241,6 +235,20 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	sentenceRow: {
+		height: 80,
+		padding: 16,
+		backgroundColor: '#404040',
+		flexDirection: 'row',
+	},
+	sentenceItem: { width: '90%' },
+	list: { width: '100%', backgroundColor: '#696969' },
+	floatingListItem: {
+		position: 'absolute',
+		backgroundColor: 'black',
+		zIndex: 2,
+		width: '100%',
 	},
 })
 
