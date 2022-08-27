@@ -46,6 +46,7 @@ class SentencesEditorDrag extends React.Component<SentencesViewProps> {
 	rowHeight = 0
 	currentIdx = -1
 	active = false
+	private myFlatListView: View | null
 
 	get offsetY() {
 		return this.currentY - this.flatlistTopOffset
@@ -53,6 +54,8 @@ class SentencesEditorDrag extends React.Component<SentencesViewProps> {
 
 	constructor(props: SentencesViewProps) {
 		super(props)
+
+		this.myFlatListView = null
 
 		this.state = {
 			dragging: false,
@@ -107,6 +110,15 @@ class SentencesEditorDrag extends React.Component<SentencesViewProps> {
 				// responder. Returns true by default. Is currently only supported on android.
 				return true
 			},
+		})
+	}
+
+	componentDidMount() {
+		setTimeout(() => {
+			this.myFlatListView?.measure((_fx, _fy, _width, _height, _px, pageY) => {
+				this.flatlistTopOffset = pageY
+				this.point.setOffset({ x: 0, y: -pageY })
+			})
 		})
 	}
 
@@ -187,22 +199,25 @@ class SentencesEditorDrag extends React.Component<SentencesViewProps> {
 						{renderItem({ item: data[draggingIdx], index: -1 }, true)}
 					</Animated.View>
 				)}
-				<FlatList
-					scrollEnabled={!dragging}
+				<View
 					style={styles.list}
-					data={data}
-					renderItem={renderItem}
-					onScroll={e => {
-						this.scrollOffset = e.nativeEvent.contentOffset.y
-					}}
-					onLayout={e => {
-						// hardcoding height due to layout being wrong (0 instead of 90)
-						this.point.setOffset({ x: 0, y: -90 })
-						this.flatlistTopOffset = e.nativeEvent.layout.y + 90
-					}}
-					scrollEventThrottle={16}
-					keyExtractor={item => '' + item.id}
-				/>
+					collapsable={false}
+					ref={ref => {
+						this.myFlatListView = ref
+					}}>
+					<FlatList
+						scrollEnabled={!dragging}
+						style={styles.list}
+						data={data}
+						renderItem={renderItem}
+						onScroll={e => {
+							this.scrollOffset = e.nativeEvent.contentOffset.y
+						}}
+						collapsable={false}
+						scrollEventThrottle={16}
+						keyExtractor={item => '' + item.id}
+					/>
+				</View>
 			</View>
 		)
 	}
@@ -243,7 +258,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	sentenceItem: { width: '90%' },
-	list: { width: '100%', backgroundColor: '#696969' },
+	list: { width: '100%', backgroundColor: '#696969', height: '100%' },
 	floatingListItem: {
 		position: 'absolute',
 		backgroundColor: 'black',
