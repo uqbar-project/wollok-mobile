@@ -17,27 +17,17 @@ type SentencesViewProps = {
 	onSentencesChanged: (sentences: List<Sentence>) => void
 }
 
-// function SentencesEditor({ sentences }: SentencesViewProps) {
-// 	return (
-// 		<DraggableFlatList<Sentence>
-// 			data={[...sentences]}
-// 			renderItem={({ item, drag }) => (
-// 				<DraggableSentence drag={drag} sentence={item} />
-// 			)}
-// 			keyExtractor={(_, index) => index.toString()}
-// 		/>
-// 	)
-// }
+type SentencesViewState = {
+	dragging: boolean
+	draggingIdx: number
+	data: Sentence[]
+}
 
-// const styles = StyleSheet.create({
-// 	sentences: {
-// 		paddingLeft: 15,
-// 		marginBottom: 15,
-// 	},
-// })
-
-class SentencesEditorDrag extends React.Component<SentencesViewProps> {
-	state
+class SentencesEditorDrag extends React.Component<
+	SentencesViewProps,
+	SentencesViewState
+> {
+	state: SentencesViewState
 	_panResponder: PanResponderInstance
 	point = new Animated.ValueXY()
 	currentY = 0
@@ -111,6 +101,12 @@ class SentencesEditorDrag extends React.Component<SentencesViewProps> {
 				return true
 			},
 		})
+	}
+
+	componentDidUpdate(prevProps: Readonly<SentencesViewProps>) {
+		if (prevProps.sentences !== this.props.sentences) {
+			this.setState({ data: [...this.props.sentences] })
+		}
 	}
 
 	componentDidMount() {
