@@ -7,10 +7,9 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native'
-import { IconButton } from 'react-native-paper'
 import { List } from 'wollok-ts/dist/extensions'
 import { Sentence } from 'wollok-ts/dist/model'
-import { ReadonlySentence } from './VisualSentence'
+import { EditableSentence } from './EditableSentence'
 
 type SentencesViewProps = {
 	sentences: List<Sentence>
@@ -20,7 +19,7 @@ type SentencesViewProps = {
 type SentencesViewState = {
 	dragging: boolean
 	draggingIdx: number
-	data: Sentence[]
+	sentences: Sentence[]
 }
 
 class SentencesEditorDrag extends React.Component<
@@ -50,7 +49,7 @@ class SentencesEditorDrag extends React.Component<
 		this.state = {
 			dragging: false,
 			draggingIdx: -1,
-			data: [...props.sentences],
+			sentences: [...props.sentences],
 		}
 
 		this._panResponder = PanResponder.create({
@@ -61,9 +60,7 @@ class SentencesEditorDrag extends React.Component<
 			onMoveShouldSetPanResponderCapture: (_evt, _gestureState) => true,
 
 			onPanResponderGrant: (_evt, gestureState) => {
-				// The gesture has started. Show visual feedback so the user knows
-				// what is happening!
-				// gestureState.d{x,y} will be set to zero now
+				// The gesture has started.
 				this.currentY = gestureState.y0 - this.rowHeight / 2
 				this.currentIdx = this.yToIndex(this.offsetY)
 				Animated.event([{ y: this.point.y }], { useNativeDriver: false })({
@@ -75,37 +72,38 @@ class SentencesEditorDrag extends React.Component<
 				})
 			},
 			onPanResponderMove: (_evt, gestureState) => {
+				// The most recent move
 				this.currentY = gestureState.moveY - this.rowHeight / 2
 				Animated.event([{ y: this.point.y }], { useNativeDriver: false })({
 					y: gestureState.moveY - this.rowHeight / 2,
 				})
-				// The most recent move distance is gestureState.move{X,Y}
-				// The accumulated gesture distance since becoming responder is
-				// gestureState.d{x,y}
 			},
 			onPanResponderTerminationRequest: (_evt, _gestureState) => false,
 			onPanResponderRelease: (_evt, _gestureState) => {
-				// The user has released all touches while this view is the
-				// responder. This typically means a gesture has succeeded
+				// The user has released all touches while this view is the responder. This typically means a gesture has succeeded
 				this.reset()
-				this.props.onSentencesChanged(this.state.data)
+				this.props.onSentencesChanged(this.state.sentences)
 			},
 			onPanResponderTerminate: (_evt, _gestureState) => {
-				// Another component has become the responder, so this gesture
-				// should be cancelled
+				// Another component has become the responder, so this gesture should be cancelled
 				this.reset()
 			},
 			onShouldBlockNativeResponder: (_evt, _gestureState) => {
-				// Returns whether this component should block native components from becoming the JS
-				// responder. Returns true by default. Is currently only supported on android.
 				return true
 			},
 		})
 	}
 
+	removeSentence = (index: number) => {
+		const newSentences = [...this.state.sentences]
+		newSentences.splice(index, 1)
+		this.props.onSentencesChanged(newSentences)
+	}
+
 	componentDidUpdate(prevProps: Readonly<SentencesViewProps>) {
 		if (prevProps.sentences !== this.props.sentences) {
-			this.setState({ data: [...this.props.sentences] })
+			// eslint-disable-next-line react/no-did-update-set-state
+			this.setState({ sentences: [...this.props.sentences] })
 		}
 	}
 
@@ -128,7 +126,11 @@ class SentencesEditorDrag extends React.Component<
 			const newIdx = this.yToIndex(this.offsetY)
 			if (this.currentIdx !== newIdx) {
 				this.setState({
-					data: immutableMove(this.state.data, this.currentIdx, newIdx),
+					sentences: immutableMove(
+						this.state.sentences,
+						this.currentIdx,
+						newIdx,
+					),
 					draggingIdx: newIdx,
 				})
 				this.currentIdx = newIdx
@@ -145,8 +147,8 @@ class SentencesEditorDrag extends React.Component<
 			return 0
 		}
 
-		if (value > this.state.data.length - 1) {
-			return this.state.data.length - 1
+		if (value > this.state.sentences.length - 1) {
+			return this.state.sentences.length - 1
 		}
 
 		return value
@@ -158,28 +160,21 @@ class SentencesEditorDrag extends React.Component<
 	}
 
 	render() {
-		const { data, dragging, draggingIdx } = this.state
+		const { sentences, dragging, draggingIdx } = this.state
 
 		const renderItem = (
 			{ item, index }: { item: Sentence; index: number },
 			noPanResponder = false,
 		) => (
-			<View
+			<EditableSentence
+				sentence={item}
+				panHandlers={noPanResponder ? {} : this._panResponder.panHandlers}
+				hidden={draggingIdx === index}
+				onDelete={() => this.removeSentence(index)}
 				onLayout={e => {
 					this.rowHeight = e.nativeEvent.layout.height
 				}}
-				style={[
-					styles.sentenceRow,
-					// eslint-disable-next-line react-native/no-inline-styles
-					{
-						opacity: draggingIdx === index ? 0 : 1,
-					},
-				]}>
-				<ReadonlySentence style={styles.sentenceItem} sentence={item} />
-				<View {...(noPanResponder ? {} : this._panResponder.panHandlers)}>
-					<IconButton icon="drag-vertical" color="#fff" />
-				</View>
-			</View>
+			/>
 		)
 
 		return (
@@ -192,7 +187,7 @@ class SentencesEditorDrag extends React.Component<
 								top: this.point.getLayout().top,
 							},
 						]}>
-						{renderItem({ item: data[draggingIdx], index: -1 }, true)}
+						{renderItem({ item: sentences[draggingIdx], index: -1 }, true)}
 					</Animated.View>
 				)}
 				<View
@@ -204,14 +199,14 @@ class SentencesEditorDrag extends React.Component<
 					<FlatList
 						scrollEnabled={!dragging}
 						style={styles.list}
-						data={data}
+						data={sentences}
 						renderItem={renderItem}
 						onScroll={e => {
 							this.scrollOffset = e.nativeEvent.contentOffset.y
 						}}
 						collapsable={false}
 						scrollEventThrottle={16}
-						keyExtractor={item => '' + item.id}
+						keyExtractor={(_item, index) => '' + index}
 					/>
 				</View>
 			</View>
@@ -247,13 +242,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	sentenceRow: {
-		height: 80,
-		padding: 16,
-		backgroundColor: '#404040',
-		flexDirection: 'row',
-	},
-	sentenceItem: { width: '90%' },
 	list: { width: '100%', backgroundColor: '#696969', height: '100%' },
 	floatingListItem: {
 		position: 'absolute',
