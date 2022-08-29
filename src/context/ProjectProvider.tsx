@@ -17,7 +17,10 @@ import {
 } from 'wollok-ts/dist/model'
 import validate from 'wollok-ts/dist/validator'
 import WRE from 'wollok-ts/dist/wre/wre.json'
-import { saveProject } from '../services/persistance.service'
+import {
+	saveProject,
+	WollokProjectDescriptor,
+} from '../services/persistance.service'
 import { ParentComponentProp } from '../utils/type-helpers'
 import {
 	EntityMember,
@@ -35,13 +38,17 @@ const allPackageNames = [mainPackageName, testsPackageName]
 export const ProjectContext = createContext<{
 	project: Environment
 	name: string
+	url: string
 	changed: boolean
 	problems: Problem[]
 	actions: Actions
 } | null>(null)
 
 type Actions = {
-	setNewProject: (name: Name, project: Environment) => void
+	setNewProject: (
+		descriptor: WollokProjectDescriptor,
+		project: Environment,
+	) => void
 	rebuildEnvironment: (entity: Entity) => void
 	addEntity: (module: Module) => void
 	editEntity: (oldModule: Module, newModule: Module) => void
@@ -59,11 +66,12 @@ type Actions = {
 
 export function ProjectProvider(
 	props: ParentComponentProp<{
-		projectName: string
+		descriptor: WollokProjectDescriptor
 		initialProject: Environment
 	}>,
 ) {
-	const [name, setName] = useState(props.projectName)
+	const [name, setName] = useState(props.descriptor.name)
+	const [url, setUrl] = useState(props.descriptor.url)
 	const [project, setProject] = useState<Environment>(
 		link(props.initialProject.members),
 	)
@@ -139,9 +147,13 @@ export function ProjectProvider(
 	/////////////////////////////////// BUILD //////////////////////////////////
 
 	/////////////////////////////////// ENTITIES //////////////////////////////////
-	function setNewProject(newName: Name, _newProject: Environment) {
+	function setNewProject(
+		descriptor: WollokProjectDescriptor,
+		_newProject: Environment,
+	) {
 		const newProject = link(_newProject.members)
-		setName(newName)
+		setName(descriptor.name)
+		setUrl(descriptor.url)
 		setProject(newProject)
 		setProblems(validateProject(newProject))
 		setChanged(false)
@@ -228,6 +240,7 @@ export function ProjectProvider(
 	const initialContext = {
 		project,
 		name,
+		url,
 		changed,
 		problems,
 		actions: {

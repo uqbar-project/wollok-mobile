@@ -4,6 +4,7 @@
 	"enterValue": "enter value",
 	"discard": "Discard",
 	"cancel": "Cancel",
+	"override": "Override",
 	"entities": {
 		"title": "entities",
 		"kinds": {
@@ -71,8 +72,12 @@
 	},
 	"project": {
 		"selectProject": "Select a project",
-		"newProject": "New project",
-		"saved": "Saved!"
+		"new": "New project",
+		"saved": "Saved!",
+		"shared": "Shared!",
+		"load": "Load project",
+		"nameAlreadyExist": "Project with name \"%{name}\" already exist",
+		"youWillOverrideIt": "Are you sure you want to override it?"
 	},
 	"problem": {
 		"shouldInitializeAllAttributes": "All object attributes should be initialized",
