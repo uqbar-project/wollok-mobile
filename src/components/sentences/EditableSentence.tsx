@@ -42,7 +42,9 @@ export const EditableSentence: FC<EditableSentenceProps> = ({
 				<CommonOptionsDialog
 					visible={showOptions}
 					dismiss={() => setShowOptions(false)}
-					title={wTranslate('abm.options')}
+					title={wTranslate('abm.options', {
+						name: wTranslate('sentence.sentence'),
+					})}
 					actions={{
 						delete: onDelete,
 					}}
