@@ -46,7 +46,10 @@ export const EditableSentence: FC<EditableSentenceProps> = ({
 						name: wTranslate('sentence.sentence'),
 					})}
 					actions={{
-						delete: onDelete,
+						delete: () => {
+							onDelete()
+							setShowOptions(false)
+						},
 					}}
 				/>
 			</TouchableOpacity>
