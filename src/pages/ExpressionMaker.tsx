@@ -9,7 +9,7 @@ import { Expression, Parameter, Send } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import { NewExpressionList } from '../components/expressions/expression-lists/NewExpressionList'
 import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
-import VisualSentence from '../components/sentences/VisualSentence'
+import SentencesView from '../components/sentences/SentencesView'
 import { SubmitCheckButton } from '../components/ui/Header'
 import {
 	Context,
@@ -32,6 +32,7 @@ function ExpressionMaker(props: {
 	onSubmit: ExpressionOnSubmit
 }) {
 	const {
+		context,
 		search,
 		actions: { setSearch, clearSearch },
 	} = useExpressionContext()
@@ -88,9 +89,7 @@ function ExpressionMaker(props: {
 		}
 	}
 
-	const { context } = useExpressionContext()
-
-	const sentences = context.kind === 'Method' && context.sentences()
+	const sentences = context.is('Module') ? [] : context.sentences()
 
 	const isSubexpressionSelected =
 		controller.expression && !controller.expression.is('Parameter')
@@ -101,34 +100,29 @@ function ExpressionMaker(props: {
 				collapsed={expandedDisplay}
 				collapsedHeight={sentences ? sentences.length * 50 : 0}
 				renderChildrenCollapsed={true}>
-				<ScrollView
-					style={{
-						backgroundColor: '#fff',
-					}}>
-					{sentences &&
-						(expandedDisplay
-							? sentences
-							: sentences.slice(sentences.length - 2)
-						).map((s, i) => <VisualSentence key={i} sentence={s} />)}
+				<SentencesView
+					sentences={
+						expandedDisplay ? sentences : sentences.slice(sentences.length - 2)
+					}
+				/>
 
-					<ExpressionDisplay
-						backgroundColor="grey"
-						withIcon={false}
-						expression={expression}
-						highlightedNode={controller.expression}
-						onSelect={(expressionOrParameter, parent) => {
-							if (!parent) {
-								// We cannot make the correct replacement
-								return setConstroller({ expression, setExpression })
-							} // Select main expression
-
-							setConstroller({
-								expression: expressionOrParameter as any,
-								setExpression: replaceChild(parent, expressionOrParameter),
-							})
-						}}
-					/>
-				</ScrollView>
+				<ExpressionDisplay
+					backgroundColor="grey"
+					withIcon={false}
+					expression={expression}
+					highlightedNode={controller.expression}
+					onSelect={(expressionOrParameter, parent) =>
+						setConstroller(
+							parent
+								? {
+										// If parent exists we can replace the child
+										expression: expressionOrParameter as any,
+										setExpression: replaceChild(parent, expressionOrParameter),
+								  }
+								: { expression, setExpression },
+						)
+					}
+				/>
 			</Collapsible>
 			<IconButton
 				icon={expandedDisplay ? 'chevron-up' : 'chevron-down'}
