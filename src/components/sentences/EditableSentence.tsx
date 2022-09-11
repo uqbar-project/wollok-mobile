@@ -1,11 +1,10 @@
 import { Sentence } from 'wollok-ts/dist/model'
 import { GestureResponderHandlers, StyleSheet, View } from 'react-native'
-import { ReadonlySentence } from './VisualSentence'
+import { TouchableSentence } from './VisualSentence'
 import { IconButton } from 'react-native-paper'
 import React, { ComponentProps, FC, useState } from 'react'
 import { CommonOptionsDialog } from '../ui/Options/CommonOptionsDialog'
 import { wTranslate } from '../../utils/translation/translation-helpers'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 type EditableSentenceProps = {
 	sentence: Sentence
@@ -34,25 +33,24 @@ export const EditableSentence: FC<EditableSentenceProps> = ({
 					opacity: hidden ? 0 : 1,
 				},
 			]}>
-			<TouchableOpacity
+			<TouchableSentence
 				style={styles.sentenceItem}
-				onLongPress={() => setShowOptions(true)}>
-				<ReadonlySentence style={styles.sentence} sentence={sentence} />
-
-				<CommonOptionsDialog
-					visible={showOptions}
-					dismiss={() => setShowOptions(false)}
-					title={wTranslate('abm.options', {
-						name: wTranslate('sentence.sentence'),
-					})}
-					actions={{
-						delete: () => {
-							onDelete()
-							setShowOptions(false)
-						},
-					}}
-				/>
-			</TouchableOpacity>
+				sentence={sentence}
+				onLongPress={() => setShowOptions(true)}
+			/>
+			<CommonOptionsDialog
+				visible={showOptions}
+				dismiss={() => setShowOptions(false)}
+				title={wTranslate('abm.options', {
+					name: wTranslate('sentence.sentence'),
+				})}
+				actions={{
+					delete: () => {
+						onDelete()
+						setShowOptions(false)
+					},
+				}}
+			/>
 			<View {...panHandlers}>
 				<IconButton icon="drag-vertical" color="#fff" />
 			</View>

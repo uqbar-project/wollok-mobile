@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleProp, View, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import { IconButton, Text } from 'react-native-paper'
 import {
 	Assignment,
@@ -18,6 +18,7 @@ import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
 import { ProblemReporterButton } from '../problems/ProblemReporterButton'
 import { ConstantVariableIcon } from '../ui/ConstantVariableIcon'
 import { Row } from '../ui/Row'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 type VisualSentenceProps = {
 	sentence: Sentence
@@ -37,18 +38,21 @@ export function ReadonlySentence({
 	)
 }
 
-//TODO: dont repeat code with readonly
-export function DraggableSentence({
+export function TouchableSentence({
 	sentence,
 	highlightedNode,
-	drag,
-}: VisualSentenceProps & { drag: () => void }) {
+	onLongPress,
+	style,
+}: VisualSentenceProps & { onLongPress: () => void }) {
 	return (
-		<View>
+		<Row style={style}>
 			<ProblemReporterButton node={sentence} />
-			<IconButton icon="drag-vertical" onPress={drag} />
-			<NodeComponent node={sentence} highlightedNode={highlightedNode} />
-		</View>
+			<TouchableOpacity
+				style={styles.touchableFullWidth}
+				onLongPress={onLongPress}>
+				<NodeComponent node={sentence} highlightedNode={highlightedNode} />
+			</TouchableOpacity>
+		</Row>
 	)
 }
 
@@ -163,3 +167,9 @@ export function ReturnComponent({
 		</Row>
 	)
 }
+
+const styles = StyleSheet.create({
+	touchableFullWidth: {
+		minWidth: '100%',
+	},
+})
