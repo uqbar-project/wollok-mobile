@@ -54,6 +54,7 @@
 		}
 	},
 	"sentence": {
+		"sentence": "sentence",
 		"assignment": "Variable assignment",
 		"selectVariable": "Select variable",
 		"messageSend": "Send message",

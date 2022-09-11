@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { upperCaseFirst } from 'upper-case-first'
+import { List } from 'wollok-ts/dist/extensions'
 import { Body, Expression, Return, Sentence } from 'wollok-ts/dist/model'
 import {
 	ExpressionMakerScreenProp,
@@ -16,7 +17,7 @@ import {
 import MultiFabScreen from '../FabScreens/MultiFabScreen'
 import { Thinking } from '../ui/Header'
 import { AssignmentFormModal } from './AssignmentFormModal'
-import SentencesView from './SentencesView'
+import SentencesEditor from './SentencesEditor'
 import { VariableFormModal } from './VariableForm'
 import { returnIconName } from './VisualSentence'
 
@@ -29,7 +30,7 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 	const [processing, setProcessing] = useState(false)
 	const [assignmentModalVisible, setAssignmentModalVisible] = useState(false)
 	const [variableModalVisible, setVariableModalVisible] = useState(false)
-	const [sentences, setSentences] = useState<Sentence[]>(
+	const [sentences, setSentences] = useState<List<Sentence>>(
 		Array.from(codeContainer.sentences()),
 	)
 
@@ -89,7 +90,10 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 
 	return (
 		<MultiFabScreen actions={actions}>
-			<SentencesView sentences={sentences} />
+			<SentencesEditor
+				sentences={sentences}
+				onSentencesChanged={setSentences}
+			/>
 
 			<AssignmentFormModal
 				variables={allScopedVariables(codeContainer)}

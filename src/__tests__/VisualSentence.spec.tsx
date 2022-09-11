@@ -8,12 +8,13 @@ import {
 	Sentence,
 	Variable as VariableModel,
 } from 'wollok-ts/dist/model'
-import VisualSentence, {
+import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
+import {
 	AssignmentComponent,
+	ReadonlySentence,
 	ReturnComponent,
 	VariableComponent,
 } from '../components/sentences/VisualSentence'
-import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
 import { renderOnProvider } from './utils/test-helpers'
 
 describe('matching sentences with components', () => {
@@ -58,7 +59,7 @@ describe('matching sentences with components', () => {
 		const crazySentence = { kind: unsupportedKind } as unknown as Sentence
 
 		const { getByText } = renderOnProvider(
-			<VisualSentence sentence={crazySentence} />,
+			<ReadonlySentence sentence={crazySentence} />,
 		)
 		expect(getByText(unsupportedKind, { exact: false })).toBeTruthy()
 	})
@@ -69,7 +70,7 @@ function checkMatch(
 	component: (props: any) => JSX.Element,
 ) {
 	const { UNSAFE_queryByType } = renderOnProvider(
-		<VisualSentence sentence={sentence} />,
+		<ReadonlySentence sentence={sentence} />,
 	)
 	expect(UNSAFE_queryByType(component)).toBeTruthy()
 }

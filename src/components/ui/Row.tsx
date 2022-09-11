@@ -1,9 +1,12 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { ParentComponentProp } from '../../utils/type-helpers'
 
 export function Row(
-	props: ParentComponentProp<{ style?: any; key?: string | number }>,
+	props: ParentComponentProp<{
+		style?: StyleProp<ViewStyle>
+		key?: string | number
+	}>,
 ) {
 	const { children, style, ...viewProps } = props
 	return (

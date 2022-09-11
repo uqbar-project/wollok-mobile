@@ -1,6 +1,7 @@
 import { RouteProp, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React from 'react'
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import { Body } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
 import { BodyMaker } from '../components/sentences/BodyMaker'
@@ -14,7 +15,7 @@ export type EditorScreenNavigationProp = StackNavigationProp<
 
 type Route = RouteProp<RootStackParamList, 'Editor'>
 
-export const Editor = ({
+const Editor = ({
 	route: {
 		params: { fqn },
 	},
@@ -43,3 +44,5 @@ export const Editor = ({
 
 	return <BodyMaker codeContainer={entity} setBody={setBody} />
 }
+
+export default gestureHandlerRootHOC(Editor)
