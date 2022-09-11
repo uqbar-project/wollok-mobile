@@ -107,7 +107,6 @@ function ExpressionMaker(props: {
 				/>
 
 				<ExpressionDisplay
-					backgroundColor="grey"
 					withIcon={false}
 					expression={expression}
 					highlightedNode={controller.expression}

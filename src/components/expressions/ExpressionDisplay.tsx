@@ -3,6 +3,7 @@ import { StyleSheet, View, ViewStyle } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import { Expression, Node, Parameter, Send } from 'wollok-ts/dist/model'
 import {
+	EmptyPill,
 	LiteralSegment,
 	MessageSegment,
 	ReferenceSegment,
@@ -38,7 +39,11 @@ export function ExpressionDisplay(props: {
 			style={[display, { backgroundColor: backgroundColor }]}
 			{...innerProps}>
 			{showIcon && <IconButton style={codeIcon} icon="chevron-right" />}
-			{expression && getVisualSegment(expression, 0, highlightedNode, onSelect)}
+			{expression ? (
+				getVisualSegment(expression, 0, highlightedNode, onSelect)
+			) : (
+				<EmptyPill index={0} />
+			)}
 		</View>
 	)
 }

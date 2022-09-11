@@ -72,9 +72,7 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 		},
 		{
 			icon: 'arrow-right',
-			onPress: () => {
-				setAssignmentModalVisible(true)
-			},
+			onPress: () => setAssignmentModalVisible(true),
 			label: upperCaseFirst(wTranslate('sentence.assignment')),
 		},
 		{
@@ -84,9 +82,7 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 		},
 		{
 			icon: 'variable',
-			onPress: () => {
-				setVariableModalVisible(true)
-			},
+			onPress: () => setVariableModalVisible(true),
 			label: upperCaseFirst(wTranslate('sentence.variable')),
 		},
 	]

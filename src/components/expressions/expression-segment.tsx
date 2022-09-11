@@ -119,7 +119,7 @@ const Pill = (
 	</View>
 )
 
-const EmptyPill = (props: NodeSegment<{}>) => {
+export const EmptyPill = (props: NodeSegment<{}>) => {
 	const theme = useTheme()
 	return (
 		<Pill color={theme.colors.expression.empty} {...props}>
