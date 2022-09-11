@@ -6,7 +6,7 @@ import { Alert } from 'react-native'
 import { IconButton, Snackbar } from 'react-native-paper'
 import { upperCaseFirst } from 'upper-case-first'
 import { RootStackParamList } from '../App'
-import ProjectHeader from '../components/projects/ProjectHeader'
+import ProjectHeader, { MessageTag } from '../components/projects/ProjectHeader'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation/translation-helpers'
 import { Describes } from './tabs/Describes'
@@ -23,20 +23,14 @@ export function Home() {
 	const { name, project, changed } = useProject()
 
 	// Move to another component
-	const [message, setMessage] = useState<'saved' | undefined>(undefined)
-	const [showMessage, setShowMessage] = useState(false)
-
-	function pushMessage(tag: 'saved') {
-		setMessage(tag)
-		setShowMessage(true)
-	}
+	const [message, setMessage] = useState<MessageTag | null>(null)
 
 	const navigation = useNavigation()
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: name,
 			headerTitleAlign: 'center',
-			headerRight: () => <ProjectHeader pushMessage={pushMessage} />,
+			headerRight: () => <ProjectHeader pushMessage={setMessage} />,
 		})
 	}, [navigation, project, name])
 
@@ -77,10 +71,8 @@ export function Home() {
 				/>
 			</Tab.Navigator>
 			<Snackbar
-				visible={showMessage}
-				onDismiss={() => {
-					setShowMessage(false)
-				}}
+				visible={message !== null}
+				onDismiss={() => setMessage(null)}
 				duration={2000}
 				wrapperStyle={{ marginBottom: '20%' }}>
 				{wTranslate(`project.${message!}`)}

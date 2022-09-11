@@ -52,7 +52,7 @@ const App = () => {
 		<PaperProvider theme={theme}>
 			<NavigationContainer theme={theme}>
 				<ProjectProvider // Starts with a DummyProject until project selection
-					projectName={''}
+					descriptor={{ name: '', url: '' }}
 					initialProject={templateProject()}>
 					<Stack.Navigator>
 						<Stack.Screen

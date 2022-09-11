@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
 	deleteProject,
 	renameProject,
+	WollokProjectDescriptor,
 } from '../../services/persistance.service'
 import { wTranslate } from '../../utils/translation/translation-helpers'
 import { TextFormModal } from '../ui/FormModal/TextFormModal'
@@ -10,22 +11,22 @@ import { CommonOptionsDialog } from '../ui/Options/CommonOptionsDialog'
 import { optionsTitleFromName } from '../ui/Options/OptionsDialog'
 
 export const ProjectItem = (props: {
-	project: string
-	navigateToProject: (project: string) => void
-	onDelete: (project: string) => void
-	onRename: (project: string) => void
+	project: WollokProjectDescriptor
+	navigateToProject: (project: WollokProjectDescriptor) => void
+	onDelete: (project: WollokProjectDescriptor) => void
+	onRename: (project: WollokProjectDescriptor) => void
 }) => {
 	const [showOptions, setShowOptions] = useState(false)
 	const [showRename, setShowRename] = useState(false)
 
 	async function onDeleteProject() {
-		await deleteProject(props.project)
+		await deleteProject(props.project.name)
 		setShowOptions(false)
 		props.onDelete(props.project)
 	}
 
 	async function onRenameProject(newName: string) {
-		await renameProject(props.project, newName)
+		await renameProject(props.project.name, newName)
 		setShowOptions(false)
 		props.onRename(props.project)
 	}
@@ -34,11 +35,11 @@ export const ProjectItem = (props: {
 		<>
 			<NamedListItem
 				onPress={() => props.navigateToProject(props.project)}
-				namedItem={{ name: props.project }}
+				namedItem={{ name: props.project.name }}
 				onLongPress={() => setShowOptions(true)}
 			/>
 			<CommonOptionsDialog
-				title={optionsTitleFromName(props.project)}
+				title={optionsTitleFromName(props.project.name)}
 				visible={showOptions}
 				dismiss={() => setShowOptions(false)}
 				actions={{
@@ -51,7 +52,7 @@ export const ProjectItem = (props: {
 				onSubmit={onRenameProject}
 				setVisible={setShowRename}
 				visible={showRename}
-				currentText={props.project}
+				currentText={props.project.name}
 			/>
 		</>
 	)
