@@ -58,6 +58,7 @@ jest.mock('react-native-fs', () => ({ readDir: () => Promise.resolve([]) }))
 jest.mock('rn-fetch-blob-v2', () => ({ fs: { exists: () => Promise.resolve(true) } }))
 
 jest.mock('react-native-share', () => ({}))
+jest.mock('react-native-collapsible', () => ({}))
 
 // Stop animations
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
