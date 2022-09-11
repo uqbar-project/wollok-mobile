@@ -282,14 +282,14 @@ PODS:
     - React-Core
   - RNFS (2.18.0):
     - React
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.4.2):
     - React-Core
   - RNLocalize (2.1.4):
     - React-Core
   - RNScreens (3.7.2):
     - React-Core
     - React-RCTImage
-  - RNShare (7.6.4):
+  - RNShare (7.9.0):
     - React-Core
   - RNVectorIcons (8.1.0):
     - React-Core
@@ -459,13 +459,13 @@ SPEC CHECKSUMS:
   rn-fetch-blob: 43401673013a116025c43538992cd2b783d3cabd
   RNBootSplash: 51eef7e143faeab63f81ddbb7c1de38b8fba66ed
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
   RNLocalize: 7f1e5792b65a839af55a9552d05b3558b66d017e
   RNScreens: 0591543e343c7444ea1756b6265d81a4295922c9
-  RNShare: 4406f61af043027b695c3a0b8f39e2c2bdacde12
+  RNShare: be91a5c149585affb02c25b351bd07ba927c7006
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Yoga: 1561f557b0c2b6047a91f7619f666134e2288916
 
 PODFILE CHECKSUM: fec7fd1a14a829f882c347a01be35dbfcdd648fe
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

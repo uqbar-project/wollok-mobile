@@ -34,6 +34,7 @@ export const dictionary = [
 	'sentence.unsupportedSentence',
 	'sentence.messageSend',
 	'sentence.selectVariable',
+	'sentence.sentence',
 	'sentence.assignment',
 	'sentence',
 	'expression.search.entity',

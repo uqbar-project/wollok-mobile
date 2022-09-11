@@ -41,7 +41,7 @@
 		"react-native-codegen": "^0.0.13",
 		"react-native-document-picker": "^8.1.1",
 		"react-native-fs": "^2.18.0",
-		"react-native-gesture-handler": "^1.10.3",
+		"react-native-gesture-handler": "^2.4.2",
 		"react-native-get-random-values": "^1.7.2",
 		"react-native-localize": "^2.1.0",
 		"react-native-paper": "^4.11.2",
