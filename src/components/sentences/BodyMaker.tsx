@@ -37,10 +37,14 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 	const contextFQN = entityMemberFQN(codeContainer)
 
 	function addSentence(sentence: Sentence) {
-		setSentences([...sentences, sentence])
+		updateSentences([...sentences, sentence])
+	}
+
+	function updateSentences(newSentences: List<Sentence>) {
+		setSentences(newSentences)
 		runAsync(() => {
 			setProcessing(true)
-			setBody(new Body({ sentences: [...sentences, sentence] }))
+			setBody(new Body({ sentences: newSentences }))
 			setProcessing(false)
 		})
 	}
@@ -92,7 +96,7 @@ export function BodyMaker({ codeContainer, setBody }: BodyMakerProps) {
 		<MultiFabScreen actions={actions}>
 			<SentencesEditor
 				sentences={sentences}
-				onSentencesChanged={setSentences}
+				onSentencesChanged={updateSentences}
 			/>
 
 			<AssignmentFormModal

@@ -173,5 +173,6 @@ export function ReturnComponent({
 const styles = StyleSheet.create({
 	touchableFullWidth: {
 		minWidth: '100%',
+		width: '100%',
 	},
 })
