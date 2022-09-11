@@ -27,7 +27,7 @@ export function ListSingletons({
 				<List.Item
 					key={id}
 					title={name}
-					onPress={() => setReference(new Reference({ name }))}
+					onPress={() => setReference(new Reference({ name: name! }))}
 				/>
 			))}
 		</>

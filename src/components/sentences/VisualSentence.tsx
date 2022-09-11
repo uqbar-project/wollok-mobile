@@ -1,7 +1,9 @@
 import React from 'react'
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import { IconButton, Text } from 'react-native-paper'
 import {
 	Assignment,
+	Expression,
 	Node,
 	Return,
 	Sentence,
@@ -17,16 +19,40 @@ import { ExpressionDisplay } from '../expressions/ExpressionDisplay'
 import { ProblemReporterButton } from '../problems/ProblemReporterButton'
 import { ConstantVariableIcon } from '../ui/ConstantVariableIcon'
 import { Row } from '../ui/Row'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 type VisualSentenceProps = {
 	sentence: Sentence
 	highlightedNode?: Node
+	style?: StyleProp<ViewStyle>
 }
-function VisualSentence({ sentence, highlightedNode }: VisualSentenceProps) {
+export function ReadonlySentence({
+	sentence,
+	highlightedNode,
+	style,
+}: VisualSentenceProps) {
 	return (
-		<Row>
+		<Row style={style}>
 			<ProblemReporterButton node={sentence} />
 			<NodeComponent node={sentence} highlightedNode={highlightedNode} />
+		</Row>
+	)
+}
+
+export function TouchableSentence({
+	sentence,
+	highlightedNode,
+	onLongPress,
+	style,
+}: VisualSentenceProps & { onLongPress: () => void }) {
+	return (
+		<Row style={style}>
+			<ProblemReporterButton node={sentence} />
+			<TouchableOpacity
+				style={styles.touchableFullWidth}
+				onLongPress={onLongPress}>
+				<NodeComponent node={sentence} highlightedNode={highlightedNode} />
+			</TouchableOpacity>
 		</Row>
 	)
 }
@@ -38,9 +64,10 @@ type NodeComponentProps = {
 function NodeComponent({ node, highlightedNode }: NodeComponentProps) {
 	switch (node.kind) {
 		case 'Send':
+		case 'Reference':
 			return (
 				<ExpressionDisplay
-					expression={node}
+					expression={node as Expression}
 					withIcon={false}
 					highlightedNode={highlightedNode}
 				/>
@@ -143,4 +170,9 @@ export function ReturnComponent({
 	)
 }
 
-export default VisualSentence
+const styles = StyleSheet.create({
+	touchableFullWidth: {
+		minWidth: '100%',
+		width: '100%',
+	},
+})

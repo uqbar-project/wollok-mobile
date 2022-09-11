@@ -2,7 +2,7 @@ import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { List } from 'wollok-ts/dist/extensions'
 import { Node, Sentence } from 'wollok-ts/dist/model'
-import VisualSentence from './VisualSentence'
+import { ReadonlySentence } from './VisualSentence'
 
 type SentencesViewProps = {
 	sentences: List<Sentence>
@@ -12,7 +12,7 @@ function SentencesView({ sentences, highlightedNode }: SentencesViewProps) {
 	return (
 		<ScrollView style={styles.sentences}>
 			{sentences.map((sentence, i) => (
-				<VisualSentence
+				<ReadonlySentence
 					key={i}
 					sentence={sentence}
 					highlightedNode={highlightedNode}

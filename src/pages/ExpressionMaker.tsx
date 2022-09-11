@@ -2,15 +2,14 @@ import { RouteProp, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import Collapsible from 'react-native-collapsible'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Button, List, TextInput } from 'react-native-paper'
-import { Expression } from 'wollok-ts/dist/model'
+import { Button, IconButton, TextInput } from 'react-native-paper'
+import { Expression, Parameter, Send } from 'wollok-ts/dist/model'
 import { RootStackParamList } from '../App'
-import { ListLiterals } from '../components/expressions/expression-lists/literals-list'
-import { ListMessages } from '../components/expressions/expression-lists/messages-list'
-import { ListSingletons } from '../components/expressions/expression-lists/singletons-list'
-import { ListVariables } from '../components/expressions/expression-lists/variables-list'
+import { NewExpressionList } from '../components/expressions/expression-lists/NewExpressionList'
 import { ExpressionDisplay } from '../components/expressions/ExpressionDisplay'
+import SentencesView from '../components/sentences/SentencesView'
 import { SubmitCheckButton } from '../components/ui/Header'
 import {
 	Context,
@@ -19,7 +18,7 @@ import {
 } from '../context/ExpressionContextProvider'
 import { useProject } from '../context/ProjectProvider'
 import { wTranslate } from '../utils/translation/translation-helpers'
-import { entityMemberByFQN } from '../utils/wollok-helpers'
+import { entityMemberByFQN, isComplete } from '../utils/wollok-helpers'
 
 export type ExpressionMakerScreenProp = StackNavigationProp<
 	RootStackParamList,
@@ -33,21 +32,16 @@ function ExpressionMaker(props: {
 	onSubmit: ExpressionOnSubmit
 }) {
 	const {
+		context,
 		search,
 		actions: { setSearch, clearSearch },
 	} = useExpressionContext()
-	const [expression, setInitialExpression] = useState(props.initialExpression)
-
-	function setExpression(e?: Expression) {
-		clearSearch()
-		setInitialExpression(e)
-	}
-
-	function reset() {
-		setExpression(undefined)
-	}
-
 	const navigation = useNavigation()
+	const [expression, setInitialExpression] = useState(props.initialExpression)
+	const [controller, setConstroller] = useState({ expression, setExpression })
+	const [expandedDisplay, setExpandedDisplay] = useState(false)
+
+	const { onSubmit } = props
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: wTranslate('expression.title'),
@@ -55,56 +49,102 @@ function ExpressionMaker(props: {
 			animationEnabled: false,
 			headerRight: () => (
 				<SubmitCheckButton
-					disabled={!expression}
+					disabled={!expression || !isComplete(expression)}
 					onSubmit={() => {
-						props.onSubmit(expression!)
+						onSubmit(expression!)
 					}}
 				/>
 			),
 		})
-	}, [navigation, expression, props])
+	}, [navigation, expression, controller, onSubmit])
+
+	function setExpression(e?: Expression) {
+		clearSearch()
+		setInitialExpression(e)
+		setConstroller({
+			expression: e,
+			setExpression,
+		})
+	}
+
+	function reset() {
+		setExpression(undefined)
+	}
+
+	function replaceChild(send: Send, actual: Expression | Parameter) {
+		return (e?: Expression) => {
+			if (send.receiver === actual) {
+				;(send as any).receiver = e
+			}
+			const args = send.args as any[]
+			args.forEach((a, i) => {
+				if (a === actual) {
+					args[i] = e
+				}
+			})
+			setConstroller({
+				expression: e,
+				setExpression: replaceChild(send, e!),
+			})
+		}
+	}
+
+	const sentences = context.is('Module') ? [] : context.sentences()
+
+	const isSubexpressionSelected =
+		controller.expression && !controller.expression.is('Parameter')
 
 	return (
 		<View>
-			<ExpressionDisplay
-				backgroundColor="white"
-				withIcon={false}
-				expression={expression}
+			<Collapsible
+				collapsed={expandedDisplay}
+				collapsedHeight={sentences ? sentences.length * 50 : 0}
+				renderChildrenCollapsed={true}>
+				<SentencesView
+					sentences={
+						expandedDisplay ? sentences : sentences.slice(sentences.length - 2)
+					}
+				/>
+
+				<ExpressionDisplay
+					withIcon={false}
+					expression={expression}
+					highlightedNode={controller.expression}
+					onSelect={(expressionOrParameter, parent) =>
+						setConstroller(
+							parent
+								? {
+										// If parent exists we can replace the child
+										expression: expressionOrParameter as any,
+										setExpression: replaceChild(parent, expressionOrParameter),
+								  }
+								: { expression, setExpression },
+						)
+					}
+				/>
+			</Collapsible>
+			<IconButton
+				icon={expandedDisplay ? 'chevron-up' : 'chevron-down'}
+				onPress={() => setExpandedDisplay(!expandedDisplay)}
 			/>
 			<TextInput
 				label={wTranslate(
-					`expression.search.${expression ? 'message' : 'entity'}`,
+					`expression.search.${
+						isSubexpressionSelected ? 'message' : 'reference'
+					}`,
 				)}
 				value={search}
 				onChangeText={setSearch}
 			/>
 			<ScrollView style={styles.view}>
-				{expression ? (
-					<List.Section>
-						<List.Subheader>{wTranslate('expression.messages')}</List.Subheader>
-						<ListMessages expression={expression} setMessage={setExpression} />
-					</List.Section>
-				) : (
-					<List.Section>
-						<List.Subheader>
-							{wTranslate('expression.variables')}
-						</List.Subheader>
-						<ListVariables setReference={setExpression} />
+				<NewExpressionList
+					expression={
+						isSubexpressionSelected ? controller.expression : undefined
+					}
+					setExpression={controller.setExpression}
+				/>
 
-						<List.Subheader>
-							{wTranslate('expression.mainObjects')}
-						</List.Subheader>
-						<ListSingletons packageName="main" setReference={setExpression} />
-
-						<List.Subheader>{wTranslate('expression.literals')}</List.Subheader>
-						<ListLiterals setLiteral={setExpression} />
-
-						<List.Subheader>
-							{wTranslate('expression.wollokObjects')}
-						</List.Subheader>
-						<ListSingletons packageName="wollok" setReference={setExpression} />
-					</List.Section>
-				)}
+				{/* Move to ExpressionDisplay component? */}
 				<Button onPress={reset}>
 					{wTranslate('clear').toLocaleUpperCase()}
 				</Button>

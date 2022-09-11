@@ -4,6 +4,7 @@
 	"enterValue": "ingresar valor",
 	"discard": "Descartar",
 	"cancel": "Cancelar",
+	"override": "Sobreescribir",
 	"entities": {
 		"title": "entidades",
 		"kinds": {
@@ -49,10 +50,11 @@
 		"enterValue": "Ingresar un valor",
 		"search": {
 			"message": "Buscá algún mensaje",
-			"entity": "Buscá alguna entidad"
+			"reference": "Buscá alguna referencia"
 		}
 	},
 	"sentence": {
+		"sentence": "sentencia",
 		"assignment": "Asignar variable",
 		"selectVariable": "Seleccionar variable",
 		"messageSend": "Enviar mensaje",
@@ -71,8 +73,12 @@
 	},
 	"project": {
 		"selectProject": "Seleccioná un proyecto",
-		"newProject": "Proyecto nuevo",
-		"saved": "¡Guardado!"
+		"new": "Proyecto nuevo",
+		"saved": "¡Guardado!",
+		"shared": "¡Proyecto compartido!",
+		"load": "Cargar proyecto",
+		"nameAlreadyExist": "Un proyecto con el nombre \"%{name}\" ya existe",
+		"youWillOverrideIt": "¿Querés sobreescribir el proyecto viejo con este nuevo?"
 	},
 	"problem": {
 		"shouldInitializeAllAttributes": "Todos los atributos del objeto deben estar inicializados",
@@ -98,6 +104,6 @@
 	},
 	"home": {
 		"unsavedChanges": "Tenés cambios sin guardar",
-		"youWillLoseThem": "¿Estás seguro que querés descartarlos?"
+		"youWillLoseThem": "¿Querés descartar los cambios que hiciste?"
 	}
 }

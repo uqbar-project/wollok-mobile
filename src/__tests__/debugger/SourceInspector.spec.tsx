@@ -14,7 +14,8 @@ describe('SourceInspector', () => {
 		it('should show test code', () => {
 			const { queryByText } = renderSourceInspector()
 			expect(queryByText('assert')).toBeTruthy()
-			expect(queryByText('that(')).toBeTruthy()
+			expect(queryByText('that')).toBeTruthy()
+			expect(queryByText('(')).toBeTruthy()
 			expect(queryByText('true')).toBeTruthy()
 			expect(queryByText(')')).toBeTruthy()
 		})

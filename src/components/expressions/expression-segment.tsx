@@ -7,66 +7,82 @@ import {
 	ViewStyle,
 } from 'react-native'
 import { Text } from 'react-native-paper'
-import { Expression, LiteralValue, Node, Send } from 'wollok-ts/dist/model'
+import { LiteralValue, Node, Send } from 'wollok-ts/dist/model'
 import { useTheme } from '../../theme'
 import { ParentComponentProp } from '../../utils/type-helpers'
-import { getVisualSegment } from './ExpressionDisplay'
+import { getVisualSegment, SelectExpression } from './ExpressionDisplay'
 
 type NodeSegment<T> = T & {
 	index: number
 	highlighted?: boolean
+	onPress?: () => void
 }
 
 export const ReferenceSegment = (props: NodeSegment<{ text: string }>) => {
 	const theme = useTheme()
+	const { text, ...nodeProps } = props
 	return (
-		<Pill
-			index={props.index}
-			color={theme.colors.expression.reference}
-			highlighted={props.highlighted}>
-			<Text>{props.text}</Text>
+		<Pill color={theme.colors.expression.reference} {...nodeProps}>
+			<Text>{text}</Text>
 		</Pill>
 	)
 }
 
 export const LiteralSegment = (props: NodeSegment<{ value: LiteralValue }>) => {
 	const theme = useTheme()
+	const { value, ...nodeProps } = props
 	return (
-		<Pill
-			index={props.index}
-			color={theme.colors.expression.literal}
-			highlighted={props.highlighted}>
-			<Text>{JSON.stringify(props.value)}</Text>
+		<Pill color={theme.colors.expression.literal} {...nodeProps}>
+			<Text>{JSON.stringify(value)}</Text>
 		</Pill>
 	)
 }
 
 export const MessageSegment = (
-	props: NodeSegment<{ send: Send; highlightedNode?: Node }>,
+	props: NodeSegment<{
+		send: Send
+		highlightedNode?: Node
+		onSelect?: SelectExpression
+	}>,
 ) => {
 	const theme = useTheme()
+	const { send, onSelect } = props
 	return (
 		<>
 			{getVisualSegment(
-				props.send.receiver,
+				send.receiver,
 				props.index,
 				props.highlightedNode,
+				props.onSelect,
+				send,
 			)}
 			<Bullet
 				color={theme.colors.expression.message}
 				index={props.index + 1}
 				highlighted={props.highlighted}>
 				<View style={style.row}>
-					<Text>{props.send.message}(</Text>
-					{props.send.args.map((a, i) => (
-						<Parameter
-							key={i}
-							color={theme.colors.expression.parameter}
-							arg={a}
-							index={props.index - 1}
-							highlightedNode={props.highlightedNode}
-						/>
-					))}
+					<Text onPress={props.onPress}>{send.message}</Text>
+					<Text>(</Text>
+					{send.args.map((arg, i) =>
+						(arg as Node).kind === 'Parameter' ? (
+							<EmptyPill
+								key={i}
+								index={props.index - 1}
+								highlighted={props.highlightedNode === arg}
+								onPress={() => onSelect && onSelect(arg, send)}
+							/>
+						) : (
+							<Argument key={i} color={theme.colors.expression.parameter}>
+								{getVisualSegment(
+									arg,
+									props.index - 1,
+									props.highlightedNode,
+									props.onSelect,
+									send,
+								)}
+							</Argument>
+						),
+					)}
 					<Text>)</Text>
 				</View>
 			</Bullet>
@@ -74,13 +90,7 @@ export const MessageSegment = (
 	)
 }
 
-const Parameter = (
-	props: NodeSegment<{
-		color: ColorValue
-		arg: Expression
-		highlightedNode?: Node
-	}>,
-) => (
+const Argument = (props: ParentComponentProp<{ color: ColorValue }>) => (
 	<View
 		style={[
 			style.pill,
@@ -93,7 +103,7 @@ const Parameter = (
 				shadowOpacity: 50,
 			},
 		]}>
-		{getVisualSegment(props.arg, props.index, props.highlightedNode)}
+		{props.children}
 	</View>
 )
 
@@ -101,17 +111,20 @@ const Parameter = (
 
 const Pill = (
 	props: ParentComponentProp<NodeSegment<{ color: ColorValue }>>,
-) => {
+) => (
+	<View
+		onTouchStart={props.onPress}
+		style={[style.pill, style.row, segmentStyle(props), highlightStyle(props)]}>
+		{props.children}
+	</View>
+)
+
+export const EmptyPill = (props: NodeSegment<{}>) => {
+	const theme = useTheme()
 	return (
-		<View
-			style={[
-				style.pill,
-				style.row,
-				segmentStyle(props),
-				highlightStyle(props),
-			]}>
-			{props.children}
-		</View>
+		<Pill color={theme.colors.expression.empty} {...props}>
+			<Text> </Text>
+		</Pill>
 	)
 }
 

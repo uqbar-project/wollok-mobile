@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { wTranslate } from '../../../utils/translation/translation-helpers'
 import { PartialRecord } from '../../../utils/type-helpers'
 import { Option, OptionsDialog } from './OptionsDialog'
 
 type CommonOptionsDialogProps = Omit<
-	Parameters<typeof OptionsDialog>[0],
+	ComponentProps<typeof OptionsDialog>,
 	'options'
 > & { actions: PartialRecord<typeof commonOptions[number], () => void> }
 
