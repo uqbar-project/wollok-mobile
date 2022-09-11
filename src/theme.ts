@@ -19,6 +19,7 @@ export type Theme = PaperTheme &
 				message: string
 				singleton: string
 				reference: string
+				empty: string
 			}
 		}
 	}
@@ -47,6 +48,7 @@ export const theme: Theme = {
 			parameter: '#907AD6',
 			literal: '#20A39E',
 			reference: '#EF5B5B',
+			empty: 'black',
 		},
 	},
 }

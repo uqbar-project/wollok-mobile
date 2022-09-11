@@ -14,7 +14,7 @@ export const SubmitCheckButton = ({
 	const [processing, setProcessing] = useState(false)
 	const navigation = useNavigation()
 	return processing ? (
-		<ActivityIndicator animating={true} style={{ marginRight: 10 }} />
+		<Thinking />
 	) : (
 		<IconButton
 			disabled={disabled}
@@ -29,3 +29,7 @@ export const SubmitCheckButton = ({
 		/>
 	)
 }
+
+export const Thinking = () => (
+	<ActivityIndicator animating={true} style={{ marginRight: 10 }} />
+)

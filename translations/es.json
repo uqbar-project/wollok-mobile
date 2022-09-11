@@ -50,7 +50,7 @@
 		"enterValue": "Ingresar un valor",
 		"search": {
 			"message": "Buscá algún mensaje",
-			"entity": "Buscá alguna entidad"
+			"reference": "Buscá alguna referencia"
 		}
 	},
 	"sentence": {
