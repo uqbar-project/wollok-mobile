@@ -1,6 +1,6 @@
 ![Wollok Mobile](assets/logo.jpg)
 
-![GitHub Tag](https://img.shields.io/github/v/tag/uqbar-project/wollok-mobile) ![GitHub License](https://img.shields.io/github/license/uqbar-project/wollok-lsp-ide)
+![GitHub Tag](https://img.shields.io/github/v/tag/uqbar-project/wollok-mobile) [![Node.js CI](https://github.com/uqbar-project/wollok-mobile/actions/workflows/node.js.yml/badge.svg)](https://github.com/uqbar-project/wollok-mobile/actions/workflows/node.js.yml) ![GitHub License](https://img.shields.io/github/license/uqbar-project/wollok-lsp-ide)
 
 A mobile IDE for [Wollok](https://www.wollok.org/)
 
