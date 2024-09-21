@@ -1,70 +1,16 @@
 ![Wollok Mobile](assets/logo.jpg)
 
+![GitHub Tag](https://img.shields.io/github/v/tag/uqbar-project/wollok-mobile) ![GitHub License](https://img.shields.io/github/license/uqbar-project/wollok-lsp-ide)
+
 A mobile IDE for [Wollok](https://www.wollok.org/)
 
-## Local development
+## 👩‍💻 Developer Instructions
 
-After [setting up your development environment](https://reactnative.dev/docs/environment-setup), in the project directory you can run:
+Do you want to contribute? Great, you are always welcome!
 
-### `yarn`
+- See [installation instructions for developers](https://github.com/uqbar-project/wollok-mobile/wiki/Development-Environment)
+- You can also [join the Discord channel!](https://discord.gg/ZstgCPKEaa)
+- There's a list of [good first issues](https://github.com/uqbar-project/wollok-mobile/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) to tackle, but in case of any hesitation you can always ping @PalumboN or @fdodino
+- Additional info is available at the [wiki](https://github.com/uqbar-project/wollok-mobile/wiki)
 
-To install dependencies
-
-### `yarn start`
-
-To start metro
-
-### `yarn android`
-
-To run the app on your android devices (external devices should be connected by USB)
-
-## Assembling APKs
-
-All the generated files will be located in the following directory:
-`android/app/build/outputs/apk/<release or debug>/`
-
-### Debug APK
-
-Run the following command in the project directory:
-
-```
-yarn publish-debug:android
-```
-
-### Release APK
-
-For this you'll need to generate a keystore, it will prompt you to set a password, **save it**.
-
-```
-keytool -genkeypair -v -storetype PKCS12 -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
-```
-
-Place the keystore file under the `android/app` folder
-
-Then create the file `android/keystores/release.keystore.properties` with the following information:
-
-```
-MYAPP_RELEASE_STORE_FILE=my-release-key.keystore
-MYAPP_RELEASE_KEY_ALIAS=my-key-alias
-MYAPP_RELEASE_STORE_PASSWORD=<the password you saved before>
-MYAPP_RELEASE_KEY_PASSWORD=<the password you saved before>
-```
-
-Then use the following command to assemble your release APK
-
-```
-yarn publish-release:android
-```
-
-note: The keystore generation is a one time only process, after that you can reuse the already generated one.
-
-
-## Releases
-
-A release is triggered on **every** push to _main_. A tag will be created based on the _package.json_ version number, said version must be bumped **manually**.
-
-Steps for a succesfull release 💪
-1. Bump npm package version on _dev_. Do **not** create a tag here.
-2. Merge dev -> main
-3. ????
-4. Profit
+**Powered by [Uqbar](https://uqbar.org/)**
